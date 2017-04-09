@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/goods_info"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/layout_padding"
+    >
+
+    <ImageView
+        android:id="@+id/goods_img_iv"
+        android:layout_width="56dp"
+        android:layout_height="72dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_gaoyuanyuan"
+        android:layout_gravity="left"
+        />
+
+
+    <TextView
+        android:id="@+id/goods_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆"
+        android:layout_gravity="right"
+        android:paddingLeft="@dimen/layout_padding"
+        android:layout_toRightOf="@id/goods_img_iv"
+        style="@style/TextAppearance.AppCompat.Body1"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¥ 90.0"
+        android:layout_gravity="center"
+        android:paddingLeft="@dimen/layout_padding"
+        android:textColor="@android:color/holo_red_light"
+        android:layout_below="@id/goods_img_iv"
+        android:layout_toRightOf="@id/goods_img_iv"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_reload"
+        android:icon="@drawable/ic_menu_refresh"
+        android:title="@string/reflesh_title"
+        app:showAsAction="ifRoom|withText"
+        />
+
+    <!--  <item android:id="@+id/menu_select_all"
+            android:icon="?android:attr/actionModeSelectAllDrawable"
+            android:title="@android:string/selectAll"
+            app:showAsAction="ifRoom|withText"
+          />
+
+      <item android:id="@+id/menu_copy"
+            android:icon="?android:attr/actionModeCopyDrawable"
+            android:title="@android:string/copy"
+            app:showAsAction="ifRoom|withText"
+          />
+
+      <item android:id="@+id/menu_paste"
+            android:icon="?android:attr/actionModePasteDrawable"
+            android:title="@android:string/paste"
+            app:showAsAction="ifRoom|withText"
+          />
+
+      <item android:id="@+id/menu_share"
+            android:icon="?android:attr/actionModeShareDrawable"
+            android:title="@string/share"
+            app:showAsAction="ifRoom|withText"
+          />
+
+      <item android:id="@+id/menu_websearch"
+            android:icon="?android:attr/actionModeWebSearchDrawable"
+            android:title="@string/websearch"
+            app:showAsAction="ifRoom|withText"
+          />-->
+
+</menu>

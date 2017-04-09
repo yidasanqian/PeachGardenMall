@@ -1,0 +1,50 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.1'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+
+        // butterknife
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        // bugly
+        classpath 'com.tencent.bugly:symtabfileuploader:2.0.7'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+// Define versions in a single place
+ext {
+    // Sdk and tools
+    minSdkVersion = 14
+    targetSdkVersion = 25
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.2'
+
+    // App version
+    versionCode = 1
+    versionName = '1.0.0'
+
+    // App dependencies
+    junitVersion = '4.12'
+    supportLibraryVersion = '25.3.1'
+
+    // butterknife
+    butterknifeVersion = '8.4.0'
+    // square全家桶
+    retrofit2Version = '2.1.0'
+}

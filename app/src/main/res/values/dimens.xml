@@ -1,0 +1,102 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="layout_margin">16dp</dimen>
+    <dimen name="layout_padding">16dp</dimen>
+
+    <dimen name="title_text_size">24sp</dimen>
+    <dimen name="app_bar_title">20sp</dimen>
+    <dimen name="subheading_size">17sp</dimen>
+    <dimen name="button_text_size">15sp</dimen>
+    <dimen name="label_text_size">12sp</dimen>
+    <dimen name="body_size">15sp</dimen>
+
+    <!-- bottom navigation -->
+    <dimen name="fixed_min_width">80dp</dimen>
+    <dimen name="fixed_max_width">168dp</dimen>
+    <dimen name="fixed_width_padding">12dp</dimen>
+
+    <dimen name="fixed_height">56dp</dimen>
+    <dimen name="fixed_height_top_padding_inactive">8dp</dimen>
+    <dimen name="fixed_height_top_padding_active">6dp</dimen>
+    <dimen name="fixed_height_bottom_padding">10dp</dimen>
+
+    <dimen name="fixed_label_active">14sp</dimen>
+    <dimen name="fixed_label_inactive">12sp</dimen>
+    <item name="fixed_label_active_to_inactive_ratio" format="float" type="dimen">0.857</item>
+
+    <dimen name="fixed_icon_grid">24dp</dimen>
+    <dimen name="fixed_icon_badge_grid_height">36dp
+    </dimen><!-- this adds 6 dp extra to top and bottom icon -->
+    <dimen name="fixed_icon_badge_grid_width">48dp
+    </dimen><!-- this adds 6 dp extra to top and bottom icon -->
+
+    <!-- icon -->
+    <dimen name="ic_bigger_width">96dp</dimen>
+    <dimen name="ic_bigger_height">96dp</dimen>
+
+    <dimen name="ic_big_width">48dp</dimen>
+    <dimen name="ic_big_height">48dp</dimen>
+
+    <dimen name="ic_width">24dp</dimen>
+    <dimen name="ic_height">24dp</dimen>
+
+    <dimen name="ic_smaller_width">16dp</dimen>
+    <dimen name="ic_smaller_height">16dp</dimen>
+
+    <dimen name="ic_smallest_width">12dp</dimen>
+    <dimen name="ic_smallest_height">12dp</dimen>
+
+    <!-- floating button -->
+    <dimen name="fab_margin">16dp</dimen>
+
+
+    <!-- single-line lists -->
+    <dimen name="list_left_padding">16dp</dimen>
+    <dimen name="list_right_padding">16dp</dimen>
+    <dimen name="list_item_text_left_padding">72dp</dimen>
+
+    <dimen name="list_top_padding">8dp</dimen>
+    <dimen name="list_bottom_padding">8dp</dimen>
+    <dimen name="list_top_padding_dense">4dp</dimen>
+    <dimen name="list_text_size">16sp</dimen>
+    <dimen name="list_text_size_dense">13sp</dimen>
+    <dimen name="list_item_height">48dp</dimen>
+    <dimen name="list_item_height_dense">40dp</dimen>
+
+    <dimen name="list_item_with_avatar_height">56dp</dimen>
+    <dimen name="list_item_with_avatar_height_dense">48dp</dimen>
+    <dimen name="list_item_padding">8dp</dimen>
+
+    <!-- three-line lists -->
+    <dimen name="list_primary_text_size">16sp</dimen>
+    <dimen name="list_secondary_text_size">14sp</dimen>
+    <dimen name="list_tile_height">88dp</dimen>
+
+    <!-- card content blocks -->
+    <dimen name="card_margin">8dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    <dimen name="card_text_padding">16dp</dimen>
+    <dimen name="card_left_padding">16dp</dimen>
+    <dimen name="card_right_padding">16dp</dimen>
+    <dimen name="card_primary_title_top_padding">24dp</dimen>
+    <dimen name="card_primary_title_bottom_padding">16dp</dimen>
+    <dimen name="card_action_button_padding">8dp</dimen>
+    <dimen name="card_between_action_button_padding">4dp</dimen>
+    <dimen name="card_text_top_padding">16dp</dimen>
+    <dimen name="card_text_bottom_padding">24dp</dimen>
+    <dimen name="card_primary_title_size">24sp</dimen>
+    <dimen name="card_primary_subtitle_size">16sp</dimen>
+    <dimen name="card_text_size">14sp</dimen>
+    <dimen name="card_resting_elevation">2dp</dimen>
+    <dimen name="card_raised_elevation">8dp</dimen>
+    <dimen name="card_item_height_with_avatar">72dp</dimen>
+    <dimen name="card_item_with_avatar_top_padding">16dp</dimen>
+    <dimen name="card_item_with_avatar_bottom_padding">16dp</dimen>
+    <dimen name="card_item_with_avatar_primary_title_size">14sp</dimen>
+    <dimen name="card_item_with_avatar_primary_subtitle_size">12sp</dimen>
+    <dimen name="card_corner_radius">2dp</dimen>
+    <dimen name="avatar_width">48dp</dimen>
+    <dimen name="avatar_height">48dp</dimen>
+</resources>

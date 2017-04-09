@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PeachGardenMall</string>
+    <string name="home_title">首页</string>
+    <string name="mall_title">商城</string>
+    <string name="my_title">我的</string>
+    <string name="reflesh_title">刷新</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="empty_data_hint">暂无数据</string>
+</resources>
