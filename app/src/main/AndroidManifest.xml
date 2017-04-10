@@ -69,6 +69,12 @@
 
         <activity android:name=".activity.MyCollectionActivity">
         </activity>
+
+        <activity android:name=".activity.VipActivity">
+        </activity>
+
+        <activity android:name=".activity.SettingsActivity">
+        </activity>
     </application>
 
 </manifest>

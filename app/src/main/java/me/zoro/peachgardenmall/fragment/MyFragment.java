@@ -19,6 +19,8 @@ import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.activity.MyCollectionActivity;
 import me.zoro.peachgardenmall.activity.MyOrderActivity;
 import me.zoro.peachgardenmall.activity.MyShoppingCartActivity;
+import me.zoro.peachgardenmall.activity.SettingsActivity;
+import me.zoro.peachgardenmall.activity.VipActivity;
 
 /**
  * Created by dengfengdecao on 17/4/7.
@@ -87,8 +89,12 @@ public class MyFragment extends Fragment {
                 startActivity(intent);
                 break;
             case R.id.vip_central:
+                intent = new Intent(getActivity(), VipActivity.class);
+                startActivity(intent);
                 break;
             case R.id.settings:
+                intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.common_questions:
                 break;

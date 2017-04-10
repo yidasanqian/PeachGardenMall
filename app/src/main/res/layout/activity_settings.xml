@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="me.zoro.peachgardenmall.activity.MyShoppingCartActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="me.zoro.peachgardenmall.activity.MyShoppingCartActivity"
+        android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            >
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fixed_height"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                >
+
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/app_bar_title"
+                    android:text="设置"
+                    android:textColor="@color/textColorPrimary"
+                    android:layout_centerInParent="true"
+                    android:scaleType="center"
+                    android:gravity="center"
+                    />
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+        <RelativeLayout
+            android:id="@+id/account_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin"
+            >
+
+            <ImageView
+                android:id="@+id/iv1"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@mipmap/ic_launcher"
+                android:layout_margin="@dimen/layout_margin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="账号设置"
+                android:layout_toRightOf="@id/iv1"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/layout_padding"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv1"
+                android:layout_toRightOf="@id/iv1"
+                />
+
+            <ImageView
+                android:id="@+id/iv2"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@drawable/ic_right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/layout_margin"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/clear_cache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/iv3"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@mipmap/ic_launcher"
+                android:layout_margin="@dimen/layout_margin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清除缓存"
+                android:layout_toRightOf="@id/iv3"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/layout_padding"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv2"
+                />
+
+            <ImageView
+                android:id="@+id/iv4"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@drawable/ic_right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/layout_margin"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin"
+            >
+
+            <ImageView
+                android:id="@+id/iv5"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@mipmap/ic_launcher"
+                android:layout_margin="@dimen/layout_margin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="订单"
+                android:layout_toRightOf="@id/iv5"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/layout_padding"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv3"
+                android:layout_toRightOf="@id/iv5"
+                />
+
+            <ImageView
+                android:id="@+id/iv6"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@drawable/ic_right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/layout_margin"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/delivery_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/iv7"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@mipmap/ic_launcher"
+                android:layout_margin="@dimen/layout_margin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收货地址"
+                android:layout_toRightOf="@id/iv7"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/layout_padding"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv4"
+                android:layout_toRightOf="@id/iv7"
+                />
+
+            <ImageView
+                android:id="@+id/iv8"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@drawable/ic_right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/layout_margin"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/coupon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/iv9"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@mipmap/ic_launcher"
+                android:layout_margin="@dimen/layout_margin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="优惠劵"
+                android:layout_toRightOf="@id/iv9"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/layout_padding"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv5"
+                />
+
+            <ImageView
+                android:id="@+id/iv10"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@drawable/ic_right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/layout_margin"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/common_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin"
+            >
+
+            <ImageView
+                android:id="@+id/iv11"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@mipmap/ic_launcher"
+                android:layout_margin="@dimen/layout_margin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="常见问题"
+                android:layout_toRightOf="@id/iv11"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/layout_padding"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv6"
+                android:layout_toRightOf="@id/iv11"
+                />
+
+            <ImageView
+                android:id="@+id/iv12"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@drawable/ic_right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/layout_margin"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/iv13"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@mipmap/ic_launcher"
+                android:layout_margin="@dimen/layout_margin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="评个分吧"
+                android:layout_toRightOf="@id/iv13"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/layout_padding"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv7"
+                android:layout_toRightOf="@id/iv13"
+                />
+
+            <ImageView
+                android:id="@+id/iv14"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@drawable/ic_right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/layout_margin"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/share"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/iv15"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@mipmap/ic_launcher"
+                android:layout_margin="@dimen/layout_margin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="推荐给朋友"
+                android:layout_toRightOf="@id/iv15"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/layout_padding"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv8"
+                android:layout_toRightOf="@id/iv15"
+                />
+
+            <ImageView
+                android:id="@+id/iv16"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@drawable/ic_right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/layout_margin"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/iv17"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@mipmap/ic_launcher"
+                android:layout_margin="@dimen/layout_margin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关于我们"
+                android:layout_toRightOf="@id/iv17"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/layout_padding"
+                />
+            <!-- <View
+                 android:layout_width="match_parent"
+                 android:layout_height="1dp"
+                 android:background="@drawable/list_divider"
+                 android:layout_below="@id/tv9"
+                 android:layout_toRightOf="@id/iv17"
+                 />-->
+            <ImageView
+                android:id="@+id/iv18"
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:src="@drawable/ic_right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/layout_margin"
+                />
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/logout_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="退出登录"
+            android:textColor="@android:color/white"
+            android:layout_margin="@dimen/layout_margin"
+            />
+    </LinearLayout>
+</ScrollView>
