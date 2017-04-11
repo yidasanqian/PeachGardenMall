@@ -8,6 +8,7 @@ import me.zoro.peachgardenmall.common.AppConfig;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -29,7 +30,7 @@ public interface UserClient {
     Call<JsonObject> fetchCaptcha(@Path("recPhoneNum") String tel);
 
     @POST("user/reg")
-    Call<JsonObject> saveUser(@QueryMap Map<String, Object> params);
+    Call<JsonObject> saveUser(@Body Map<String, Object> params);
 
     @FormUrlEncoded
     @POST(AppConfig.SERVER_HOST + "/happy-help/login")

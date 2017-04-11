@@ -2,6 +2,7 @@ package me.zoro.peachgardenmall.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.MainFragmentPagerAdapter;
+import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.fragment.HomeFragment;
 import me.zoro.peachgardenmall.fragment.MallFragment;
 import me.zoro.peachgardenmall.fragment.MyFragment;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
      */
     private ArrayList<String> mPermissions;
 
+    private UserInfo mUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setupViewPager(mViewpager);
 
         requestPermissions();
+
+
+        // TODO: 17/4/11 判断用户是否登录
+        if (mUserInfo != null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.M)

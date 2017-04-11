@@ -145,7 +145,6 @@ public class UserRemoteDatasource implements UserDatasource {
 
                         UserInfo userInfo = new UserInfo();
 
-                        userInfo.setUsername(username);
                         userInfo.setNickname(nickname);
                         userInfo.setAvatarUrl(photo);
                         callback.onLoginSuccess(userInfo, cookie);
