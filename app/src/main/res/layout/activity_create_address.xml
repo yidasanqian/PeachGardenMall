@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.zoro.peachgardenmall.activity.MyShoppingCartActivity"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fixed_height"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            >
+
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="@dimen/app_bar_title"
+                android:text="新建地址"
+                android:textColor="@color/textColorPrimary"
+                android:layout_centerInParent="true"
+                android:scaleType="center"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/toolbar_right_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_horizontal"
+                android:text="保存"
+                android:textColor="@color/textColorPrimary"
+                style="@style/Widget.AppCompat.ActionButton"
+                />
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/layout_padding"
+        android:orientation="vertical"
+        >
+
+        <EditText
+            android:id="@+id/name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="姓名"
+            />
+
+        <EditText
+            android:id="@+id/phone_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="手机号码"
+            android:layout_marginTop="@dimen/layout_margin"
+            />
+
+        <EditText
+            android:id="@+id/address_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="省份、城市、区县"
+            android:layout_marginTop="@dimen/layout_margin"
+            />
+
+        <EditText
+            android:id="@+id/detail_address_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="详细地址，如接到、楼牌号等"
+            android:layout_marginTop="@dimen/layout_margin"
+            />
+
+        <RadioButton
+            android:id="@+id/set_default_addr_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设为默认地址"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/layout_margin"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

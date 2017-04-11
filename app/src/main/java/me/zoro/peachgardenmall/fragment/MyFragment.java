@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +20,7 @@ import me.zoro.peachgardenmall.activity.MyOrderActivity;
 import me.zoro.peachgardenmall.activity.MyShoppingCartActivity;
 import me.zoro.peachgardenmall.activity.SettingsActivity;
 import me.zoro.peachgardenmall.activity.VipActivity;
+import me.zoro.peachgardenmall.view.RichText;
 
 /**
  * Created by dengfengdecao on 17/4/7.
@@ -32,21 +32,19 @@ public class MyFragment extends Fragment {
     @BindView(R.id.user_avatar)
     CircleImageView mUserAvatar;
     @BindView(R.id.edit_user_info_tv)
-    TextView mEditUserInfoTv;
+    RichText mEditUserInfoTv;
     @BindView(R.id.my_shopping_cart)
-    TextView mMyShoppingCart;
+    RichText mMyShoppingCart;
     @BindView(R.id.my_orders)
-    TextView mMyOrders;
+    RichText mMyOrders;
     @BindView(R.id.my_collection)
-    TextView mMyCollection;
+    RichText mMyCollection;
     @BindView(R.id.vip_central)
-    TextView mVipCentral;
+    RichText mVipCentral;
     @BindView(R.id.settings)
-    TextView mSettings;
+    RichText mSettings;
     @BindView(R.id.common_questions)
-    TextView mCommonQuestions;
-    @BindView(R.id.exchange)
-    TextView mExchange;
+    RichText mCommonQuestions;
     Unbinder unbinder;
 
     public static MyFragment newInstance(String s) {
@@ -69,7 +67,9 @@ public class MyFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.user_avatar, R.id.edit_user_info_tv, R.id.my_shopping_cart, R.id.my_orders, R.id.my_collection, R.id.vip_central, R.id.settings, R.id.common_questions, R.id.exchange})
+    @OnClick({R.id.user_avatar, R.id.edit_user_info_tv, R.id.my_shopping_cart, R.id.my_orders,
+            R.id.my_collection, R.id.vip_central, R.id.settings, R.id.common_questions
+    })
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_avatar:
@@ -97,8 +97,6 @@ public class MyFragment extends Fragment {
                 startActivity(intent);
                 break;
             case R.id.common_questions:
-                break;
-            case R.id.exchange:
                 break;
         }
     }

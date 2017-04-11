@@ -40,8 +40,6 @@
             android:textSize="@dimen/app_bar_title"
             android:textColor="@android:color/holo_red_light"
             android:minHeight="56dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
             android:scaleType="center"
             android:gravity="center"
             android:layout_toRightOf="@id/total_lbl"

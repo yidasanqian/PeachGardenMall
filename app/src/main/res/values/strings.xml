@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PeachGardenMall</string>
+    <string name="app_name">桃花源</string>
     <string name="home_title">首页</string>
     <string name="mall_title">商城</string>
     <string name="my_title">我的</string>
@@ -8,4 +8,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_data_hint">暂无数据</string>
+    <string name="register_progress_bar_title">注册中...</string>
 </resources>

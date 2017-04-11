@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -43,24 +42,28 @@
         android:layout_margin="@dimen/layout_margin"
         />
 
-    <TextView
+    <me.zoro.peachgardenmall.view.RichText
         android:id="@+id/edit_user_info_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="编辑资料"
         android:layout_gravity="center"
+        android:drawableLeft="@drawable/ic_edit"
+        android:drawablePadding="4dp"
+        app:drawableHeight="12dp"
+        app:drawableWidth="12dp"
         />
 
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_margin"
         android:columnCount="3"
         android:orientation="horizontal"
         android:layout_gravity="fill"
         >
 
-        <TextView
+        <me.zoro.peachgardenmall.view.RichText
             android:id="@+id/my_shopping_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,10 +72,13 @@
             android:layout_rowWeight="1"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
-            android:drawableTop="@drawable/ic_mall_black"
+            android:drawableTop="@drawable/ic_shopping_cart"
+            android:drawablePadding="4dp"
+            app:drawableHeight="32dp"
+            app:drawableWidth="32dp"
             />
 
-        <TextView
+        <me.zoro.peachgardenmall.view.RichText
             android:id="@+id/my_orders"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,10 +87,13 @@
             android:layout_rowWeight="1"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
-            android:drawableTop="@drawable/ic_mall_black"
+            android:drawableTop="@drawable/ic_order"
+            android:drawablePadding="4dp"
+            app:drawableHeight="32dp"
+            app:drawableWidth="32dp"
             />
 
-        <TextView
+        <me.zoro.peachgardenmall.view.RichText
             android:id="@+id/my_collection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -93,10 +102,13 @@
             android:layout_rowWeight="1"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
-            android:drawableTop="@drawable/ic_mall_black"
+            android:drawableTop="@drawable/ic_collection"
+            android:drawablePadding="4dp"
+            app:drawableHeight="32dp"
+            app:drawableWidth="32dp"
             />
 
-        <TextView
+        <me.zoro.peachgardenmall.view.RichText
             android:id="@+id/vip_central"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -105,10 +117,13 @@
             android:layout_rowWeight="1"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
-            android:drawableTop="@drawable/ic_mall_black"
+            android:drawableTop="@drawable/ic_vip"
+            android:drawablePadding="4dp"
+            app:drawableHeight="32dp"
+            app:drawableWidth="32dp"
             />
 
-        <TextView
+        <me.zoro.peachgardenmall.view.RichText
             android:id="@+id/settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,10 +132,13 @@
             android:layout_rowWeight="1"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
-            android:drawableTop="@drawable/ic_mall_black"
+            android:drawableTop="@drawable/ic_setting"
+            android:drawablePadding="4dp"
+            app:drawableHeight="32dp"
+            app:drawableWidth="32dp"
             />
 
-        <TextView
+        <me.zoro.peachgardenmall.view.RichText
             android:id="@+id/common_questions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -129,10 +147,13 @@
             android:layout_rowWeight="1"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
-            android:drawableTop="@drawable/ic_mall_black"
+            android:drawableTop="@drawable/ic_common_questions"
+            android:drawablePadding="4dp"
+            app:drawableHeight="32dp"
+            app:drawableWidth="32dp"
             />
 
-        <TextView
+        <!--<me.zoro.peachgardenmall.view.RichText
             android:id="@+id/exchange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -142,7 +163,10 @@
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
             android:drawableTop="@drawable/ic_mall_black"
-            />
+            android:drawablePadding="4dp"
+            app:drawableHeight="32dp"
+            app:drawableWidth="32dp"
+            />-->
 
     </GridLayout>
 </LinearLayout>

@@ -13,4 +13,10 @@
         <attr name="metaButtonBarStyle" format="reference"/>
         <attr name="metaButtonBarButtonStyle" format="reference"/>
     </declare-styleable>
+
+    <!-- RichText -->
+    <declare-styleable name="RichText">
+        <attr name="drawableWidth" format="dimension"/>
+        <attr name="drawableHeight" format="dimension"/>
+    </declare-styleable>
 </resources>

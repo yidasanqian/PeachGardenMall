@@ -60,20 +60,25 @@
                     android:scheme="http"/>
             </intent-filter>
         </activity>
-
         <activity android:name=".activity.MyShoppingCartActivity">
         </activity>
-
         <activity android:name=".activity.MyOrderActivity">
         </activity>
-
         <activity android:name=".activity.MyCollectionActivity">
         </activity>
-
         <activity android:name=".activity.VipActivity">
         </activity>
-
         <activity android:name=".activity.SettingsActivity">
+        </activity>
+        <activity android:name=".activity.CreateAddressActivity">
+        </activity>
+        <activity android:name=".activity.CreateOrderActivity">
+        </activity>
+        <activity android:name=".activity.PayActivity">
+        </activity>
+        <activity android:name=".activity.GoodsDetailActivity">
+        </activity>
+        <activity android:name=".activity.RegisterActivity">
         </activity>
     </application>
 

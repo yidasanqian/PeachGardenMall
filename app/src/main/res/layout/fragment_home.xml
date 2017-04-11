@@ -17,11 +17,22 @@
         app:image_scale_type="center_crop"
         />
 
-    <Spinner
-        android:id="@+id/spinner"
+    <!-- <Spinner
+         android:id="@+id/spinner"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         />-->
+
+    <me.zoro.peachgardenmall.view.RichText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:entries="@array/category"
+        android:drawableRight="@drawable/ic_drop_down"
+        android:text="小布精品推荐"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorAccent"
+        android:drawablePadding="4dp"
+        app:drawableWidth="12dp"
+        app:drawableHeight="12dp"
         />
 
     <GridView

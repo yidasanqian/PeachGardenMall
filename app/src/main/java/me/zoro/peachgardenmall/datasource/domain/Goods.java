@@ -1,4 +1,4 @@
-package me.zoro.peachgardenmall.model;
+package me.zoro.peachgardenmall.datasource.domain;
 
 import java.io.Serializable;
 

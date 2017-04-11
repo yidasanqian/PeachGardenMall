@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
-import me.zoro.peachgardenmall.model.Goods;
+import me.zoro.peachgardenmall.datasource.domain.Goods;
 
 /**
  * Created by dengfengdecao on 16/12/5.

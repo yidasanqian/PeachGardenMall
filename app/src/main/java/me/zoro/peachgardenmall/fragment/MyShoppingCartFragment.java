@@ -18,7 +18,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.MyShoppingCartRecyclerViewAdapter;
-import me.zoro.peachgardenmall.model.Goods;
+import me.zoro.peachgardenmall.datasource.domain.Goods;
 
 /**
  *

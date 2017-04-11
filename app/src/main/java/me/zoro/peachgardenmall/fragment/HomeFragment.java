@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
@@ -40,7 +38,7 @@ import me.zoro.peachgardenmall.adapter.GoodsGridAdapter;
  * Created by dengfengdecao on 17/4/7.
  */
 
-public class HomeFragment extends Fragment implements OnBannerClickListener, AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
+public class HomeFragment extends Fragment implements OnBannerClickListener, AdapterView.OnItemClickListener {
     private static final String TAG = "HomeFragment";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -48,12 +46,12 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     ImageButton mToolbarRightImg;
     @BindView(R.id.banner)
     Banner mBanner;
-    @BindView(R.id.spinner)
-    Spinner mSpinner;
     @BindView(R.id.grid_view)
     GridView mGridView;
     Unbinder unbinder;
     private List<String> mImagesUrl = new ArrayList<>();
+   /* private ArrayAdapter<String> mSpinnerAdapter;
+    private String[] mCategory;*/
 
     public static HomeFragment newInstance(String s) {
 
@@ -64,17 +62,23 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        unbinder = ButterKnife.bind(this, root);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         // TODO: 17/4/9 banner跳转url
         mImagesUrl.add("http://img3.imgtn.bdimg.com/it/u=2264776075,3168614604&fm=21&gp=0.jpg");
         mImagesUrl.add("http://img3.duitang.com/uploads/item/201604/30/20160430003024_FwSEG.thumb.700_0.jpeg");
         mImagesUrl.add("http://g.hiphotos.baidu.com/zhidao/pic/item/bd315c6034a85edf433f02544f540923dd547512.jpg");
         mImagesUrl.add("http://i-7.vcimg.com/trim/b7316e98fe939f0f9b064b8ac2de99d0351027/trim.jpg");
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        unbinder = ButterKnife.bind(this, root);
+
         // 设置banner样式
         mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         // 设置图片加载器
@@ -91,7 +95,12 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         mBanner.start();
         mBanner.setOnBannerClickListener(this);
 
-        mSpinner.setOnItemSelectedListener(this);
+        // 初始化spinner中显示的数据
+        /*mCategory = getResources().getStringArray(R.array.category);
+        mSpinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, mCategory);
+        mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(mSpinnerAdapter);
+        mSpinner.setOnItemSelectedListener(this);*/
 
         // TODO: 17/4/9 banner显示的图片
         List<Integer> images = new ArrayList<>();
@@ -104,11 +113,7 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         return root;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
+
 
     @Override
     public void OnBannerClick(int position) {
@@ -117,17 +122,6 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
        /* intent.putExtra(BANNER_TITLE_EXTRA, mBannerInfos.get(position - 1).getRelateArticleTitle());
         intent.putExtra(BANNER_URL_EXTRA, mBannerInfos.get(position - 1).getRelateUrl());*/
         startActivity(intent);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String[] category = getResources().getStringArray(R.array.category);
-        Snackbar.make(getView(), "你点击的是:" + category[position], Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     @Override
@@ -157,4 +151,10 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         }
     }
 
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }
