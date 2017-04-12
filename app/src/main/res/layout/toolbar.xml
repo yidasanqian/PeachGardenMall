@@ -30,10 +30,11 @@
             android:id="@+id/toolbar_right_img"
             android:layout_width="@dimen/ic_width"
             android:layout_height="@dimen/ic_height"
-            android:background="@drawable/ic_service"
+            android:src="@drawable/ic_service"
             android:layout_marginRight="@dimen/layout_margin"
             android:layout_gravity="right"
             android:scaleType="fitXY"
+            android:background="?android:attr/selectableItemBackground"
             />
 
     </android.support.v7.widget.Toolbar>

@@ -45,6 +45,7 @@
                 android:layout_gravity="end|center_horizontal"
                 android:text="编辑"
                 android:textColor="@color/textColorPrimary"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/Widget.AppCompat.ActionButton"
                 />
 

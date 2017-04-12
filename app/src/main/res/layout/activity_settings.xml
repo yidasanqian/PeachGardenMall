@@ -50,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin"
+            android:background="?android:attr/selectableItemBackground"
             >
 
             <ImageView
@@ -93,6 +94,7 @@
             android:id="@+id/clear_cache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             >
 
             <ImageView
@@ -136,6 +138,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin"
+            android:background="?android:attr/selectableItemBackground"
             >
 
             <ImageView
@@ -179,6 +182,7 @@
             android:id="@+id/delivery_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             >
 
             <ImageView
@@ -222,6 +226,7 @@
             android:id="@+id/coupon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             >
 
             <ImageView
@@ -265,6 +270,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_margin"
+            android:background="?android:attr/selectableItemBackground"
             >
 
             <ImageView
@@ -308,6 +314,7 @@
              android:id="@+id/score"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
+             android:background="?android:attr/selectableItemBackground"
              >
 
              <ImageView
@@ -394,6 +401,7 @@
             android:id="@+id/about"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             >
 
             <ImageView

@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.activity.EditUserInfoActivity;
 import me.zoro.peachgardenmall.activity.MyCollectionActivity;
 import me.zoro.peachgardenmall.activity.MyOrderActivity;
 import me.zoro.peachgardenmall.activity.MyShoppingCartActivity;
@@ -75,9 +76,11 @@ public class MyFragment extends Fragment {
             case R.id.user_avatar:
                 break;
             case R.id.edit_user_info_tv:
+                Intent intent = new Intent(getActivity(), EditUserInfoActivity.class);
+                startActivity(intent);
                 break;
             case R.id.my_shopping_cart:
-                Intent intent = new Intent(getActivity(), MyShoppingCartActivity.class);
+                intent = new Intent(getActivity(), MyShoppingCartActivity.class);
                 startActivity(intent);
                 break;
             case R.id.my_orders:

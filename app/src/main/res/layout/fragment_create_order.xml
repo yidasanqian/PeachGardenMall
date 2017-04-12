@@ -53,6 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/layout_padding"
+        android:background="?android:attr/selectableItemBackground"
         >
 
         <TextView
@@ -103,6 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_margin"
+        android:background="?android:attr/selectableItemBackground"
         >
 
         <TextView
@@ -142,7 +144,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_margin"

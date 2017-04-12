@@ -101,6 +101,7 @@
             android:text="忘记密码了？"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
+            android:background="?android:attr/selectableItemBackground"
             style="@style/TextAppearance.AppCompat.Title"
             />
 
@@ -126,6 +127,7 @@
             android:text="现在注册！"
             android:layout_gravity="center"
             android:textColor="@color/colorAccent"
+            android:background="?android:attr/selectableItemBackground"
             style="@style/TextAppearance.AppCompat.Title"
             />
     </LinearLayout>
