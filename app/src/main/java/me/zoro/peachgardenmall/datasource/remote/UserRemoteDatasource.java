@@ -13,6 +13,7 @@ import java.util.Map;
 
 import me.zoro.peachgardenmall.api.ServiceGenerator;
 import me.zoro.peachgardenmall.api.UserClient;
+import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.UserDatasource;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import okhttp3.MediaType;
@@ -85,12 +86,19 @@ public class UserRemoteDatasource implements UserDatasource {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 Log.d(TAG, "onResponse: 注册 bodyJson <== " + bodyJson);
-                int code = bodyJson.get("code").getAsInt();
-                if (code == 0) {
-                    String username = bodyJson.get("result").getAsString();
-                    callback.onRegisterSuccess(username);
+                if (bodyJson != null) {
+
+                    int code = bodyJson.get(Const.CODE).getAsInt();
+                    if (code == 0) {
+                        Gson gson = new GsonBuilder().setLenient().create();
+                        UserInfo userInfo = gson.fromJson(bodyJson.get(Const.RESULT), UserInfo.class);
+                        String username = userInfo.getMobile();
+                        callback.onRegisterSuccess(username);
+                    } else {
+                        callback.onRegisterFailure(bodyJson.get(Const.MESSAGE).getAsString());
+                    }
                 } else {
-                    callback.onRegisterFailure(bodyJson.get("message").getAsString());
+                    callback.onRegisterFailure("请求失败");
                 }
 
             }
@@ -98,30 +106,13 @@ public class UserRemoteDatasource implements UserDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 注册异常 t <== ", t);
-                callback.onRegisterFailure("服务器错误");
+                callback.onRegisterFailure("服务器异常");
             }
         });
     }
 
     @Override
     public void login(Map<String, String> params, @NonNull final LoginCallback callback) {
-        /*Call<ResponseBody> call = mUserClient.login(params.get("username"),
-                params.get("password"));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    Log.d(TAG, "onResponse: " + response.body().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "onFailure: ", t);
-            }
-        });*/
         Call<JsonObject> call = mUserClient.login(params.get("username"),
                 params.get("password"));
         call.enqueue(new Callback<JsonObject>() {

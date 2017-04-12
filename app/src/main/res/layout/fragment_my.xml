@@ -153,10 +153,10 @@
             android:layout_rowWeight="1"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
-            android:drawableTop="@drawable/ic_common_questions"
+            android:drawableTop="@drawable/ic_my_common_question"
             android:drawablePadding="4dp"
             android:background="?android:attr/selectableItemBackground"
-            app:drawableHeight="32dp"
+            app:drawableHeight="40dp"
             app:drawableWidth="32dp"
             />
 

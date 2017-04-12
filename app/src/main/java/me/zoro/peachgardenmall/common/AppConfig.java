@@ -11,6 +11,6 @@ public final class AppConfig {
      * 服务器地址
      */
     //public static final String SERVER_HOST = "http://10.0.0.3:8080";
-    public static final String SERVER_HOST = "http://www.lezhufeng.com";
+    public static final String SERVER_HOST = "http://123.57.83.8";
 
 }

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.zoro.peachgardenmall.activity.MyShoppingCartActivity"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fixed_height"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            >
+
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="@dimen/app_bar_title"
+                android:text="账号设置"
+                android:textColor="@color/textColorPrimary"
+                android:layout_centerInParent="true"
+                android:scaleType="center"
+                android:gravity="center"
+                />
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="小布账号"
+        android:padding="@dimen/layout_padding"
+        style="@style/TextAppearance.AppCompat.Small"
+        />
+
+    <RelativeLayout
+        android:id="@+id/edit_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        >
+
+
+        <TextView
+            android:id="@+id/tv_password_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设定密码"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:padding="@dimen/layout_padding"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/list_divider"
+            android:layout_below="@id/tv_password_lbl"
+            />
+
+        <me.zoro.peachgardenmall.view.RichText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/layout_padding"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:drawableRight="@drawable/ic_right_arrow"
+            app:drawableWidth="@dimen/ic_width"
+            app:drawableHeight="@dimen/ic_height"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/edit_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        >
+
+
+        <TextView
+            android:id="@+id/tv_phone_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机号码"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:padding="@dimen/layout_padding"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/list_divider"
+            android:layout_below="@id/tv_phone_lbl"
+            />
+
+        <me.zoro.peachgardenmall.view.RichText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/layout_padding"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:drawableRight="@drawable/ic_right_arrow"
+            app:drawableWidth="@dimen/ic_width"
+            app:drawableHeight="@dimen/ic_height"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/edit_id_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        >
+
+
+        <TextView
+            android:id="@+id/tv_id_card_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="身份证信息"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:padding="@dimen/layout_padding"
+            />
+
+        <me.zoro.peachgardenmall.view.RichText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/layout_padding"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:drawableRight="@drawable/ic_right_arrow"
+            app:drawableWidth="@dimen/ic_width"
+            app:drawableHeight="@dimen/ic_height"
+            />
+    </RelativeLayout>
+</LinearLayout>

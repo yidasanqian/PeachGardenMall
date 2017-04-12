@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/avatar_width"
+            android:layout_height="@dimen/avatar_height"
+            android:src="@drawable/ic_gaoyuanyuan"
+            android:layout_margin="@dimen/layout_padding"
+            />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="高圆圆"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:layout_centerInParent="true"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            />
+
+        <ImageView
+            android:layout_width="@dimen/ic_width"
+            android:layout_height="@dimen/ic_height"
+            android:src="@drawable/ic_vip"
+            android:layout_toRightOf="@id/tv_nickname"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017-04-05"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            style="@style/TextAppearance.AppCompat.Medium"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_comment_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="很爱很爱"
+        android:paddingLeft="@dimen/layout_padding"
+        android:paddingRight="@dimen/layout_padding"
+        style="@style/TextAppearance.AppCompat.Body1"
+        />
+
+    <TextView
+        android:id="@+id/tv_goods_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50克"
+        android:paddingLeft="@dimen/layout_padding"
+        android:paddingRight="@dimen/layout_padding"
+        android:layout_marginTop="@dimen/layout_margin"
+        />
+
+</LinearLayout>

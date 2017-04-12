@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.activity.CommonQuestionActivity;
 import me.zoro.peachgardenmall.activity.EditUserInfoActivity;
 import me.zoro.peachgardenmall.activity.MyCollectionActivity;
 import me.zoro.peachgardenmall.activity.MyOrderActivity;
@@ -100,6 +101,8 @@ public class MyFragment extends Fragment {
                 startActivity(intent);
                 break;
             case R.id.common_questions:
+                intent = new Intent(getActivity(), CommonQuestionActivity.class);
+                startActivity(intent);
                 break;
         }
     }

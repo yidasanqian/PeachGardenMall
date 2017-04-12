@@ -29,7 +29,7 @@ public interface UserClient {
     @POST("sms/captcha/{recPhoneNum}")
     Call<JsonObject> fetchCaptcha(@Path("recPhoneNum") String tel);
 
-    @POST("user/reg")
+    @POST("User/register")
     Call<JsonObject> saveUser(@Body Map<String, Object> params);
 
     @FormUrlEncoded

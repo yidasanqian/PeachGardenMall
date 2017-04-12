@@ -35,6 +35,7 @@
             android:layout_height="300dp"
             app:delay_time="2500"
             app:image_scale_type="center_crop"
+            android:background="@drawable/ic_gaoyuanyuan"
             />
 
         <TextView
@@ -53,10 +54,234 @@
             style="@style/TextAppearance.AppCompat.Medium"
             />
 
+        <ImageView
+            android:id="@+id/iv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@drawable/list_divider"
+            />
+
+        <RelativeLayout
+            android:id="@+id/edit_select_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            >
+
+
+            <TextView
+                android:id="@+id/tv_select_number_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已选择："
+                android:padding="@dimen/layout_padding"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_select_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50克 x1"
+                android:layout_toRightOf="@id/tv_select_number_lbl"
+                android:layout_centerVertical="true"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv_select_number_lbl"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_right_arrow"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_promotion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            >
+
+
+            <TextView
+                android:id="@+id/tv_promotion_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:paddingLeft="@dimen/layout_padding"
+                android:paddingTop="@dimen/layout_padding"
+                android:paddingBottom="@dimen/layout_padding"
+                android:layout_centerVertical="true"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                />
+
+            <TextView
+                android:id="@+id/tv_promotion_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="个促销:"
+                android:layout_toRightOf="@id/tv_promotion_count"
+                android:layout_centerVertical="true"
+                android:textColor="@color/subheadColor"
+                android:textSize="@dimen/subhead_size"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_promotion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="抢先囤8折卡，享店庆最低折扣"
+                android:layout_toRightOf="@id/tv_promotion_lbl"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/layout_padding"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv_promotion_count"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_right_arrow"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            >
+
+
+            <TextView
+                android:id="@+id/tv_service_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="服务:"
+                android:padding="@dimen/layout_padding"
+                android:textColor="@color/subheadColor"
+                android:textSize="@dimen/subhead_size"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="不支持无忧退货"
+                android:layout_toRightOf="@id/tv_service_lbl"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/layout_padding"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv_service_lbl"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/ic_width"
+                android:layout_height="@dimen/ic_height"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_right_arrow"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            >
+
+
+            <TextView
+                android:id="@+id/tv_comment_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="评论"
+                android:paddingLeft="@dimen/layout_padding"
+                android:paddingTop="@dimen/layout_padding"
+                android:paddingBottom="@dimen/layout_padding"
+                android:textColor="@color/subheadColor"
+                android:textSize="@dimen/subhead_size"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_comment_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="（26）"
+                android:layout_toRightOf="@id/tv_comment_lbl"
+                android:layout_centerVertical="true"
+                android:textColor="@color/subheadColor"
+                android:textSize="@dimen/subhead_size"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/list_divider"
+                android:layout_below="@id/tv_comment_lbl"
+                />
+
+            <me.zoro.peachgardenmall.view.RichText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="查看全部"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                app:drawableWidth="@dimen/ic_width"
+                app:drawableHeight="@dimen/ic_height"
+                android:drawableRight="@drawable/ic_right_arrow"
+                style="@style/TextAppearance.AppCompat.Medium"
+                />
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             />
     </LinearLayout>
 </ScrollView>
