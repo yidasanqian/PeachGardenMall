@@ -25,4 +25,12 @@ public final class Const {
     public static final String MESSAGE = "message";
     public static final String RESULT = "result";
     public static final String COUNT = "count";
+
+    /**
+     * Preferences
+     */
+    public static final String PREF_TOKEN = "pref_token";
+    public static final String PREF_USER_INFO = "pref_user_info";
+    public static final String TOKEN_KEY = "token_key";
+    public static final String USERINFO_KEY = "userinfo_key";
 }

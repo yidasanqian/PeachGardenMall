@@ -89,9 +89,10 @@ public class UserRemoteDatasource implements UserDatasource {
                 if (bodyJson != null) {
 
                     int code = bodyJson.get(Const.CODE).getAsInt();
+                    JsonObject resultJson = bodyJson.get(Const.RESULT).getAsJsonObject();
                     if (code == 0) {
                         Gson gson = new GsonBuilder().setLenient().create();
-                        UserInfo userInfo = gson.fromJson(bodyJson.get(Const.RESULT), UserInfo.class);
+                        UserInfo userInfo = gson.fromJson(resultJson, UserInfo.class);
                         String username = userInfo.getMobile();
                         callback.onRegisterSuccess(username);
                     } else {
@@ -113,36 +114,25 @@ public class UserRemoteDatasource implements UserDatasource {
 
     @Override
     public void login(Map<String, String> params, @NonNull final LoginCallback callback) {
-        Call<JsonObject> call = mUserClient.login(params.get("username"),
-                params.get("password"));
+        Call<JsonObject> call = mUserClient.login(params);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson != null) {
-
-                    int code = bodyJson.get("code").getAsInt();
-                    JsonObject resultJson = bodyJson.get("result").getAsJsonObject();
+                    int code = bodyJson.get(Const.CODE).getAsInt();
+                    JsonObject resultJson = bodyJson.get(Const.RESULT).getAsJsonObject();
                     if (code == 0) {
-                        int id = resultJson.get("id").getAsInt();
-                        String username = resultJson.get("username").getAsString();
-                        String nickname = resultJson.get("nickname").getAsString();
-                        String phone = resultJson.get("phone").getAsString();
-                        int grade = resultJson.get("grade").getAsInt();
-                        int honerScore = resultJson.get("honerScore").getAsInt();
-                        String photo = resultJson.get("photo").getAsString();
+                        Gson gson = new GsonBuilder().setLenient().create();
+                        UserInfo userInfo = gson.fromJson(resultJson, UserInfo.class);
 
-                        String cookie = resultJson.get("sid").getAsString();
-
-                        UserInfo userInfo = new UserInfo();
-
-                        userInfo.setNickname(nickname);
-                        callback.onLoginSuccess(userInfo, cookie);
+                        String token = userInfo.getToken();
+                        callback.onLoginSuccess(userInfo, token);
                     } else {
-                        callback.onLoginFailure(bodyJson.get("message").getAsString());
+                        callback.onLoginFailure(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onLoginFailure("服务器异常");
+                    callback.onLoginFailure("请求失败");
                 }
             }
 

@@ -2,7 +2,6 @@ package me.zoro.peachgardenmall.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,7 +25,10 @@ import me.zoro.peachgardenmall.fragment.HomeFragment;
 import me.zoro.peachgardenmall.fragment.MallFragment;
 import me.zoro.peachgardenmall.fragment.MyFragment;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
+import static android.os.Build.VERSION_CODES.M;
+
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
+        ViewPager.OnPageChangeListener, MyFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "MainActivity";
 
@@ -56,18 +58,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setupViewPager(mViewpager);
 
         requestPermissions();
-
-
-        // TODO: 17/4/11 判断用户是否登录
-        if (mUserInfo != null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
+    @TargetApi(M)
     private void requestPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= M) {
             mPermissions = new ArrayList<>();
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -145,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
             case R.id.mall_title:
                 mViewpager.setCurrentItem(1);
-
                 break;
             case R.id.my_title:
                 mViewpager.setCurrentItem(2);
@@ -173,5 +167,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onUserInfoLoaded(UserInfo userInfo) {
+        mUserInfo = userInfo;
     }
 }

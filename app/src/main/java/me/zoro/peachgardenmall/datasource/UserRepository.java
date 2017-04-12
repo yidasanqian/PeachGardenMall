@@ -82,9 +82,8 @@ public class UserRepository implements UserDatasource {
     public void login(Map<String, String> params, @NonNull final LoginCallback callback) {
         mRemoteDatasource.login(params, new LoginCallback() {
             @Override
-            public void onLoginSuccess(UserInfo userInfo, String cookie) {
-                mMemoryCache.put(USER_INFO_KEY, userInfo);
-                callback.onLoginSuccess(userInfo, cookie);
+            public void onLoginSuccess(UserInfo userInfo, String token) {
+                callback.onLoginSuccess(userInfo, token);
             }
 
             @Override

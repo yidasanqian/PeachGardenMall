@@ -100,7 +100,15 @@ public class UserInfo implements Serializable {
     @SerializedName("third_leader")
     private int thirdLeader;
     private String token;
+    /**
+     * autograph :
+     * user_level : {"level_id":1,"level_name":"注册会员","amount":"0.00","discount":100,"describe":"注册会员"}
+     */
+
     private String autograph;
+    @SerializedName("user_level")
+    private UserLevelEntity userLevel;
+
 
     public int getUserId() {
         return userId;
@@ -372,5 +380,73 @@ public class UserInfo implements Serializable {
 
     public void setAutograph(String autograph) {
         this.autograph = autograph;
+    }
+
+    public UserLevelEntity getUserLevel() {
+        return userLevel;
+    }
+
+    public void setUserLevel(UserLevelEntity userLevel) {
+        this.userLevel = userLevel;
+    }
+
+
+    public static class UserLevelEntity {
+        /**
+         * level_id : 1
+         * level_name : 注册会员
+         * amount : 0.00
+         * discount : 100
+         * describe : 注册会员
+         */
+
+        @SerializedName("level_id")
+        private int levelId;
+        @SerializedName("level_name")
+        private String levelName;
+        private String amount;
+        @SerializedName("discount")
+        private int discountX;
+        private String describe;
+
+        public int getLevelId() {
+            return levelId;
+        }
+
+        public void setLevelId(int levelId) {
+            this.levelId = levelId;
+        }
+
+        public String getLevelName() {
+            return levelName;
+        }
+
+        public void setLevelName(String levelName) {
+            this.levelName = levelName;
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
+        }
+
+        public int getDiscountX() {
+            return discountX;
+        }
+
+        public void setDiscountX(int discountX) {
+            this.discountX = discountX;
+        }
+
+        public String getDescribe() {
+            return describe;
+        }
+
+        public void setDescribe(String describe) {
+            this.describe = describe;
+        }
     }
 }

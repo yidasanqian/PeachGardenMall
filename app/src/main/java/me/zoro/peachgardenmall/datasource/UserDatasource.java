@@ -48,7 +48,7 @@ public interface UserDatasource {
     }
 
     interface LoginCallback {
-        void onLoginSuccess(UserInfo userInfo, String cookie);
+        void onLoginSuccess(UserInfo userInfo, String token);
 
         void onLoginFailure(String errorMsg);
     }

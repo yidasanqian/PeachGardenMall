@@ -1,5 +1,6 @@
 package me.zoro.peachgardenmall.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    public static final String USERNAME_EXTRA = "username";
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     @BindView(R.id.toolbar)
@@ -86,14 +88,23 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("phone", phone);
                 params.put("password", password);
                 params.put("captcha", captcha);
+                setLoadingIndicator(true);
                 mUserRepository.registerNewUser(params, new UserDatasource.RegisterUserCallback() {
                     @Override
                     public void onRegisterSuccess(String username) {
+                        setLoadingIndicator(false);
                         showMessage(getString(R.string.register_success_msg));
+
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        intent.putExtra(USERNAME_EXTRA, username);
+                        startActivity(intent);
+                        finish();
                     }
 
                     @Override
                     public void onRegisterFailure(String errorMsg) {
+                        setLoadingIndicator(false);
+
                         showMessage(errorMsg);
                     }
                 });

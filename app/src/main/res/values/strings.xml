@@ -13,4 +13,5 @@
     <string name="empty_password_msg">密码不能为空</string>
     <string name="empty_captcha_msg">验证码不能为空</string>
     <string name="register_success_msg">注册成功</string>
+    <string name="login_success_msg">登录成功</string>
 </resources>
