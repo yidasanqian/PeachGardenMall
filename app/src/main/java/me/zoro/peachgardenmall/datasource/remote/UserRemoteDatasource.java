@@ -296,4 +296,34 @@ public class UserRemoteDatasource implements UserDatasource {
         });
     }
 
+    @Override
+    public void fetchUserInfo(int userId, @NonNull final GetUserInfoCallback callback) {
+        Call<JsonObject> call = mUserClient.fetchUserInfo(userId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson != null) {
+                    int code = bodyJson.get(Const.CODE).getAsInt();
+                    JsonObject resultJson = bodyJson.get(Const.RESULT).getAsJsonObject();
+                    if (code == 0) {
+                        Gson gson = new GsonBuilder().setLenient().create();
+                        UserInfo userInfo = gson.fromJson(resultJson, UserInfo.class);
+                        callback.onUserInfoLoaded(userInfo);
+                    } else {
+                        callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
+                    }
+                } else {
+                    callback.onDataNotAvailable("请求失败");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 获取用户信息异常 t <== ", t);
+                callback.onDataNotAvailable("服务器异常");
+            }
+        });
+    }
+
 }

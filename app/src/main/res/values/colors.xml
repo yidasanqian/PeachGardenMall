@@ -7,5 +7,6 @@
     <color name="textColor">#000000</color>
     <color name="textColorSecondary">#8a000000</color>
     <color name="subheadColor">#de000000</color>
+    <color name="colorButtonNormal">#d6d7d7</color>
     <drawable name="progress_bar_background">#90000000</drawable>
 </resources>

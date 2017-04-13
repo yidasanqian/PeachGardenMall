@@ -2,6 +2,7 @@ package me.zoro.peachgardenmall.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.fragment.HomeFragment;
 import me.zoro.peachgardenmall.fragment.MallFragment;
 import me.zoro.peachgardenmall.fragment.MyFragment;
+import me.zoro.peachgardenmall.utils.PreferencesUtil;
 
 import static android.os.Build.VERSION_CODES.M;
 
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
      */
     private ArrayList<String> mPermissions;
 
+
     private UserInfo mUserInfo;
 
     @Override
@@ -53,11 +57,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        requestPermissions();
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            mUserInfo = (UserInfo) intent.getSerializableExtra(LoginActivity.USERINFO_EXTRA);
+        }
+
         mBottomNavigation.setOnNavigationItemSelectedListener(this);
         mViewpager.addOnPageChangeListener(this);
         setupViewPager(mViewpager);
 
-        requestPermissions();
     }
 
     @TargetApi(M)
@@ -119,12 +129,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String token = PreferencesUtil.getTokenFromPref(this);
+        if (TextUtils.isEmpty(token)) {
+            mUserInfo = null;
+            Toast.makeText(this, "您未登录", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void setupViewPager(ViewPager viewpager) {
         mFragmentManager = getSupportFragmentManager();
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(mFragmentManager);
         HomeFragment homeFragment = HomeFragment.newInstance(getText(R.string.home_title).toString());
         MallFragment mallFragment = MallFragment.newInstance(getText(R.string.mall_title).toString());
-        MyFragment myFragment = MyFragment.newInstance(getText(R.string.my_title).toString());
+        MyFragment myFragment = MyFragment.newInstance();
 
         adapter.addFragment(homeFragment);
         adapter.addFragment(mallFragment);

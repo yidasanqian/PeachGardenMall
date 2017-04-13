@@ -16,6 +16,8 @@ import me.zoro.peachgardenmall.R;
 
 public class EditUserInfoActivity extends AppCompatActivity {
 
+    private static final String TAG = "EditUserInfoActivity";
+
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     @BindView(R.id.toolbar)

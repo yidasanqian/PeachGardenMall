@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/btn_promotion"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="促销"
+            />
+
+        <Button
+            android:id="@+id/btn_self_support"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="小布自营"
+            />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/left_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll"
+        style="@style/Widget.AppCompat.ListView"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/right_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/left_recycler_view"
+        android:layout_below="@id/ll"
+        style="@style/Widget.AppCompat.ListView"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:elevation="1dp"
+        >
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="有"
+            android:textSize="@dimen/app_bar_title"
+            android:textColor="@color/textColorSecondary"
+            android:minHeight="56dp"
+            android:paddingLeft="16dp"
+            android:scaleType="center"
+            android:gravity="center"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_goods_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15"
+            android:textSize="@dimen/app_bar_title"
+            android:textColor="@android:color/holo_red_light"
+            android:minHeight="56dp"
+            android:scaleType="center"
+            android:gravity="center"
+            android:layout_toRightOf="@id/tv1"
+            />
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="件商品"
+            android:textSize="@dimen/app_bar_title"
+            android:textColor="@color/textColorSecondary"
+            android:minHeight="56dp"
+            android:scaleType="center"
+            android:gravity="center"
+            android:layout_toRightOf="@id/tv_goods_count"
+
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="重置"
+                android:textSize="@dimen/app_bar_title"
+                android:background="@color/colorButtonNormal"
+                android:minHeight="56dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:scaleType="center"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确定"
+                android:textSize="@dimen/app_bar_title"
+                android:textColor="@color/colorPrimary"
+                android:background="@color/colorAccent"
+                android:minHeight="56dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:scaleType="center"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

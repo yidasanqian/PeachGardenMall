@@ -181,5 +181,20 @@ public class UserRepository implements UserDatasource {
         });
     }
 
+    @Override
+    public void fetchUserInfo(int userId, @NonNull final GetUserInfoCallback callback) {
+        mRemoteDatasource.fetchUserInfo(userId, new GetUserInfoCallback() {
+            @Override
+            public void onUserInfoLoaded(UserInfo userInfo) {
+                callback.onUserInfoLoaded(userInfo);
+            }
+
+            @Override
+            public void onDataNotAvailable(String errorMsg) {
+                callback.onDataNotAvailable(errorMsg);
+            }
+        });
+    }
+
 
 }

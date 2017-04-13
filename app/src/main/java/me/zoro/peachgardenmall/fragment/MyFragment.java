@@ -3,17 +3,18 @@ package me.zoro.peachgardenmall.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.activity.CommonQuestionActivity;
 import me.zoro.peachgardenmall.activity.EditUserInfoActivity;
+import me.zoro.peachgardenmall.activity.ImageShowerActivity;
 import me.zoro.peachgardenmall.activity.LoginActivity;
 import me.zoro.peachgardenmall.activity.MyCollectionActivity;
 import me.zoro.peachgardenmall.activity.MyOrderActivity;
@@ -30,7 +32,10 @@ import me.zoro.peachgardenmall.activity.MyShoppingCartActivity;
 import me.zoro.peachgardenmall.activity.SettingsActivity;
 import me.zoro.peachgardenmall.activity.VipActivity;
 import me.zoro.peachgardenmall.common.Const;
+import me.zoro.peachgardenmall.datasource.UserDatasource;
+import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
+import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
 import me.zoro.peachgardenmall.utils.PreferencesUtil;
 import me.zoro.peachgardenmall.view.RichText;
 
@@ -39,6 +44,8 @@ import me.zoro.peachgardenmall.view.RichText;
  */
 
 public class MyFragment extends Fragment {
+    private static final String TAG = "MyFragment";
+
     public static final int LOGIN_REQUEST_CODE = 1;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -62,12 +69,13 @@ public class MyFragment extends Fragment {
     @BindView(R.id.tv_login)
     TextView mTvLogin;
 
+    private UserRepository mUserRepository;
+
     private OnFragmentInteractionListener mListener;
 
     private UserInfo mUserInfo;
-    private String mToken;
 
-    public static MyFragment newInstance(String s) {
+    public static MyFragment newInstance() {
 
         Bundle args = new Bundle();
 
@@ -79,20 +87,10 @@ public class MyFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (TextUtils.isEmpty(mToken)) {
-            mToken = PreferencesUtil.getDefaultPreferences(getContext(), Const.PREF_TOKEN)
-                    .getString(Const.TOKEN_KEY, null);
-        }
-
-        if (mUserInfo == null) {
-            String userStr = PreferencesUtil.getDefaultPreferences(getContext(), Const.PREF_USER_INFO)
-                    .getString(Const.USERINFO_KEY, null);
-            if (userStr != null) {
-                mUserInfo = new GsonBuilder().setLenient().create().fromJson(userStr, UserInfo.class);
-            }
-        }
-
-        updateUserInfo(mUserInfo);
+        mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(getContext().getApplicationContext()));
+        mUserInfo = PreferencesUtil.getUserInfoFromPref(getContext());
+        if (mUserInfo != null)
+            new FetchUserInfoTask().execute(mUserInfo.getUserId());
     }
 
     @Nullable
@@ -100,52 +98,66 @@ public class MyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_my, container, false);
         unbinder = ButterKnife.bind(this, root);
+        return root;
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
         // 如果用户未登录，则显示"请登录"按钮
         if (mUserInfo == null) {
             mTvLogin.setVisibility(View.VISIBLE);
         }
 
-        return root;
+        invalidateUI();
     }
-
 
     @OnClick({R.id.user_avatar, R.id.edit_user_info_tv, R.id.my_shopping_cart, R.id.my_orders,
             R.id.my_collection, R.id.vip_central, R.id.settings, R.id.common_questions
     })
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.user_avatar:
-                break;
-            case R.id.edit_user_info_tv:
-                Intent intent = new Intent(getActivity(), EditUserInfoActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.my_shopping_cart:
-                intent = new Intent(getActivity(), MyShoppingCartActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.my_orders:
-                intent = new Intent(getActivity(), MyOrderActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.my_collection:
-                intent = new Intent(getActivity(), MyCollectionActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.vip_central:
-                intent = new Intent(getActivity(), VipActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.settings:
-                intent = new Intent(getActivity(), SettingsActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.common_questions:
-                intent = new Intent(getActivity(), CommonQuestionActivity.class);
-                startActivity(intent);
-                break;
+        Intent intent;
+        if (mUserInfo != null) {
+            switch (view.getId()) {
+                case R.id.user_avatar:
+                    intent = new Intent(getActivity(), ImageShowerActivity.class);
+                    intent.putExtra(Const.IMAGE_URL, mUserInfo.getHeadPic());
+                    startActivity(intent);
+                    break;
+                case R.id.edit_user_info_tv:
+                    intent = new Intent(getActivity(), EditUserInfoActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.my_shopping_cart:
+                    intent = new Intent(getActivity(), MyShoppingCartActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.my_orders:
+                    intent = new Intent(getActivity(), MyOrderActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.my_collection:
+                    intent = new Intent(getActivity(), MyCollectionActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.vip_central:
+                    intent = new Intent(getActivity(), VipActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.settings:
+                    intent = new Intent(getActivity(), SettingsActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.common_questions:
+                    intent = new Intent(getActivity(), CommonQuestionActivity.class);
+                    startActivity(intent);
+                    break;
+            }
+        } else {
+            intent = new Intent(getActivity(), LoginActivity.class);
+            startActivityForResult(intent, LOGIN_REQUEST_CODE);
         }
+
     }
 
     @OnClick(R.id.tv_login)
@@ -162,6 +174,7 @@ public class MyFragment extends Fragment {
             updateUserInfo(userInfo);
         }
     }
+
 
     public interface OnFragmentInteractionListener {
         void onUserInfoLoaded(UserInfo userInfo);
@@ -185,7 +198,7 @@ public class MyFragment extends Fragment {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " m      ust implement OnFragmentInteractionListener");
         }
     }
 
@@ -199,5 +212,40 @@ public class MyFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    /**
+     * 获取用户信息
+     */
+    private class FetchUserInfoTask extends AsyncTask<Integer, Void, Void> {
+        @Override
+        protected Void doInBackground(Integer... params) {
+            int userId = params[0];
+            mUserRepository.fetchUserInfo(userId, new UserDatasource.GetUserInfoCallback() {
+                @Override
+                public void onUserInfoLoaded(UserInfo userInfo) {
+                    mUserInfo = userInfo;
+                    updateUserInfo(userInfo);
+                    invalidateUI();
+                    PreferencesUtil.persistentUserInfo(getContext(), userInfo);
+                }
+
+                @Override
+                public void onDataNotAvailable(String errorMsg) {
+                    Log.w(TAG, "onDataNotAvailable: " + errorMsg);
+                }
+            });
+
+            return null;
+        }
+    }
+
+    private void invalidateUI() {
+        if (mUserInfo != null) {
+            Picasso.with(getContext())
+                    .load(mUserInfo.getHeadPic())
+                    .fit()
+                    .into(mUserAvatar);
+        }
     }
 }

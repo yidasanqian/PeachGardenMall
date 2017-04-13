@@ -129,7 +129,7 @@
             android:id="@+id/tv_sex_lbl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="昵称"
+            android:text="性别"
             style="@style/TextAppearance.AppCompat.Subhead"
             android:padding="@dimen/layout_padding"
             />
@@ -205,7 +205,7 @@
             android:id="@+id/tv_autograph_lbl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="账号"
+            android:text="个性签名"
             style="@style/TextAppearance.AppCompat.Subhead"
             android:padding="@dimen/layout_padding"
             />

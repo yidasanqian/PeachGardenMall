@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.common.Const;
 
 /**
  * @see <a href=http://blog.csdn.net/brokge/article/details/8532662>ProgressBar 相关设置讲解</a>
@@ -37,27 +38,28 @@ public class ImageShowerActivity extends AppCompatActivity {
         mProgressBar.setIndeterminate(true);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        // TODO: 17/4/12 显示大图的图片地址
-        String imageUrl = "";
+        if (getIntent() != null) {
+            String imageUrl = getIntent().getStringExtra(Const.IMAGE_URL);
 
-        if (!TextUtils.isEmpty(imageUrl)) {
+            if (!TextUtils.isEmpty(imageUrl)) {
 
-            // 加载发生错误会重复三次请求，三次都失败才会显示error Place holder
-            Picasso.with(this).load(imageUrl)
-                    .placeholder(R.drawable.ic_image_downloading_placeholder)
-                    .error(R.drawable.ic_image_error_placeholder)
-                    .into(mImageShower, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            mProgressBar.setVisibility(View.GONE);
-                        }
+                // 加载发生错误会重复三次请求，三次都失败才会显示error Place holder
+                Picasso.with(this).load(imageUrl)
+                        .placeholder(R.drawable.ic_image_downloading_placeholder)
+                        .error(R.drawable.ic_image_error_placeholder)
+                        .into(mImageShower, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                mProgressBar.setVisibility(View.GONE);
+                            }
 
-                        @Override
-                        public void onError() {
-                            mProgressBar.setVisibility(View.GONE);
-                            Toast.makeText(ImageShowerActivity.this, "显示图片失败，请稍后重试！", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onError() {
+                                mProgressBar.setVisibility(View.GONE);
+                                Toast.makeText(ImageShowerActivity.this, "显示图片失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
         }
 
     }

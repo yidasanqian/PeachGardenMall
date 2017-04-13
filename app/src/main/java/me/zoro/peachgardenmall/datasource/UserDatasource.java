@@ -30,6 +30,8 @@ public interface UserDatasource {
 
     void changePasswrod(Map<String, Object> params, @NonNull ChangePasswordCallback callback);
 
+    void fetchUserInfo(int userId, @NonNull GetUserInfoCallback callback);
+
     interface GetCaptchaCallback {
         /**
          * 成功获取校验码

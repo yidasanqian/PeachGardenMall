@@ -14,8 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.GsonBuilder;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +21,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
-import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.UserDatasource;
 import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
@@ -100,9 +97,9 @@ public class LoginActivity extends AppCompatActivity {
                     public void onLoginSuccess(UserInfo userInfo, String token) {
                         setLoadingIndicator(false);
                         showMessage(getString(R.string.login_success_msg));
-                        persistentToken(token);
+                        PreferencesUtil.persistentToken(LoginActivity.this, token);
                         // 持久化用户信息
-                        persistentUserInfo(userInfo);
+                        PreferencesUtil.persistentUserInfo(LoginActivity.this, userInfo);
                         // 设置返回的结果数据
                         Intent data = new Intent(LoginActivity.this, MainActivity.class);
                         data.putExtra(USERINFO_EXTRA, userInfo);
@@ -129,21 +126,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void persistentToken(String token) {
-        // 持久化token
-        PreferencesUtil.getDefaultPreferences(this, Const.PREF_TOKEN)
-                .edit()
-                .putString(Const.TOKEN_KEY, token)
-                .apply();
-    }
 
-    private void persistentUserInfo(UserInfo userInfo) {
-        String userinfo = new GsonBuilder().create().toJson(userInfo, UserInfo.class);
-        PreferencesUtil.getDefaultPreferences(this, Const.PREF_USER_INFO)
-                .edit()
-                .putString(Const.USERINFO_KEY, userinfo)
-                .apply();
-    }
 
     private void setLoadingIndicator(boolean active) {
         if (mProgressBarContainer != null) {

@@ -31,6 +31,9 @@ public final class Const {
      */
     public static final String PREF_TOKEN = "pref_token";
     public static final String PREF_USER_INFO = "pref_user_info";
-    public static final String TOKEN_KEY = "token_key";
-    public static final String USERINFO_KEY = "userinfo_key";
+    public static final String TOKEN_KEY = "token";
+    public static final String USERINFO_KEY = "userinfo";
+
+
+    public static final String IMAGE_URL = "image_url";
 }

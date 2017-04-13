@@ -33,6 +33,9 @@ public interface UserClient {
     @POST("User/do_login")
     Call<JsonObject> login(@Body Map<String, String> params);
 
+    @GET("user")
+    Call<JsonObject> fetchUserInfo(@Query("userId") int userId);
+
     //获取用户详细信息
     @GET("user/{username}")
     Call<JsonObject> getUserInfo(@Path("username") String username);
@@ -57,4 +60,6 @@ public interface UserClient {
     //修改密码
     @POST("user/new/password")
     Call<JsonObject> changePassword(@QueryMap Map<String, Object> params);
+
+
 }

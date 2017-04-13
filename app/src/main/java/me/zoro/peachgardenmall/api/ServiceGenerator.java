@@ -40,7 +40,7 @@ public final class ServiceGenerator {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(logging)    // 添加日志拦截器
                 //.addInterceptor(new ReceivedCookiesInterceptor(sContext))
-                //.addInterceptor(new AddCookiesInterceptor(context))
+                .addInterceptor(new AddTokenInterceptor(context))
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
