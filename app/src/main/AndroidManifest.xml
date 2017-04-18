@@ -98,6 +98,12 @@
         </activity>
         <activity android:name=".activity.GoodsListActivity">
         </activity>
+        <activity android:name=".activity.EditPasswordActivity">
+        </activity>
+        <activity android:name=".activity.EditPhoneActivity">
+        </activity>
+        <activity android:name=".activity.EditIdCardActivity">
+        </activity>
     </application>
 
 </manifest>

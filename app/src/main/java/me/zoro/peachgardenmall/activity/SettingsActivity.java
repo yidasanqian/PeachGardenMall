@@ -101,6 +101,8 @@ public class SettingsActivity extends AppCompatActivity {
             case R.id.delivery_address:
                 break;
             case R.id.coupon:
+                intent = new Intent(this, CouponActivity.class);
+                startActivity(intent);
                 break;
             case R.id.common_question:
                 intent = new Intent(this, CommonQuestionActivity.class);

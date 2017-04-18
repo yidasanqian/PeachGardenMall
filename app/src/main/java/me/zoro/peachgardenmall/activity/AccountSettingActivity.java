@@ -1,5 +1,6 @@
 package me.zoro.peachgardenmall.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -54,12 +55,17 @@ public class AccountSettingActivity extends AppCompatActivity {
     @OnClick({R.id.edit_password, R.id.edit_phone, R.id.edit_id_card})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            // TODO: 17/4/12 账号设置
             case R.id.edit_password:
+                Intent intent = new Intent(this, EditPasswordActivity.class);
+                startActivity(intent);
                 break;
             case R.id.edit_phone:
+                intent = new Intent(this, EditPhoneActivity.class);
+                startActivity(intent);
                 break;
             case R.id.edit_id_card:
+                intent = new Intent(this, EditIdCardActivity.class);
+                startActivity(intent);
                 break;
         }
     }
