@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 
 import java.util.Map;
 
-import me.zoro.peachgardenmall.common.AppConfig;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -33,10 +32,14 @@ public interface UserClient {
     @POST("User/do_login")
     Call<JsonObject> login(@Body Map<String, String> params);
 
-    @GET("user")
+    // 获取用户详细信息
+    @GET("User/get_user_info")
     Call<JsonObject> fetchUserInfo(@Query("userId") int userId);
 
-    //获取用户详细信息
+    // 登出
+    @GET("User/logout")
+    Call<JsonObject> logout(@Query("userId") int userId);
+
     @GET("user/{username}")
     Call<JsonObject> getUserInfo(@Path("username") String username);
 
@@ -49,9 +52,6 @@ public interface UserClient {
     Call<JsonObject> uploadAvatar(@PartMap Map<String, RequestBody> partMap,
                                   @Part MultipartBody.Part file);
 
-    //登出
-    @POST(AppConfig.SERVER_HOST + "/happy-help/logout")
-    Call<JsonObject> logout(@Query("sid") String sid);
 
     //忘记密码
     @POST("anon/user/new/password")

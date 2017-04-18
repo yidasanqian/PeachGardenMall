@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -47,6 +48,7 @@ public class MyFragment extends Fragment {
     private static final String TAG = "MyFragment";
 
     public static final int LOGIN_REQUEST_CODE = 1;
+    public static final String USERINFO_EXTRA = "userinfo";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.user_avatar)
@@ -104,10 +106,7 @@ public class MyFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // 如果用户未登录，则显示"请登录"按钮
-        if (mUserInfo == null) {
-            mTvLogin.setVisibility(View.VISIBLE);
-        }
+
 
         invalidateUI();
     }
@@ -126,30 +125,37 @@ public class MyFragment extends Fragment {
                     break;
                 case R.id.edit_user_info_tv:
                     intent = new Intent(getActivity(), EditUserInfoActivity.class);
+                    intent.putExtra(USERINFO_EXTRA, mUserInfo);
                     startActivity(intent);
                     break;
                 case R.id.my_shopping_cart:
                     intent = new Intent(getActivity(), MyShoppingCartActivity.class);
+                    intent.putExtra(USERINFO_EXTRA, mUserInfo);
                     startActivity(intent);
                     break;
                 case R.id.my_orders:
                     intent = new Intent(getActivity(), MyOrderActivity.class);
+                    intent.putExtra(USERINFO_EXTRA, mUserInfo);
                     startActivity(intent);
                     break;
                 case R.id.my_collection:
                     intent = new Intent(getActivity(), MyCollectionActivity.class);
+                    intent.putExtra(USERINFO_EXTRA, mUserInfo);
                     startActivity(intent);
                     break;
                 case R.id.vip_central:
                     intent = new Intent(getActivity(), VipActivity.class);
+                    intent.putExtra(USERINFO_EXTRA, mUserInfo);
                     startActivity(intent);
                     break;
                 case R.id.settings:
                     intent = new Intent(getActivity(), SettingsActivity.class);
+                    intent.putExtra(USERINFO_EXTRA, mUserInfo);
                     startActivity(intent);
                     break;
                 case R.id.common_questions:
                     intent = new Intent(getActivity(), CommonQuestionActivity.class);
+                    intent.putExtra(USERINFO_EXTRA, mUserInfo);
                     startActivity(intent);
                     break;
             }
@@ -170,7 +176,7 @@ public class MyFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LOGIN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            UserInfo userInfo = (UserInfo) data.getSerializableExtra(LoginActivity.USERINFO_EXTRA);
+            UserInfo userInfo = (UserInfo) data.getSerializableExtra(USERINFO_EXTRA);
             updateUserInfo(userInfo);
         }
     }
@@ -233,6 +239,13 @@ public class MyFragment extends Fragment {
                 @Override
                 public void onDataNotAvailable(String errorMsg) {
                     Log.w(TAG, "onDataNotAvailable: " + errorMsg);
+                    if (Const.SERVER_AVALIABLE.equals(errorMsg)) {
+                        showMessage(errorMsg);
+                    } else {
+                        mUserInfo = null;
+                        updateUserInfo(mUserInfo);
+                        invalidateUI();
+                    }
                 }
             });
 
@@ -240,12 +253,23 @@ public class MyFragment extends Fragment {
         }
     }
 
+    private void showMessage(String msg) {
+        if (!getActivity().isFinishing()) {
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void invalidateUI() {
         if (mUserInfo != null) {
+            mTvLogin.setVisibility(View.GONE);
+
             Picasso.with(getContext())
                     .load(mUserInfo.getHeadPic())
                     .fit()
                     .into(mUserAvatar);
+        } else {
+            // 如果用户未登录，则显示"请登录"按钮
+            mTvLogin.setVisibility(View.VISIBLE);
         }
     }
 }

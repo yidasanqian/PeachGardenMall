@@ -2,11 +2,12 @@ package me.zoro.peachgardenmall.datasource;
 
 
 import android.support.annotation.NonNull;
-import android.support.v4.util.LruCache;
 
 import java.util.Map;
 
+import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
+import me.zoro.peachgardenmall.utils.CacheManager;
 
 /**
  * 从数据源加载用户数据到缓存
@@ -17,27 +18,14 @@ public class UserRepository implements UserDatasource {
 
     public static final String TAG = "UserRepository";
 
-    private static final String USER_INFO_KEY = "user";
-
     private static UserRepository sRepository;
 
-    private LruCache<String, Object> mMemoryCache;
-
-    /**
-     * Marks the cache as invalid, to force an update the next time data is requested.
-     */
-    private boolean mCacheIsDirty = false;
 
     private UserDatasource mRemoteDatasource;
 
     // 防止被直接实例化
     private UserRepository(UserDatasource remoteDatasource) {
         mRemoteDatasource = remoteDatasource;
-        // 获取系统分配给每个应用程序的最大内存，每个应用系统分配32M
-        int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        int maxSize = maxMemory / 8;
-        mMemoryCache = new LruCache<>(maxSize);
-
     }
 
     public static UserRepository getInstance(UserDatasource remoteDatasource) {
@@ -96,22 +84,6 @@ public class UserRepository implements UserDatasource {
 
     @Override
     public void getUserInfo(String username, @NonNull final GetUserInfoCallback callback) {
-       /* UserInfo userInfo = (UserInfo) mMemoryCache.get(USER_INFO_KEY);
-        if (userInfo != null) {
-            Log.d(TAG, "getUserInfo: 内存中存在用户信息");
-        } else {
-            mRemoteDatasource.getUserInfo(username, new GetUserInfoCallback() {
-                @Override
-                public void onUserInfoLoaded(UserInfo userInfo) {
-                    callback.onUserInfoLoaded(userInfo);
-                }
-
-            @Override
-            public void onDataNotAvailable(String errorMsg) {
-                callback.onDataNotAvailable(errorMsg);
-            }
-        });*/
-
         mRemoteDatasource.getUserInfo(username, new GetUserInfoCallback() {
             @Override
             public void onUserInfoLoaded(UserInfo userInfo) {
@@ -141,8 +113,8 @@ public class UserRepository implements UserDatasource {
     }
 
     @Override
-    public void logout(String sid, @NonNull final LogoutCallback callback) {
-        mRemoteDatasource.logout(sid, new LogoutCallback() {
+    public void logout(int userId, @NonNull final LogoutCallback callback) {
+        mRemoteDatasource.logout(userId, new LogoutCallback() {
 
             @Override
             public void onLogout() {
@@ -182,18 +154,25 @@ public class UserRepository implements UserDatasource {
     }
 
     @Override
-    public void fetchUserInfo(int userId, @NonNull final GetUserInfoCallback callback) {
-        mRemoteDatasource.fetchUserInfo(userId, new GetUserInfoCallback() {
-            @Override
-            public void onUserInfoLoaded(UserInfo userInfo) {
-                callback.onUserInfoLoaded(userInfo);
-            }
+    public void fetchUserInfo(final int userId, @NonNull final GetUserInfoCallback callback) {
+        UserInfo userInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
+        if (userInfo == null) {
+            mRemoteDatasource.fetchUserInfo(userId, new GetUserInfoCallback() {
+                @Override
+                public void onUserInfoLoaded(UserInfo userInfo) {
+                    CacheManager.getInstance().put(Const.USER_INFO_CACHE_KEY, userInfo);
+                    callback.onUserInfoLoaded(userInfo);
+                }
 
-            @Override
-            public void onDataNotAvailable(String errorMsg) {
-                callback.onDataNotAvailable(errorMsg);
-            }
-        });
+                @Override
+                public void onDataNotAvailable(String errorMsg) {
+                    callback.onDataNotAvailable(errorMsg);
+                }
+            });
+        } else {
+            callback.onUserInfoLoaded(userInfo);
+        }
+
     }
 
 

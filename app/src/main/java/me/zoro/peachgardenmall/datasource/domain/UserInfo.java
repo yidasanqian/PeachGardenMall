@@ -16,7 +16,7 @@ public class UserInfo implements Serializable {
      * user_id : 2598
      * email : 2216348885@qq.com
      * password : 444e3a7c6f6764a919fbab2334961304
-     * sex : 0
+     * sex : 保密
      * birthday : 0
      * user_money : 0.00
      * frozen_money : 0.00
@@ -53,7 +53,7 @@ public class UserInfo implements Serializable {
     private int userId;
     private String email;
     private String password;
-    private int sex;
+    private String sex;
     private int birthday;
     @SerializedName("user_money")
     private String userMoney;
@@ -134,11 +134,11 @@ public class UserInfo implements Serializable {
         this.password = password;
     }
 
-    public int getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -391,7 +391,7 @@ public class UserInfo implements Serializable {
     }
 
 
-    public static class UserLevelEntity {
+    class UserLevelEntity implements Serializable {
         /**
          * level_id : 1
          * level_name : 注册会员

@@ -25,7 +25,7 @@ import static me.zoro.peachgardenmall.common.AppConfig.SERVER_HOST;
  */
 public final class ServiceGenerator {
     private static final String TAG = "ServiceGenerator";
-    private static final String API_BASE_URL = SERVER_HOST + "/PeachGarden/index.php/Home/";
+    private static final String API_BASE_URL = SERVER_HOST + "/index.php/Home/";
 
     private static final HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)

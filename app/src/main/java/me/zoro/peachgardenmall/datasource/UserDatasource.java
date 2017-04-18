@@ -24,7 +24,7 @@ public interface UserDatasource {
 
     void userInfoRevise(Map<String, Object> params, @NonNull UserInfoReviseCallback callback);
 
-    void logout(String sid, @NonNull LogoutCallback callback);
+    void logout(int userId, @NonNull LogoutCallback callback);
 
     void forgetPassword(Map<String, Object> params, @NonNull ForgetPasswordCallback callback);
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,10 +30,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.activity.AdActivity;
 import me.zoro.peachgardenmall.adapter.GoodsGridAdapter;
+import me.zoro.peachgardenmall.common.Const;
 
 /**
  * Created by dengfengdecao on 17/4/7.
@@ -114,7 +117,6 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     }
 
 
-
     @Override
     public void OnBannerClick(int position) {
         // TODO: 17/4/9 banner点击事件
@@ -128,6 +130,18 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // TODO: 17/4/9 商品点击事件
         Toast.makeText(getActivity(), position + "", Toast.LENGTH_SHORT).show();
+    }
+
+    // 显示客服信息
+    @OnClick(R.id.toolbar_right_img)
+    public void onViewClicked() {
+        if (!getActivity().isFinishing()) {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("客服信息")
+                    .setMessage("联系客服：" + Const.SERVICE_CONTACT_INFORMATION)
+                    .setCancelable(true)
+                    .show();
+        }
     }
 
     private class PicassoImageLoader implements ImageLoader {

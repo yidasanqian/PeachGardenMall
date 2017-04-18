@@ -35,5 +35,15 @@ public final class Const {
     public static final String USERINFO_KEY = "userinfo";
 
 
+    /**
+     * Cache
+     */
+    public static final String USER_INFO_CACHE_KEY = "user";
+
+
     public static final String IMAGE_URL = "image_url";
+
+    public static final String SERVER_AVALIABLE = "服务器异常，请稍后重试";
+
+    public static final String SERVICE_CONTACT_INFORMATION = "1000317";
 }

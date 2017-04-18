@@ -21,10 +21,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.UserDatasource;
 import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
+import me.zoro.peachgardenmall.utils.CacheManager;
 import me.zoro.peachgardenmall.utils.PreferencesUtil;
 
 public class LoginActivity extends AppCompatActivity {
@@ -90,6 +92,8 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+                params.put("phone", phone);
+                params.put("password", password);
                 setLoadingIndicator(true);
 
                 mUserRepository.login(params, new UserDatasource.LoginCallback() {
@@ -97,6 +101,9 @@ public class LoginActivity extends AppCompatActivity {
                     public void onLoginSuccess(UserInfo userInfo, String token) {
                         setLoadingIndicator(false);
                         showMessage(getString(R.string.login_success_msg));
+                        // 存入缓存
+                        CacheManager.getInstance().put(Const.USER_INFO_CACHE_KEY, userInfo);
+                        // 持久化token
                         PreferencesUtil.persistentToken(LoginActivity.this, token);
                         // 持久化用户信息
                         PreferencesUtil.persistentUserInfo(LoginActivity.this, userInfo);

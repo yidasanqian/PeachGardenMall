@@ -15,6 +15,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.common.Const;
+import me.zoro.peachgardenmall.datasource.UserDatasource;
+import me.zoro.peachgardenmall.datasource.UserRepository;
+import me.zoro.peachgardenmall.datasource.domain.UserInfo;
+import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
+import me.zoro.peachgardenmall.fragment.MyFragment;
+import me.zoro.peachgardenmall.utils.PreferencesUtil;
 
 /**
  * Created by dengfengdecao on 17/4/10.
@@ -43,6 +50,10 @@ public class SettingsActivity extends AppCompatActivity {
     @BindView(R.id.logout_btn)
     Button mLogoutBtn;
 
+    private UserRepository mUserRepository;
+
+    private UserInfo mUserInfo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +66,17 @@ public class SettingsActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
+        mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(getApplicationContext()));
+
+
+        if (getIntent() != null) {
+            mUserInfo = (UserInfo) getIntent().getSerializableExtra(MyFragment.USERINFO_EXTRA);
+        }
+
+        if (mUserInfo == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -89,6 +111,22 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.logout_btn:
+                mUserRepository.logout(mUserInfo.getUserId(), new UserDatasource.LogoutCallback() {
+                    @Override
+                    public void onLogout() {
+                        PreferencesUtil.getDefaultPreferences(SettingsActivity.this, Const.PREF_TOKEN)
+                                .edit()
+                                .clear()
+                                .apply();
+                        PreferencesUtil.getDefaultPreferences(SettingsActivity.this, Const.PREF_USER_INFO)
+                                .edit()
+                                .clear()
+                                .apply();
+                        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
                 break;
         }
     }
