@@ -104,6 +104,8 @@
         </activity>
         <activity android:name=".activity.EditIdCardActivity">
         </activity>
+        <activity android:name=".activity.ErrorActivity">
+        </activity>
     </application>
 
 </manifest>

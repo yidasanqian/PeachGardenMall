@@ -139,8 +139,8 @@ public class UserRepository implements UserDatasource {
     }
 
     @Override
-    public void changePasswrod(Map<String, Object> params, @NonNull final ChangePasswordCallback callback) {
-        mRemoteDatasource.changePasswrod(params, new ChangePasswordCallback() {
+    public void changePassword(Map<String, Object> params, @NonNull final ChangePasswordCallback callback) {
+        mRemoteDatasource.changePassword(params, new ChangePasswordCallback() {
             @Override
             public void onChangePasswordSuccess() {
                 callback.onChangePasswordSuccess();
@@ -149,6 +149,36 @@ public class UserRepository implements UserDatasource {
             @Override
             public void onChangePasswordFailure(String errorMsg) {
                 callback.onChangePasswordFailure(errorMsg);
+            }
+        });
+    }
+
+    @Override
+    public void changePhone(Map<String, Object> params, @NonNull final ChangePhoneCallback callback) {
+        mRemoteDatasource.changePhone(params, new ChangePhoneCallback() {
+            @Override
+            public void onChangePhoneSuccess() {
+                callback.onChangePhoneSuccess();
+            }
+
+            @Override
+            public void onChangePhoneFailure(String errorMsg) {
+                callback.onChangePhoneFailure(errorMsg);
+            }
+        });
+    }
+
+    @Override
+    public void changeIdCard(Map<String, Object> params, @NonNull final ChangeIdCardCallback callback) {
+        mRemoteDatasource.changeIdCard(params, new ChangeIdCardCallback() {
+            @Override
+            public void onChangeIdCardSuccess() {
+                callback.onChangeIdCardSuccess();
+            }
+
+            @Override
+            public void onChangeIdCardFailure(String errorMsg) {
+                callback.onChangeIdCardFailure(errorMsg);
             }
         });
     }

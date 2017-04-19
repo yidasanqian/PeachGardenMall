@@ -272,25 +272,85 @@ public class UserRemoteDatasource implements UserDatasource {
     }
 
     @Override
-    public void changePasswrod(Map<String, Object> params, @NonNull final ChangePasswordCallback callback) {
+    public void changePassword(Map<String, Object> params, @NonNull final ChangePasswordCallback callback) {
         Call<JsonObject> call = mUserClient.changePassword(params);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
-                Log.d(TAG, "onResponse: 更改密码 bodyJson <== " + bodyJson);
-                int code = bodyJson.get("code").getAsInt();
-                if (code == 0) {
-                    callback.onChangePasswordSuccess();
+                if (bodyJson != null) {
+                    int code = bodyJson.get(Const.CODE).getAsInt();
+                    if (code == 0) {
+                        callback.onChangePasswordSuccess();
+                    } else {
+                        callback.onChangePasswordFailure(bodyJson.get(Const.MESSAGE).getAsString());
+                    }
                 } else {
-                    callback.onChangePasswordFailure(bodyJson.get("message").getAsString());
+                    callback.onChangePasswordFailure(Const.SERVER_AVALIABLE);
                 }
+
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 更改密码异常 t <== ", t);
                 callback.onChangePasswordFailure(Const.SERVER_AVALIABLE);
+            }
+        });
+    }
+
+    @Override
+    public void changePhone(Map<String, Object> params, @NonNull final ChangePhoneCallback callback) {
+        Call<JsonObject> call = mUserClient.changePhone(params);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson != null) {
+                    int code = bodyJson.get(Const.CODE).getAsInt();
+                    if (code == 0) {
+                        callback.onChangePhoneSuccess();
+                    } else {
+                        callback.onChangePhoneFailure(bodyJson.get(Const.MESSAGE).getAsString());
+                    }
+                } else {
+                    callback.onChangePhoneFailure(Const.SERVER_AVALIABLE);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 更改手机号异常 t <== ", t);
+                callback.onChangePhoneFailure(Const.SERVER_AVALIABLE);
+            }
+        });
+    }
+
+    @Override
+    public void changeIdCard(Map<String, Object> params, @NonNull final ChangeIdCardCallback callback) {
+        Call<JsonObject> call = mUserClient.changeIdCard(params);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson != null) {
+                    int code = bodyJson.get(Const.CODE).getAsInt();
+                    if (code == 0) {
+                        callback.onChangeIdCardSuccess();
+                    } else {
+                        callback.onChangeIdCardFailure(bodyJson.get(Const.MESSAGE).getAsString());
+                    }
+                } else {
+                    callback.onChangeIdCardFailure(Const.SERVER_AVALIABLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 更改身份证异常 t <== ", t);
+                callback.onChangeIdCardFailure(Const.SERVER_AVALIABLE);
+
             }
         });
     }

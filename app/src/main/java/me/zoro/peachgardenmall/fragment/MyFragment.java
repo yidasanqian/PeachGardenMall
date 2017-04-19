@@ -260,16 +260,18 @@ public class MyFragment extends Fragment {
     }
 
     private void invalidateUI() {
-        if (mUserInfo != null) {
-            mTvLogin.setVisibility(View.GONE);
+        if (mTvLogin != null) {
+            if (mUserInfo != null) {
+                mTvLogin.setVisibility(View.GONE);
 
-            Picasso.with(getContext())
-                    .load(mUserInfo.getHeadPic())
-                    .fit()
-                    .into(mUserAvatar);
-        } else {
-            // 如果用户未登录，则显示"请登录"按钮
-            mTvLogin.setVisibility(View.VISIBLE);
+                Picasso.with(getContext())
+                        .load(mUserInfo.getHeadPic())
+                        .fit()
+                        .into(mUserAvatar);
+            } else {
+                // 如果用户未登录，则显示"请登录"按钮
+                mTvLogin.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

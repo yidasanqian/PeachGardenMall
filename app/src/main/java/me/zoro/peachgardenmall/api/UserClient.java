@@ -40,6 +40,17 @@ public interface UserClient {
     @GET("User/logout")
     Call<JsonObject> logout(@Query("userId") int userId);
 
+    // 修改密码
+    @POST("User/editPassword")
+    Call<JsonObject> changePassword(@QueryMap Map<String, Object> params);
+
+    @POST("User/editPhone")
+    Call<JsonObject> changePhone(@QueryMap Map<String, Object> params);
+
+    @POST("User/editPhone")
+    Call<JsonObject> changeIdCard(@QueryMap Map<String, Object> params);
+
+
     @GET("user/{username}")
     Call<JsonObject> getUserInfo(@Path("username") String username);
 
@@ -56,10 +67,6 @@ public interface UserClient {
     //忘记密码
     @POST("anon/user/new/password")
     Call<JsonObject> forgetPassword(@QueryMap Map<String, Object> params);
-
-    //修改密码
-    @POST("user/new/password")
-    Call<JsonObject> changePassword(@QueryMap Map<String, Object> params);
 
 
 }

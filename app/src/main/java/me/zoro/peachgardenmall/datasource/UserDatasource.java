@@ -28,7 +28,11 @@ public interface UserDatasource {
 
     void forgetPassword(Map<String, Object> params, @NonNull ForgetPasswordCallback callback);
 
-    void changePasswrod(Map<String, Object> params, @NonNull ChangePasswordCallback callback);
+    void changePassword(Map<String, Object> params, @NonNull ChangePasswordCallback callback);
+
+    void changePhone(Map<String, Object> params, @NonNull ChangePhoneCallback callback);
+
+    void changeIdCard(Map<String, Object> params, @NonNull ChangeIdCardCallback callback);
 
     void fetchUserInfo(int userId, @NonNull GetUserInfoCallback callback);
 
@@ -89,5 +93,17 @@ public interface UserDatasource {
         void onChangePasswordSuccess();
 
         void onChangePasswordFailure(String errorMsg);
+    }
+
+    interface ChangePhoneCallback {
+        void onChangePhoneSuccess();
+
+        void onChangePhoneFailure(String errorMsg);
+    }
+
+    interface ChangeIdCardCallback {
+        void onChangeIdCardSuccess();
+
+        void onChangeIdCardFailure(String errorMsg);
     }
 }
