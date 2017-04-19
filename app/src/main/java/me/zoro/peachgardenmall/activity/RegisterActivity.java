@@ -74,15 +74,15 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = mEtPassword.getText().toString();
                 String captcha = mEtCaptcha.getText().toString();
                 if (TextUtils.isEmpty(phone)) {
-                    showMessage(getString(R.string.empty_phone_msg));
+                    mEtTel.setError(getString(R.string.empty_phone_msg));
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
-                    showMessage(getString(R.string.empty_password_msg));
+                    mEtPassword.setError(getString(R.string.empty_password_msg));
                     return;
                 }
                 if (TextUtils.isEmpty(captcha)) {
-                    showMessage(getString(R.string.empty_captcha_msg));
+                    mEtCaptcha.setError(getString(R.string.empty_captcha_msg));
                     return;
                 }
                 params.put("phone", phone);

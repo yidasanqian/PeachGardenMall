@@ -78,17 +78,16 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick({R.id.btn_login, R.id.tv_forget_password, R.id.tv_register})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            // TODO: 17/4/11 登录
             case R.id.btn_login:
                 Map<String, String> params = new HashMap<>();
                 String phone = mEtTel.getText().toString();
                 String password = mEtPassword.getText().toString();
                 if (TextUtils.isEmpty(phone)) {
-                    showMessage(getString(R.string.empty_phone_msg));
+                    mEtTel.setError(getString(R.string.empty_phone_msg));
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
-                    showMessage(getString(R.string.empty_password_msg));
+                    mEtPassword.setError(getString(R.string.empty_password_msg));
                     return;
                 }
 

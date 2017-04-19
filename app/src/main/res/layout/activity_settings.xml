@@ -123,13 +123,15 @@
                 android:layout_below="@id/tv2"
                 />
 
-            <ImageView
-                android:id="@+id/iv4"
-                android:layout_width="@dimen/ic_width"
-                android:layout_height="@dimen/ic_height"
-                android:src="@drawable/ic_right_arrow"
+            <me.zoro.peachgardenmall.view.RichText
+                android:id="@+id/tv_cache_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_right_arrow"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/layout_margin"
+                app:drawableWidth="@dimen/ic_width"
+                app:drawableHeight="@dimen/ic_height"
                 />
         </RelativeLayout>
 

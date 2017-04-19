@@ -1,11 +1,14 @@
 package me.zoro.peachgardenmall.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -21,13 +24,17 @@ import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.MyFragment;
+import me.zoro.peachgardenmall.utils.CacheManager;
 import me.zoro.peachgardenmall.utils.PreferencesUtil;
+import me.zoro.peachgardenmall.view.RichText;
 
 /**
  * Created by dengfengdecao on 17/4/10.
  */
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private static final String TAG = "SettingsActivity";
 
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
@@ -49,6 +56,8 @@ public class SettingsActivity extends AppCompatActivity {
     RelativeLayout mAbout;
     @BindView(R.id.logout_btn)
     Button mLogoutBtn;
+    @BindView(R.id.tv_cache_size)
+    RichText mTvCacheSize;
 
     private UserRepository mUserRepository;
 
@@ -77,6 +86,10 @@ public class SettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+
+        String cacheSize = CacheManager.getInstance().getTotalCacheSize(getApplicationContext());
+        Log.d(TAG, "onCreate: 缓存大小" + cacheSize);
+        mTvCacheSize.setText(cacheSize);
     }
 
     @Override
@@ -85,7 +98,8 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onSupportNavigateUp();
     }
 
-    @OnClick({R.id.account_setting, R.id.clear_cache, R.id.order, R.id.delivery_address, R.id.coupon, R.id.common_question, R.id.about, R.id.logout_btn})
+    @OnClick({R.id.account_setting, R.id.clear_cache, R.id.order, R.id.delivery_address, R.id.coupon,
+            R.id.common_question, R.id.about, R.id.logout_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.account_setting:
@@ -93,6 +107,7 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.clear_cache:
+                clearCache();
                 break;
             case R.id.order:
                 intent = new Intent(this, MyOrderActivity.class);
@@ -131,5 +146,27 @@ public class SettingsActivity extends AppCompatActivity {
                 });
                 break;
         }
+    }
+
+    private void clearCache() {
+        new AlertDialog.Builder(this)
+                .setMessage("是否清除缓存")
+                .setCancelable(true)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CacheManager.getInstance().clearCache(getApplicationContext());
+                        String cacheSize = CacheManager.getInstance().getTotalCacheSize(getApplicationContext());
+                        Log.d(TAG, "onClick: 清除缓存后，大小" + cacheSize);
+                        mTvCacheSize.setText(cacheSize);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 }
