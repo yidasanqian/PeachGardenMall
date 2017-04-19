@@ -35,14 +35,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private static final String TAG = "MainActivity";
 
+    private static final int PERMISSION_REQUEST_CODE = 1;
+
     @BindView(R.id.viewpager)
     ViewPager mViewpager;
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigation;
     MenuItem mPrevMenuItem;
-    FragmentManager mFragmentManager;
 
-    private static final int PERMISSION_REQUEST_CODE = 1;
+    FragmentManager mFragmentManager;
     /**
      * 未授权的运行时权限
      */
@@ -79,36 +80,93 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
                 // 未授权，显示该权限的用途说明，如果应用没有获得对应权限,则添加到列表中,准备批量申请
                 mPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            } else if (checkSelfPermission((Manifest.permission.ACCESS_FINE_LOCATION))
+            }
+            if (checkSelfPermission((Manifest.permission.ACCESS_FINE_LOCATION))
                     != PackageManager.PERMISSION_GRANTED) {
 
                 mPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-            } else if (checkSelfPermission((Manifest.permission.ACCESS_COARSE_LOCATION))
+            }
+            if (checkSelfPermission((Manifest.permission.ACCESS_COARSE_LOCATION))
                     != PackageManager.PERMISSION_GRANTED) {
 
                 mPermissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-            } else if (checkSelfPermission((Manifest.permission.READ_PHONE_STATE))
+            }
+            if (checkSelfPermission((Manifest.permission.READ_PHONE_STATE))
                     != PackageManager.PERMISSION_GRANTED) {
 
                 mPermissions.add(Manifest.permission.READ_PHONE_STATE);
             }
-
-
-            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                Log.d(TAG, "requestPermissions: 申请的权限被拒绝后显示权限描述");
-                Log.d(TAG, "requestPermissions: 写外部存储权限被禁止");
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Log.d(TAG, "requestPermissions: 精确定位权限被禁止");
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                Log.d(TAG, "requestPermissions: 模糊定位权限被禁止");
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {
-                Log.d(TAG, "requestPermissions: 读取手机状态权限被禁止");
-            } else {
-                if (mPermissions.size() > 0) {
-                    requestPermissions(mPermissions.toArray(new String[mPermissions.size()]),
-                            PERMISSION_REQUEST_CODE);
-                }
+            if (checkSelfPermission(Manifest.permission.READ_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                mPermissions.add(Manifest.permission.READ_CONTACTS);
             }
+            if (checkSelfPermission(Manifest.permission.WRITE_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                mPermissions.add(Manifest.permission.WRITE_CONTACTS);
+            }
+            if (checkSelfPermission(Manifest.permission.SEND_SMS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                mPermissions.add(Manifest.permission.SEND_SMS);
+            }
+            if (checkSelfPermission(Manifest.permission.RECEIVE_SMS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                mPermissions.add(Manifest.permission.RECEIVE_SMS);
+            }
+            if (checkSelfPermission(Manifest.permission.READ_SMS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                mPermissions.add(Manifest.permission.READ_SMS);
+            }
+            if (checkSelfPermission(Manifest.permission.RECORD_AUDIO)
+                    != PackageManager.PERMISSION_GRANTED) {
+                mPermissions.add(Manifest.permission.RECORD_AUDIO);
+            }
+            if (checkSelfPermission(Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                mPermissions.add(Manifest.permission.CAMERA);
+            }
+
+            /**
+             *  申请的权限被拒绝后,可以在此提示用户打开权限
+             */
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Log.d(TAG, "requestPermissions: 写外部存储权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Log.d(TAG, "requestPermissions: 精确定位权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                Log.d(TAG, "requestPermissions: 模糊定位权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {
+                Log.d(TAG, "requestPermissions: 读取手机状态权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
+                Log.d(TAG, "requestPermissions: 读取联系人权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CONTACTS)) {
+                Log.d(TAG, "requestPermissions: 写联系人权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS)) {
+                Log.d(TAG, "requestPermissions: 发送短信权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS)) {
+                Log.d(TAG, "requestPermissions: 接收短信权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)) {
+                Log.d(TAG, "requestPermissions: 读取短信权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO)) {
+                Log.d(TAG, "requestPermissions: 读取短信权限被禁止");
+            }
+            if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                Log.d(TAG, "requestPermissions: 读取短信权限被禁止");
+            }
+
+            if (mPermissions.size() > 0) {
+                requestPermissions(mPermissions.toArray(new String[mPermissions.size()]),
+                        PERMISSION_REQUEST_CODE);
+            }
+
         }
     }
 
@@ -117,16 +175,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                            @NonNull int[] grantResults) {
 
         if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "onRequestPermissionsResult: 授权成功！");
-            } else {
-                // Permission Denied
-                Log.d(TAG, "onRequestPermissionsResult: Permission Denied");
-                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_LONG).show();
+            int index = 0;
+
+            for (int gr :
+                    grantResults) {
+                if (index < grantResults.length) {
+                    if (gr == PackageManager.PERMISSION_GRANTED) {
+                        Log.d(TAG, "onRequestPermissionsResult: 授权成功的权限==> " + mPermissions.get(index));
+                    } else {
+                        // Permission Denied
+                        Log.d(TAG, "onRequestPermissionsResult: 被拒绝的权限 ==> " + mPermissions.get(index));
+                    }
+                }
+                index++;
             }
+
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 

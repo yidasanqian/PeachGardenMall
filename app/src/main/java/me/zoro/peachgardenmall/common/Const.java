@@ -45,5 +45,4 @@ public final class Const {
 
     public static final String SERVER_AVALIABLE = "服务器异常，请稍后重试";
 
-    public static final String SERVICE_CONTACT_INFORMATION = "1000317";
 }

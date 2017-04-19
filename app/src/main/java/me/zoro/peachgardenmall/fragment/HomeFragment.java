@@ -7,6 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +38,6 @@ import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.activity.AdActivity;
 import me.zoro.peachgardenmall.adapter.GoodsGridAdapter;
-import me.zoro.peachgardenmall.common.Const;
 
 /**
  * Created by dengfengdecao on 17/4/7.
@@ -136,9 +138,17 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     @OnClick(R.id.toolbar_right_img)
     public void onViewClicked() {
         if (!getActivity().isFinishing()) {
+            SpannableString ss = new SpannableString(getString(R.string.service_contact_information));
+            ss.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    Log.d("", "onClick........" + widget);
+                }
+            }, 5, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
             new AlertDialog.Builder(getContext())
                     .setTitle("客服信息")
-                    .setMessage("联系客服：" + Const.SERVICE_CONTACT_INFORMATION)
+                    .setMessage(ss)
                     .setCancelable(true)
                     .show();
         }

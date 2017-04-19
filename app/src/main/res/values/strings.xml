@@ -5,14 +5,13 @@
     <string name="my_title">我的</string>
     <string name="reflesh_title">刷新</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_data_hint">暂无数据</string>
-    <string name="register_progress_bar_title">注册中...</string>
+    <string name="register_progress_bar_title">注册中&#8230;&#8230;&#8230;</string>
     <string name="empty_phone_msg">手机号不能为空</string>
     <string name="empty_password_msg">密码不能为空</string>
     <string name="empty_captcha_msg">验证码不能为空</string>
     <string name="register_success_msg">注册成功</string>
     <string name="login_success_msg">登录成功</string>
     <string name="empty_idcard_msg">身份证号码不能为空</string>
+    <string name="service_contact_information">联系客服：1000231312</string>
 </resources>
