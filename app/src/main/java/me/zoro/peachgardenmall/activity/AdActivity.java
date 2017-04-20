@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.fragment.HomeFragment;
 
 public class AdActivity extends AppCompatActivity {
 
@@ -34,10 +36,8 @@ public class AdActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ad);
         ButterKnife.bind(this);
 
-       /* String title = getIntent().getStringExtra(MainFragment.BANNER_TITLE_EXTRA);
-        String url = getIntent().getStringExtra(MainFragment.BANNER_URL_EXTRA);
-        Log.d(TAG, "onCreate: title <== " + title + ", url <== " + url);
-        mToolbar.setTitle(title);*/
+        final String url = getIntent().getStringExtra(HomeFragment.AD_URL_EXTRA);
+        mToolbar.setTitle(url);
         setSupportActionBar(mToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
@@ -46,18 +46,18 @@ public class AdActivity extends AppCompatActivity {
         final String cacheDirPath = getCacheDir().getPath();
 
         final WebSettings settings = mWebView.getSettings();
-        settings.setJavaScriptEnabled(true);//启用js
-        settings.setJavaScriptCanOpenWindowsAutomatically(true);//js和android交互
+        settings.setJavaScriptEnabled(true);    // 启用js
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);    // js和android交互
         mWebView.addJavascriptInterface(new JavaScriptInterface(), "android"); // js调原生
 
-        settings.setAppCachePath(cacheDirPath); //设置缓存的指定路径
-        settings.setAllowFileAccess(true); // 允许访问文件
-        settings.setAppCacheEnabled(true); //设置H5的缓存打开,默认关闭
-        settings.setUseWideViewPort(true);//设置webview自适应屏幕大小
-        settings.setLoadWithOverviewMode(true);//设置webview自适应屏幕大小
-        settings.setDomStorageEnabled(true);//设置可以使用localStorage
-        settings.setSupportZoom(false);//关闭zoom按钮
-        settings.setBuiltInZoomControls(false);//关闭zoom
+        settings.setAppCachePath(cacheDirPath); // 设置缓存的指定路径
+        settings.setAllowFileAccess(true);      // 允许访问文件
+        settings.setAppCacheEnabled(true);      // 设置H5的缓存打开,默认关闭
+        settings.setUseWideViewPort(true);      // 设置webview自适应屏幕大小
+        settings.setLoadWithOverviewMode(true); // 设置webview自适应屏幕大小
+        settings.setDomStorageEnabled(true);    // 设置可以使用localStorage
+        settings.setSupportZoom(false);         // 关闭zoom按钮
+        settings.setBuiltInZoomControls(false); // 关闭zoom
 
         // 告诉WebView先不要自动加载图片，等页面finish后再发起图片加载
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -86,10 +86,10 @@ public class AdActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new WebViewClient() {
 
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Log.d(TAG, "shouldOverrideUrlLoading: url <== " + url);
-                //par   serURL(url); // 解析url,如果存在有跳转原生界面的url规则，则跳转原生。
-                return super.shouldOverrideUrlLoading(view, url);
+                //parserURL(url); // 解析url,如果存在有跳转原生界面的url规则，则跳转原生。
+                return super.shouldOverrideUrlLoading(view, request);
             }
 
             @Override
@@ -106,7 +106,7 @@ public class AdActivity extends AppCompatActivity {
             }
         });
 
-        //mWebView.loadUrl(url);
+        mWebView.loadUrl(url);
     }
 
     private class JavaScriptInterface {

@@ -391,7 +391,7 @@ public class UserInfo implements Serializable {
     }
 
 
-    class UserLevelEntity implements Serializable {
+    public static class UserLevelEntity implements Serializable {
         /**
          * level_id : 1
          * level_name : 注册会员

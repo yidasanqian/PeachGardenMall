@@ -2,6 +2,7 @@ package me.zoro.peachgardenmall.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,7 +30,9 @@ import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +41,10 @@ import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.activity.AdActivity;
 import me.zoro.peachgardenmall.adapter.GoodsGridAdapter;
+import me.zoro.peachgardenmall.datasource.BannerDatasource;
+import me.zoro.peachgardenmall.datasource.BannerRepository;
+import me.zoro.peachgardenmall.datasource.domain.BannerInfo;
+import me.zoro.peachgardenmall.datasource.remote.BannerRemoteDatasource;
 
 /**
  * Created by dengfengdecao on 17/4/7.
@@ -45,6 +52,7 @@ import me.zoro.peachgardenmall.adapter.GoodsGridAdapter;
 
 public class HomeFragment extends Fragment implements OnBannerClickListener, AdapterView.OnItemClickListener {
     private static final String TAG = "HomeFragment";
+    public static final String AD_URL_EXTRA = "ad_url";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.toolbar_right_img)
@@ -54,6 +62,10 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     @BindView(R.id.grid_view)
     GridView mGridView;
     Unbinder unbinder;
+
+    private BannerRepository mBannerRepository;
+    private BannerInfo mBannerInfo;
+
     private List<String> mImagesUrl = new ArrayList<>();
    /* private ArrayAdapter<String> mSpinnerAdapter;
     private String[] mCategory;*/
@@ -71,11 +83,20 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mBannerRepository = BannerRepository.getInstance(BannerRemoteDatasource
+                .getInstance(getContext().getApplicationContext()));
+
+        if (mBannerInfo != null) {
+            setupBanner(mBannerInfo);
+        } else {
+            new FetchBannerTask().execute();
+        }
+
         // TODO: 17/4/9 banner跳转url
-        mImagesUrl.add("http://img3.imgtn.bdimg.com/it/u=2264776075,3168614604&fm=21&gp=0.jpg");
+      /*  mImagesUrl.add("http://img3.imgtn.bdimg.com/it/u=2264776075,3168614604&fm=21&gp=0.jpg");
         mImagesUrl.add("http://img3.duitang.com/uploads/item/201604/30/20160430003024_FwSEG.thumb.700_0.jpeg");
         mImagesUrl.add("http://g.hiphotos.baidu.com/zhidao/pic/item/bd315c6034a85edf433f02544f540923dd547512.jpg");
-        mImagesUrl.add("http://i-7.vcimg.com/trim/b7316e98fe939f0f9b064b8ac2de99d0351027/trim.jpg");
+        mImagesUrl.add("http://i-7.vcimg.com/trim/b7316e98fe939f0f9b064b8ac2de99d0351027/trim.jpg");*/
     }
 
     @Nullable
@@ -84,20 +105,6 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, root);
 
-        // 设置banner样式
-        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
-        // 设置图片加载器
-        mBanner.setImageLoader(new PicassoImageLoader());
-        // 设置banner动画效果
-        mBanner.setBannerAnimation(Transformer.DepthPage);
-        // 设置标题集合（当banner样式有显示title时）
-        // mBanner.setBannerTitles(Arrays.asList(mTitles));
-        // 设置指示器位置（当banner模式中有指示器时）
-        mBanner.setIndicatorGravity(BannerConfig.CENTER);
-        // 设置轮播图片(所有设置参数方法都放在此方法之前执行)
-        mBanner.setImages(mImagesUrl);
-        // banner设置方法全部调用完毕时最后调用
-        mBanner.start();
         mBanner.setOnBannerClickListener(this);
 
         // 初始化spinner中显示的数据
@@ -121,11 +128,34 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
 
     @Override
     public void OnBannerClick(int position) {
-        // TODO: 17/4/9 banner点击事件
-        Intent intent = new Intent(getActivity(), AdActivity.class);
-       /* intent.putExtra(BANNER_TITLE_EXTRA, mBannerInfos.get(position - 1).getRelateArticleTitle());
-        intent.putExtra(BANNER_URL_EXTRA, mBannerInfos.get(position - 1).getRelateUrl());*/
-        startActivity(intent);
+        int pos = position - 1;
+        // 0：表示广告， 1：表示商品
+        int type = 0;
+        List<BannerInfo.AdDataEntity> adList = mBannerInfo.getAdList();
+        List<BannerInfo.GoodsDataEntity> goodsList = mBannerInfo.getGoodsList();
+        try {
+
+            for (int i = 0; i < adList.size(); i++) {
+                if (mImagesUrl.get(pos).equals(adList.get(i).getAdImageUrl())) {
+                    type = 0;
+                }
+            }
+            for (int i = 0; i < goodsList.size(); i++) {
+                if (mImagesUrl.get(pos).equals(goodsList.get(i).getGoodsImageUrl())) {
+                    type = 1;
+                }
+            }
+        } catch (IndexOutOfBoundsException e) {
+            Log.e(TAG, "OnBannerClick: 数组越界", e);
+        }
+
+        if (type == 0) {
+            Intent intent = new Intent(getActivity(), AdActivity.class);
+            intent.putExtra(AD_URL_EXTRA, adList.get(pos).getAdLink());
+            startActivity(intent);
+        } else {
+            Log.d(TAG, "OnBannerClick: 商品");
+        }
     }
 
     @Override
@@ -180,5 +210,68 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private class FetchBannerTask extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // 每种广告类型的数量
+            int count = 2;
+            Map<String, Object> p = new HashMap<>();
+            p.put("count", count);
+            mBannerRepository.getBannerInfo(p, new BannerDatasource.GetBannerInfoCallback() {
+                @Override
+                public void onBannerLoaded(final BannerInfo bannerInfo) {
+                    mBannerInfo = bannerInfo;
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setupBanner(bannerInfo);
+                        }
+                    });
+                }
+
+                @Override
+                public void onDataNotAvoidable(String errorMsg) {
+                    showMessage(errorMsg);
+                }
+            });
+            return null;
+        }
+    }
+
+    private void setupBanner(BannerInfo bannerInfo) {
+        List<BannerInfo.AdDataEntity> adList = bannerInfo.getAdList();
+        for (int i = 0; i < adList.size(); i++) {
+            mImagesUrl.add(adList.get(i).getAdImageUrl());
+        }
+        List<BannerInfo.GoodsDataEntity> goodsList = bannerInfo.getGoodsList();
+        for (int i = 0; i < goodsList.size(); i++) {
+            mImagesUrl.add(goodsList.get(i).getGoodsImageUrl());
+        }
+
+
+        // 设置banner样式
+        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+        // 设置图片加载器
+        mBanner.setImageLoader(new PicassoImageLoader());
+        // 设置banner动画效果
+        mBanner.setBannerAnimation(Transformer.DepthPage);
+        // 设置标题集合（当banner样式有显示title时）
+        // mBanner.setBannerTitles(Arrays.asList(mTitles));
+        // 设置指示器位置（当banner模式中有指示器时）
+        mBanner.setIndicatorGravity(BannerConfig.CENTER);
+        // 设置轮播图片(所有设置参数方法都放在此方法之前执行)
+        mBanner.setImages(mImagesUrl);
+        // banner设置方法全部调用完毕时最后调用
+        mBanner.start();
+    }
+
+    private void showMessage(String msg) {
+        if (!getActivity().isFinishing()) {
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        }
     }
 }
