@@ -16,4 +16,5 @@
     <string name="service_contact_information">联系客服：1000231312</string>
     <string name="edit_shopping_cart">编辑</string>
     <string name="delete_shopping_cart">删除</string>
+    <string name="illegal_idcard_msg">不合法的身份证</string>
 </resources>

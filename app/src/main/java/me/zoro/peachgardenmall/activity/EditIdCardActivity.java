@@ -62,6 +62,9 @@ public class EditIdCardActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(idCard)) {
             mEtIdcard.setError(getString(R.string.empty_idcard_msg));
             return;
+        } else if (!idCard.matches("(^\\d{15}$)|(^\\d{17}([0-9]|X)$)")) {
+            mEtIdcard.setError(getString(R.string.illegal_idcard_msg));
+            return;
         }
 
         UserInfo userInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);

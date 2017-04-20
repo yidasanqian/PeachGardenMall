@@ -47,7 +47,7 @@ public interface UserClient {
     @POST("User/editPhone")
     Call<JsonObject> changePhone(@Body Map<String, Object> params);
 
-    @POST("User/editPhone")
+    @POST("User/setIDCard")
     Call<JsonObject> changeIdCard(@Body Map<String, Object> params);
 
 

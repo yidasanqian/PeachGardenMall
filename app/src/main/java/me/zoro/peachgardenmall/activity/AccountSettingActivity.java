@@ -40,8 +40,6 @@ public class AccountSettingActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
-
-
     }
 
 
