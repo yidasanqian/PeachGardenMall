@@ -2,11 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical"
+              android:orientation="horizontal"
     >
 
+    <CheckBox
+        android:id="@+id/cb_checked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        />
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
         android:id="@+id/goods_info"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -42,11 +55,21 @@
         >
 
         <TextView
+            android:id="@+id/tv_goods_money_lbl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¥ 90.0"
+            android:text="¥ "
             android:layout_gravity="center"
             android:paddingLeft="@dimen/layout_padding"
+            android:textColor="@android:color/holo_red_light"
+            />
+
+        <TextView
+            android:id="@+id/tv_goods_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="90"
+            android:layout_gravity="center"
             android:textColor="@android:color/holo_red_light"
             />
 
@@ -81,7 +104,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/subtract_iv"
-                    android:text="1"
                     android:paddingLeft="@dimen/layout_padding"
                     android:paddingRight="@dimen/layout_padding"
                     />
@@ -99,4 +121,7 @@
 
 
     </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>

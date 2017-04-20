@@ -1,21 +1,25 @@
 package me.zoro.peachgardenmall.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.activity.MyShoppingCartActivity;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 
 /**
@@ -29,12 +33,32 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private static final int TYPE_FOOTER = 2;
 
 
-    private Context mContext;
+    private MyShoppingCartActivity mContext;
     private List<Goods> mGoodses;
+    private double mTotalMoney;
 
-    public MyShoppingCartRecyclerViewAdapter(Context context, List<Goods> goodses) {
+    private boolean mIsShowChecked;
+
+    /**
+     * 存储勾选框状态的map集合
+     */
+    private Map<Integer, Boolean> map = new HashMap<>();
+
+    private static OnAddSubtractClickListener sOnAddSubtractClickListener;
+
+
+    public static interface OnAddSubtractClickListener {
+        void onAddSubtractClick(View view, double money, int count);
+    }
+
+    public void setOnAddSubtractClickListener(OnAddSubtractClickListener listener) {
+        sOnAddSubtractClickListener = listener;
+    }
+
+    public MyShoppingCartRecyclerViewAdapter(MyShoppingCartActivity context, List<Goods> goodses, boolean isShowChecked) {
         mContext = context;
         mGoodses = goodses;
+        mIsShowChecked = isShowChecked;
     }
 
     public int getItemViewType(int position) {
@@ -50,10 +74,13 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         return mGoodses.size() == 0;
     }
 
-    public void replaceData(List<Goods> goods) {
+    public void replaceData(List<Goods> goods, boolean isShowChecked) {
         mGoodses = goods;
+        mIsShowChecked = isShowChecked;
+        mTotalMoney = 0;
         // 调用以下方法更新后，会依次调用getItemViewType和onBindViewHolder方法
         notifyDataSetChanged();
+        //mContext.updateTotalMoney();
     }
 
     @Override
@@ -70,20 +97,48 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         // item 第一个位置position为0，之后递增
         if (holder instanceof RecyclerEmptyViewHolder) {
             RecyclerEmptyViewHolder viewHolder = (RecyclerEmptyViewHolder) holder;
             viewHolder.mTvEmptyHint.setText(R.string.empty_data_hint);
+            mTotalMoney = 0;
         } else {
             RecyclerItemViewHolder viewHolder = (RecyclerItemViewHolder) holder;
+            if (mIsShowChecked) {
+                viewHolder.mCbChecked.setVisibility(View.VISIBLE);
+                // 设置checkBox选中监听
+                viewHolder.mCbChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        // 用map集合保存
+                        map.put(position, isChecked);
+                    }
+                });
+
+            } else {
+                viewHolder.mCbChecked.setVisibility(View.GONE);
+            }
+
+
             Goods goods = getItem(position);
+            viewHolder.itemView.setTag(goods.getMoney());
             viewHolder.mGoodsNameTv.setText(goods.getName());
+            viewHolder.mTvGoodsMoney.setText(String.valueOf(goods.getMoney()));
+            viewHolder.mCountTv.setText(String.valueOf(goods.getCount()));
+            viewHolder.mSubtractIv.setTag(goods.getMoney());
+            viewHolder.mAddIv.setTag(goods.getMoney());
+            mTotalMoney += goods.getMoney();
         }
+        mContext.updateTotalMoney(mTotalMoney);
     }
 
     private Goods getItem(int position) {
         return mGoodses.get(position);
+    }
+
+    public Map<Integer, Boolean> getMap() {
+        return map;
     }
 
     @Override
@@ -99,14 +154,16 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         LinearLayout mGoodsesInfo;
         @BindView(R.id.goods_name_tv)
         TextView mGoodsNameTv;
+        @BindView(R.id.tv_goods_money)
+        TextView mTvGoodsMoney;
         @BindView(R.id.subtract_iv)
         ImageView mSubtractIv;
         @BindView(R.id.count_tv)
         TextView mCountTv;
         @BindView(R.id.add_iv)
         ImageView mAddIv;
-
-        private int count = 1;
+        @BindView(R.id.cb_checked)
+        CheckBox mCbChecked;
 
         public RecyclerItemViewHolder(View itemView) {
             super(itemView);
@@ -124,16 +181,26 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     Toast.makeText(view.getContext(), "goods info", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.subtract_iv:
-                    if (count <= 1) {
-                        count = 1;
+                    int count = Integer.parseInt(mCountTv.getText().toString());
+                    count--;
+
+                    if (count >= 1) {
+                        if (sOnAddSubtractClickListener != null) {
+                            sOnAddSubtractClickListener.onAddSubtractClick(view, -(double) view.getTag(), count);
+                        }
                     } else {
-                        count--;
+                        count = 1;
                     }
                     mCountTv.setText(String.valueOf(count));
+
                     break;
                 case R.id.add_iv:
+                    count = Integer.parseInt(mCountTv.getText().toString());
                     count++;
                     mCountTv.setText(String.valueOf(count));
+                    if (sOnAddSubtractClickListener != null) {
+                        sOnAddSubtractClickListener.onAddSubtractClick(view, (double) view.getTag(), count);
+                    }
                     break;
             }
         }

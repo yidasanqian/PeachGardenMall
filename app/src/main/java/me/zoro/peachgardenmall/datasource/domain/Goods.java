@@ -10,6 +10,8 @@ import java.io.Serializable;
 public class Goods implements Serializable {
 
     private String name;
+    private double money;
+    private int count = 1;
     private String imgUrl;
 
     public String getName() {
@@ -18,6 +20,22 @@ public class Goods implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public String getImgUrl() {

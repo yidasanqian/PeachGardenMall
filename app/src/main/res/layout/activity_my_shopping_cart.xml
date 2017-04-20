@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_horizontal"
-                android:text="编辑"
+                android:text="@string/edit_shopping_cart"
                 android:textColor="@color/textColorPrimary"
                 android:background="?android:attr/selectableItemBackground"
                 style="@style/Widget.AppCompat.ActionButton"
@@ -52,8 +52,80 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/main_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context="me.zoro.peachgardenmall.fragment.MyShoppingCartFragment">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:elevation="1dp"
+            >
+
+            <TextView
+                android:id="@+id/total_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合计："
+                android:textSize="@dimen/app_bar_title"
+                android:textColor="@color/textColorSecondary"
+                android:minHeight="56dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:scaleType="center"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/total_money_tv_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¥"
+                android:textSize="@dimen/app_bar_title"
+                android:textColor="@android:color/holo_red_light"
+                android:minHeight="56dp"
+                android:scaleType="center"
+                android:gravity="center"
+                android:layout_toRightOf="@id/total_lbl"
+                />
+
+            <TextView
+                android:id="@+id/total_money_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/app_bar_title"
+                android:textColor="@android:color/holo_red_light"
+                android:minHeight="56dp"
+                android:scaleType="center"
+                android:gravity="center"
+                android:layout_toRightOf="@id/total_money_tv_lbl"
+                />
+
+            <TextView
+                android:id="@+id/settlement_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结算"
+                android:textSize="@dimen/app_bar_title"
+                android:textColor="@color/colorPrimary"
+                android:background="@color/colorAccent"
+                android:layout_alignParentRight="true"
+                android:minHeight="56dp"
+                android:paddingStart="48dp"
+                android:paddingEnd="48dp"
+                android:scaleType="center"
+                android:gravity="center"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
 </LinearLayout>

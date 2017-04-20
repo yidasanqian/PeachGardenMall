@@ -14,4 +14,6 @@
     <string name="login_success_msg">登录成功</string>
     <string name="empty_idcard_msg">身份证号码不能为空</string>
     <string name="service_contact_information">联系客服：1000231312</string>
+    <string name="edit_shopping_cart">编辑</string>
+    <string name="delete_shopping_cart">删除</string>
 </resources>

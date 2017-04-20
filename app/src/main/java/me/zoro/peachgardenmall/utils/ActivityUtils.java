@@ -24,6 +24,13 @@ public class ActivityUtils {
         transaction.commit();
     }
 
+    public static void replaceFragmentOnActivity(@NonNull FragmentManager fragmentManager,
+                                                 @NonNull Fragment fragment, int frameId, String tag) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(frameId, fragment, tag);
+        transaction.commit();
+    }
+
     public static void switchFragmentOnActivity(@NonNull FragmentManager fragmentManager,
                                                 @NonNull Fragment from,
                                                 @NonNull Fragment to,
@@ -45,27 +52,4 @@ public class ActivityUtils {
             }
         }
     }
-
-    public static void replaceFragmentOnActivity(@NonNull FragmentManager fragmentManager,
-                                                 @NonNull Fragment from,
-                                                 @NonNull Fragment to,
-                                                 int frameId, String tag) {
-        if (from != to) {
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            // 要切换的fragment已经在activity上,则隐藏,否则添加到activity上
-            if (to.isAdded()) {
-                transaction.hide(from).show(to);
-            } else {
-                transaction.hide(from).add(frameId, to, tag);
-            }
-            if (Build.VERSION.SDK_INT >= 24) {
-                transaction.commitNow();
-            } else {
-                // fix : java.lang.IllegalStateException: FragmentManager is already executing transactions
-                fragmentManager.executePendingTransactions();
-                transaction.commit();
-            }
-        }
-    }
-
 }

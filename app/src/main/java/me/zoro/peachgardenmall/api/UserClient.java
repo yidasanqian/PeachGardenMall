@@ -42,13 +42,13 @@ public interface UserClient {
 
     // 修改密码
     @POST("User/editPassword")
-    Call<JsonObject> changePassword(@QueryMap Map<String, Object> params);
+    Call<JsonObject> changePassword(@Body Map<String, Object> params);
 
     @POST("User/editPhone")
-    Call<JsonObject> changePhone(@QueryMap Map<String, Object> params);
+    Call<JsonObject> changePhone(@Body Map<String, Object> params);
 
     @POST("User/editPhone")
-    Call<JsonObject> changeIdCard(@QueryMap Map<String, Object> params);
+    Call<JsonObject> changeIdCard(@Body Map<String, Object> params);
 
 
     @GET("user/{username}")
