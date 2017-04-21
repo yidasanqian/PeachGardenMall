@@ -2,6 +2,7 @@ package me.zoro.peachgardenmall.datasource;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ public interface GoodsDatasource {
 
     void getGoodsCategories(Map<String, Object> params, @NonNull GetGoodsCategoriesCallback callback);
 
+    void searchGoodses(Map<String, Object> params, @NonNull SearchGoodsesCallback callback);
+
     interface GetGoodsesCallback {
         void onGoodsesLoaded(List<Goods> goodses);
 
@@ -28,5 +31,11 @@ public interface GoodsDatasource {
         void onGoodsCategoriesLoaded(List<GoodsCategory> goodsCategories);
 
         void onDataNotAvailable(String errorMsg);
+    }
+
+    interface SearchGoodsesCallback {
+        void onSearchSucces(ArrayList<Goods> goodses);
+
+        void onSearchFailure(String msg);
     }
 }

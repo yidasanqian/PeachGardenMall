@@ -205,5 +205,20 @@ public class UserRepository implements UserDatasource {
 
     }
 
+    @Override
+    public void uploadAvatar(Map<String, Object> params, @NonNull final UploadAvatarCallback callback) {
+        mRemoteDatasource.uploadAvatar(params, new UploadAvatarCallback() {
+            @Override
+            public void onUploaded(String avatarUrl) {
+                callback.onUploaded(avatarUrl);
+            }
+
+            @Override
+            public void onUploadFailure() {
+                callback.onUploadFailure();
+            }
+        });
+    }
+
 
 }

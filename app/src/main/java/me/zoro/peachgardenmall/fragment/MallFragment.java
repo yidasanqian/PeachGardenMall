@@ -1,9 +1,11 @@
 package me.zoro.peachgardenmall.fragment;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +25,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.activity.SearchGoodsActivity;
 import me.zoro.peachgardenmall.adapter.GoodsCategoryGridAdapter;
 import me.zoro.peachgardenmall.datasource.GoodsDatasource;
 import me.zoro.peachgardenmall.datasource.GoodsRepository;
+import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.domain.GoodsCategory;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 
@@ -34,6 +38,7 @@ import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
  */
 
 public class MallFragment extends Fragment implements SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
+    public static final String GOODSES_EXTRA = "goodes";
     @BindView(R.id.searchView)
     SearchView mSearchView;
     @BindView(R.id.grid_view)
@@ -115,6 +120,25 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
     // 当点击搜索按钮时触发该方法
     @Override
     public boolean onQueryTextSubmit(String query) {
+        if (!TextUtils.isEmpty(query)) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("name", query);
+            params.put("pn", mPageNum);
+            params.put("ps", mPageSize);
+            mGoodsRepository.searchGoodses(params, new GoodsDatasource.SearchGoodsesCallback() {
+                @Override
+                public void onSearchSucces(ArrayList<Goods> goodses) {
+                    Intent intent = new Intent(getActivity(), SearchGoodsActivity.class);
+                    intent.putExtra(GOODSES_EXTRA, goodses);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onSearchFailure(String msg) {
+                    showMessage(msg);
+                }
+            });
+        }
         return false;
     }
 

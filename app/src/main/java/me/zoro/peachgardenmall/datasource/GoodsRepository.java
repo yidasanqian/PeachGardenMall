@@ -2,6 +2,7 @@ package me.zoro.peachgardenmall.datasource;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +57,21 @@ public class GoodsRepository implements GoodsDatasource {
             @Override
             public void onDataNotAvailable(String errorMsg) {
                 callback.onDataNotAvailable(errorMsg);
+            }
+        });
+    }
+
+    @Override
+    public void searchGoodses(Map<String, Object> params, @NonNull final SearchGoodsesCallback callback) {
+        mRemoteDatasource.searchGoodses(params, new SearchGoodsesCallback() {
+            @Override
+            public void onSearchSucces(ArrayList<Goods> goodses) {
+                callback.onSearchSucces(goodses);
+            }
+
+            @Override
+            public void onSearchFailure(String msg) {
+                callback.onSearchFailure(msg);
             }
         });
     }

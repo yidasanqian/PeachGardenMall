@@ -186,34 +186,22 @@ public class UserRemoteDatasource implements UserDatasource {
 
     @Override
     public void userInfoRevise(Map<String, Object> params, @NonNull final UserInfoReviseCallback callback) {
-        Call<JsonObject> call = null;
-        MultipartBody.Part part;
-        if (params.get("a") != null) {
-            part = ((MultipartBody.Part) params.get("a"));
-            Map<String, RequestBody> requestBodyMap = new HashMap<>();
-            requestBodyMap.put("id", RequestBody.create(MediaType.parse("multipart/form-data"),
-                    params.get("id").toString()));
-            call = mUserClient.uploadAvatar(requestBodyMap, part);
-        } else {
-            call = mUserClient.userInfoRevise(params);
-        }
-
+        Call<JsonObject> call = mUserClient.userInfoRevise(params);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson != null) {
-                    int code = bodyJson.get("code").getAsInt();
+                    int code = bodyJson.get(Const.CODE).getAsInt();
                     if (code == 0) {
                         callback.onUserInfoReviseSuccess();
                     } else {
-                        callback.onUserInfoReviseFailure((bodyJson.get("message").getAsString()));
+                        callback.onUserInfoReviseFailure((bodyJson.get(Const.MESSAGE).getAsString()));
                     }
                 } else {
-                    callback.onUserInfoReviseFailure("服务器异常");
+                    callback.onUserInfoReviseFailure(Const.SERVER_AVALIABLE);
 
                 }
-
             }
 
             @Override
@@ -385,4 +373,35 @@ public class UserRemoteDatasource implements UserDatasource {
         });
     }
 
+    @Override
+    public void uploadAvatar(Map<String, Object> params, @NonNull final UploadAvatarCallback callback) {
+        Map<String, RequestBody> requestBodyMap = new HashMap<>();
+        MultipartBody.Part part = ((MultipartBody.Part) params.get("avatar"));
+        requestBodyMap.put("userId", RequestBody.create(MediaType.parse("multipart/form-data"),
+                params.get("userId").toString()));
+        Call<JsonObject> call = mUserClient.uploadAvatar(requestBodyMap, part);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson != null) {
+                    int code = bodyJson.get(Const.CODE).getAsInt();
+                    if (code == 0) {
+                        JsonObject resultJson = bodyJson.get(Const.RESULT).getAsJsonObject();
+
+                    } else {
+                        callback.onUploadFailure();
+                    }
+                } else {
+                    callback.onUploadFailure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 上传头像异常 t <== ", t);
+                callback.onUploadFailure();
+            }
+        });
+    }
 }

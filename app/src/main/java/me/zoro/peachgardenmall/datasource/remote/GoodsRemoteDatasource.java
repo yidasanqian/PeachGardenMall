@@ -116,4 +116,39 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             }
         });
     }
+
+    @Override
+    public void searchGoodses(Map<String, Object> params, @NonNull final SearchGoodsesCallback callback) {
+        Call<JsonObject> call = mGoodsClient.searchGoodses(params);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson != null) {
+                    int code = bodyJson.get(Const.CODE).getAsInt();
+                    if (code == 0) {
+                        Gson gson = new GsonBuilder().setLenient().create();
+                        JsonArray jsonArray = bodyJson.get(Const.RESULT).getAsJsonArray();
+                        ArrayList<Goods> goodsList = new ArrayList<Goods>();
+                        for (int i = 0; i < jsonArray.size(); i++) {
+                            JsonObject json = jsonArray.get(i).getAsJsonObject();
+                            Goods goods = gson.fromJson(json, Goods.class);
+                            goodsList.add(goods);
+                        }
+                        callback.onSearchSucces(goodsList);
+                    } else {
+                        callback.onSearchFailure(bodyJson.get(Const.MESSAGE).getAsString());
+                    }
+                } else {
+                    callback.onSearchFailure(Const.SERVER_AVALIABLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 搜索商品失败", t);
+                callback.onSearchFailure(Const.SERVER_AVALIABLE);
+            }
+        });
+    }
 }

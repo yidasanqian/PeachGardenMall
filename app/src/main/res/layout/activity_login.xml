@@ -4,6 +4,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/ic_login_and_register_background"
                 tools:context="me.zoro.peachgardenmall.activity.RegisterActivity"
 
     >
@@ -12,6 +13,7 @@
         android:id="@+id/apptoolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         >
 
@@ -19,23 +21,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@android:color/transparent"
             android:minHeight="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             >
-
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="@dimen/app_bar_title"
-                android:text="登录"
-                android:textColor="@color/textColorPrimary"
-                android:layout_centerInParent="true"
-                android:scaleType="center"
-                android:gravity="center"
-                />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
@@ -48,9 +37,7 @@
         >
 
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_tel"
@@ -62,25 +49,17 @@
                 android:hint="用户名"
                 android:background="@drawable/et_background"
                 />
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_margin"
-            >
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/layout_margin"
                 android:hint="输入密码"
                 android:inputType="textPassword"
                 android:background="@drawable/et_background"
                 />
-        </android.support.design.widget.TextInputLayout>
 
 
         <Button
@@ -99,6 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="忘记密码了？"
+            android:textColor="@color/colorPrimary"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
             android:background="?android:attr/selectableItemBackground"
@@ -115,6 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="还没有账户？"
+            android:textColor="@color/colorPrimary"
             android:layout_gravity="center"
             android:padding="@dimen/layout_padding"
             style="@style/TextAppearance.AppCompat.Title"
@@ -126,7 +107,7 @@
             android:layout_height="wrap_content"
             android:text="现在注册！"
             android:layout_gravity="center"
-            android:textColor="@color/colorAccent"
+            android:textColor="@android:color/holo_green_dark"
             android:background="?android:attr/selectableItemBackground"
             style="@style/TextAppearance.AppCompat.Title"
             />

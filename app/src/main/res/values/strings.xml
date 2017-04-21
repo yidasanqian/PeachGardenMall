@@ -6,7 +6,8 @@
     <string name="reflesh_title">刷新</string>
 
     <string name="empty_data_hint">暂无数据</string>
-    <string name="register_progress_bar_title">注册中&#8230;&#8230;&#8230;</string>
+    <string name="register_progress_bar_title">注册中&#8230;</string>
+    <string name="login_progress_bar_title">登录中&#8230;</string>
     <string name="empty_phone_msg">手机号不能为空</string>
     <string name="empty_password_msg">密码不能为空</string>
     <string name="empty_captcha_msg">验证码不能为空</string>
@@ -17,4 +18,9 @@
     <string name="edit_shopping_cart">编辑</string>
     <string name="delete_shopping_cart">删除</string>
     <string name="illegal_idcard_msg">不合法的身份证</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="empty_nickname_msg">昵称不能为空</string>
+    <string name="revise_success_msg">修改成功</string>
+    <string name="empty_value_msg">值不能为空</string>
 </resources>

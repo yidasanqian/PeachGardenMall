@@ -36,6 +36,14 @@ public interface UserDatasource {
 
     void fetchUserInfo(int userId, @NonNull GetUserInfoCallback callback);
 
+    void uploadAvatar(Map<String, Object> params, @NonNull UploadAvatarCallback callback);
+
+    interface UploadAvatarCallback {
+        void onUploaded(String avatarUrl);
+
+        void onUploadFailure();
+    }
+
     interface GetCaptchaCallback {
         /**
          * 成功获取校验码

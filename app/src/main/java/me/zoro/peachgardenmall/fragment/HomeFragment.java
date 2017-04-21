@@ -222,10 +222,8 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        // TODO: 17/4/21 上拉加载
-        int y = view.getScrollY();
-        // 到底部
-        if (view.getLastVisiblePosition() == totalItemCount - 1 && !isLoadingMore && y > 0) {
+        // 上拉加载
+        if (view.getLastVisiblePosition() == totalItemCount - 1 && !isLoadingMore) {
             isLoadingMore = true;
             mPageNum++;
             new FetchGoodsesTask().execute();
@@ -326,21 +324,21 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     private class FetchGoodsesTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            isLoadingMore = true;
-
             Map<String, Object> map = new HashMap<>();
             map.put("pn", mPageNum);
             map.put("ps", mPageSize);
             mGoodsRepository.getGoodses(map, new GoodsDatasource.GetGoodsesCallback() {
                 @Override
                 public void onGoodsesLoaded(List<Goods> goodses) {
-                    mGoodses = goodses;
-                    if (mPageNum > 1) {
-                        mGridAdapter.appendData(goodses);
-                    } else {
-                        mGridAdapter.replaceData(goodses);
+                    if (goodses.size() > 0) {
+                        mGoodses = goodses;
+                        if (mPageNum > 1) {
+                            mGridAdapter.appendData(goodses);
+                        } else {
+                            mGridAdapter.replaceData(goodses);
+                        }
+                        isLoadingMore = false;
                     }
-                    isLoadingMore = false;
                 }
 
                 @Override

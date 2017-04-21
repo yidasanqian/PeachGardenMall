@@ -1,29 +1,48 @@
 package me.zoro.peachgardenmall.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.datasource.UserDatasource;
+import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
+import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.MyFragment;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class EditUserInfoActivity extends AppCompatActivity {
 
     private static final String TAG = "EditUserInfoActivity";
     private static final int LOGIN_REQUEST_CODE = 1;
+    private static final int REQUEST_UPDATE_AVATAR = 2;
 
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
@@ -50,6 +69,10 @@ public class EditUserInfoActivity extends AppCompatActivity {
     @BindView(R.id.edit_autograph)
     RelativeLayout mEditAutograph;
 
+    private UserRepository mUserRepository;
+
+    private UserInfo mUserInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +84,13 @@ public class EditUserInfoActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
+        mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(getApplicationContext()));
+
+
         if (getIntent() != null) {
-            UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra(MyFragment.USERINFO_EXTRA);
-            if (userInfo != null) {
-                invalidateUI(userInfo);
+            mUserInfo = (UserInfo) getIntent().getSerializableExtra(MyFragment.USERINFO_EXTRA);
+            if (mUserInfo != null) {
+                invalidateUI(mUserInfo);
             } else {
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivityForResult(intent, EditUserInfoActivity.LOGIN_REQUEST_CODE);
@@ -80,6 +106,54 @@ public class EditUserInfoActivity extends AppCompatActivity {
             if (userInfo != null) {
                 invalidateUI(userInfo);
             }
+        } else if (requestCode == REQUEST_UPDATE_AVATAR && resultCode == RESULT_OK) {
+            setupAvatar(data);
+        }
+    }
+
+    private void setupAvatar(Intent data) {
+        Uri uri = data.getData();
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        File file = null;
+        if (cursor != null) {
+            try {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                if (cursor.moveToFirst()) {
+                    String path = cursor.getString(columnIndex);
+                    file = new File(path);
+                }
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "setupAvatar: 无效参数", e);
+            } finally {
+                cursor.close();
+            }
+        }
+
+        if (file != null) {
+            RequestBody body = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
+            Map<String, Object> params = new HashMap<>();
+            params.put("userId", mUserInfo.getUserId());
+            params.put("avatar", MultipartBody.Part.createFormData("avatar", file.getName(), body));
+            mUserRepository.uploadAvatar(params, new UserDatasource.UploadAvatarCallback() {
+                @Override
+                public void onUploaded(String avatarUrl) {
+                    Picasso.with(EditUserInfoActivity.this)
+                            .load(avatarUrl)
+                            .fit()
+                            .into(mIvAvatar);
+                }
+
+                @Override
+                public void onUploadFailure() {
+                    showMessage("上传失败！");
+                }
+            });
+        }
+    }
+
+    private void showMessage(String msg) {
+        if (!isFinishing()) {
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -100,19 +174,69 @@ public class EditUserInfoActivity extends AppCompatActivity {
 
     @OnClick({R.id.edit_avatar, R.id.edit_nickname, R.id.edit_sex, R.id.edit_account, R.id.edit_autograph})
     public void onViewClicked(View view) {
+        final EditText editText = new EditText(this);
         switch (view.getId()) {
             // TODO: 17/4/12 编辑用户资料
             case R.id.edit_avatar:
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, REQUEST_UPDATE_AVATAR);
                 break;
             case R.id.edit_nickname:
+                String title = "修改昵称", key = "nickname", value = editText.getText().toString();
+                reviseUserInfo(editText, title, key, value);
                 break;
             case R.id.edit_sex:
+                title = "修改性别";
+                key = "sex";
+                value = editText.getText().toString();
+                reviseUserInfo(editText, title, key, value);
                 break;
             case R.id.edit_account:
                 break;
             case R.id.edit_autograph:
+                title = "设置个性签名";
+                key = "autograph";
+                value = editText.getText().toString();
+                reviseUserInfo(editText, title, key, value);
                 break;
         }
+    }
+
+    private void reviseUserInfo(final EditText editText, String title, final String key, final String value) {
+        new AlertDialog.Builder(this)
+                .setView(editText)
+                .setTitle(title)
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (TextUtils.isEmpty(value)) {
+                            showMessage(getString(R.string.empty_value_msg));
+                        } else {
+                            Map<String, Object> params = new HashMap<>();
+                            params.put("userId", mUserInfo.getUserId());
+                            params.put(key, value);
+                            mUserRepository.userInfoRevise(params, new UserDatasource.UserInfoReviseCallback() {
+                                @Override
+                                public void onUserInfoReviseSuccess() {
+                                    showMessage(getString(R.string.revise_success_msg));
+                                }
+
+                                @Override
+                                public void onUserInfoReviseFailure(String errorMsg) {
+                                    showMessage(errorMsg);
+                                }
+                            });
+                        }
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     @Override

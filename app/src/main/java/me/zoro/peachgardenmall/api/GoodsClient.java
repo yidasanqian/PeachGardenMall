@@ -19,4 +19,7 @@ public interface GoodsClient {
 
     @GET("Index/getCategory")
     Call<JsonObject> getGoodsCategories(@QueryMap Map<String, Object> params);
+
+    @GET("Goods/seachGoodsByName")
+    Call<JsonObject> searchGoodses(@QueryMap Map<String, Object> params);
 }
