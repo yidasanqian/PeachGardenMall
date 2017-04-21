@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -13,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.activity.GoodsListActivity;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 
 /**
@@ -49,8 +51,17 @@ public class GoodsGridAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (view == null) {
             view = LayoutInflater.from(mContext).inflate(R.layout.goods_gv_item, viewGroup, false);
-            viewHolder = new ViewHolder((ImageView) view.findViewById(R.id.goods_img_iv),
-                    (TextView) view.findViewById(R.id.goods_name_tv));
+            if (mContext instanceof GoodsListActivity) {
+                viewHolder = new ViewHolder((ImageView) view.findViewById(R.id.goods_img_iv),
+                        (TextView) view.findViewById(R.id.goods_name_tv),
+                        (TextView) view.findViewById(R.id.tv_goods_money),
+                        (LinearLayout) view.findViewById(R.id.ll_goods_price));
+                viewHolder.mLinearLayout.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder = new ViewHolder((ImageView) view.findViewById(R.id.goods_img_iv),
+                        (TextView) view.findViewById(R.id.goods_name_tv));
+            }
+
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -63,6 +74,9 @@ public class GoodsGridAdapter extends BaseAdapter {
                 .fit()
                 .into(viewHolder.mIcon);
 
+        if (mContext instanceof GoodsListActivity) {
+            viewHolder.mPrice.setText(goods.getPrice());
+        }
         return view;
     }
 
@@ -77,18 +91,21 @@ public class GoodsGridAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        protected ImageView mIcon;
-        protected TextView mName;
+        private ImageView mIcon;
+        private TextView mName;
+        private TextView mPrice;
+        private LinearLayout mLinearLayout;
 
-        /**
-         * The constructor to construct a navigation view tag
-         *
-         * @param name the name view of the item
-         * @param icon the icon view of the item
-         */
         public ViewHolder(ImageView icon, TextView name) {
             this.mName = name;
             this.mIcon = icon;
+        }
+
+        public ViewHolder(ImageView icon, TextView name, TextView price, LinearLayout linearLayout) {
+            this.mName = name;
+            this.mIcon = icon;
+            this.mPrice = price;
+            this.mLinearLayout = linearLayout;
         }
     }
 }

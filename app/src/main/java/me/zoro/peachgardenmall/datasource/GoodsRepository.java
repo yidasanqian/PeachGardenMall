@@ -35,7 +35,7 @@ public class GoodsRepository implements GoodsDatasource {
     public void getGoodses(Map<String, Object> params, @NonNull final GetGoodsesCallback callback) {
         mRemoteDatasource.getGoodses(params, new GetGoodsesCallback() {
             @Override
-            public void onGoodsesLoaded(List<Goods> goodses) {
+            public void onGoodsesLoaded(ArrayList<Goods> goodses) {
                 callback.onGoodsesLoaded(goodses);
             }
 

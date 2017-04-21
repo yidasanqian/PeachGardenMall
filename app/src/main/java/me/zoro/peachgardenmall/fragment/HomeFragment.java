@@ -333,7 +333,7 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
             map.put("ps", mPageSize);
             mGoodsRepository.getGoodses(map, new GoodsDatasource.GetGoodsesCallback() {
                 @Override
-                public void onGoodsesLoaded(List<Goods> goodses) {
+                public void onGoodsesLoaded(ArrayList<Goods> goodses) {
                     if (goodses.size() > 0) {
                         mGoodses = goodses;
                         if (mPageNum > 1) {

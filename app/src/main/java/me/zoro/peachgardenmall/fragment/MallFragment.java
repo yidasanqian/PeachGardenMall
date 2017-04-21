@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.activity.GoodsListActivity;
 import me.zoro.peachgardenmall.activity.SearchGoodsActivity;
 import me.zoro.peachgardenmall.adapter.GoodsCategoryGridAdapter;
 import me.zoro.peachgardenmall.datasource.GoodsDatasource;
@@ -40,6 +41,7 @@ import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 public class MallFragment extends Fragment implements SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
     public static final String GOODSES_EXTRA = "goodes";
     public static final String QUERY_EXTRA = "query";
+    public static final String GOODS_CATEGORY_EXTRA = "goods_category";
     @BindView(R.id.searchView)
     SearchView mSearchView;
     @BindView(R.id.grid_view)
@@ -155,9 +157,8 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: 17/4/9 商品目录点击事件
         GoodsCategory category = mGoodsCategories.get(position);
-        Toast.makeText(getActivity(), "类别id" + category.getId(), Toast.LENGTH_SHORT).show();
+        new FetchGoodsesTask().execute(category.getId());
     }
 
     private class FetchGoodsCategoriesTask extends AsyncTask<Void, Void, Void> {
@@ -171,6 +172,31 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
                 public void onGoodsCategoriesLoaded(List<GoodsCategory> goodsCategories) {
                     mGoodsCategories = goodsCategories;
                     mCategoryGridAdapter.replaceData(goodsCategories);
+                }
+
+                @Override
+                public void onDataNotAvailable(String errorMsg) {
+                    showMessage(errorMsg);
+                }
+            });
+            return null;
+        }
+    }
+
+    private class FetchGoodsesTask extends AsyncTask<Integer, Void, Void> {
+        @Override
+        protected Void doInBackground(final Integer... params) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("categoryId", params[0]);
+            map.put("pn", mPageNum);
+            map.put("ps", mPageSize);
+            mGoodsRepository.getGoodses(map, new GoodsDatasource.GetGoodsesCallback() {
+                @Override
+                public void onGoodsesLoaded(ArrayList<Goods> goodses) {
+                    Intent intent = new Intent(getActivity(), GoodsListActivity.class);
+                    intent.putExtra(GOODSES_EXTRA, goodses);
+                    intent.putExtra(GOODS_CATEGORY_EXTRA, params[0]);
+                    startActivity(intent);
                 }
 
                 @Override

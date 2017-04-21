@@ -58,7 +58,7 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
                     if (code == 0) {
                         Gson gson = new GsonBuilder().setLenient().create();
                         JsonArray jsonArray = bodyJson.get(Const.RESULT).getAsJsonArray();
-                        List<Goods> goodsList = new ArrayList<Goods>();
+                        ArrayList<Goods> goodsList = new ArrayList<Goods>();
                         for (int i = 0; i < jsonArray.size(); i++) {
                             JsonObject json = jsonArray.get(i).getAsJsonObject();
                             Goods goods = gson.fromJson(json, Goods.class);

@@ -22,7 +22,7 @@ public interface GoodsDatasource {
     void searchGoodses(Map<String, Object> params, @NonNull SearchGoodsesCallback callback);
 
     interface GetGoodsesCallback {
-        void onGoodsesLoaded(List<Goods> goodses);
+        void onGoodsesLoaded(ArrayList<Goods> goodses);
 
         void onDataNotAvailable(String errorMsg);
     }
