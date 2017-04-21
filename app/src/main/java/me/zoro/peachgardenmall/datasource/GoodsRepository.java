@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.zoro.peachgardenmall.datasource.domain.Goods;
+import me.zoro.peachgardenmall.datasource.domain.GoodsCategory;
 
 /**
  * Created by dengfengdecao on 17/4/17.
@@ -35,6 +36,21 @@ public class GoodsRepository implements GoodsDatasource {
             @Override
             public void onGoodsesLoaded(List<Goods> goodses) {
                 callback.onGoodsesLoaded(goodses);
+            }
+
+            @Override
+            public void onDataNotAvailable(String errorMsg) {
+                callback.onDataNotAvailable(errorMsg);
+            }
+        });
+    }
+
+    @Override
+    public void getGoodsCategories(Map<String, Object> params, @NonNull final GetGoodsCategoriesCallback callback) {
+        mRemoteDatasource.getGoodsCategories(params, new GetGoodsCategoriesCallback() {
+            @Override
+            public void onGoodsCategoriesLoaded(List<GoodsCategory> goodsCategories) {
+                callback.onGoodsCategoriesLoaded(goodsCategories);
             }
 
             @Override

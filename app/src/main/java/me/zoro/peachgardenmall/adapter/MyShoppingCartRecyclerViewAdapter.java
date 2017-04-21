@@ -122,13 +122,13 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
 
             Goods goods = getItem(position);
-            viewHolder.itemView.setTag(goods.getMoney());
-            viewHolder.mGoodsNameTv.setText(goods.getName());
-            viewHolder.mTvGoodsMoney.setText(String.valueOf(goods.getMoney()));
+            viewHolder.itemView.setTag(Double.parseDouble(goods.getPrice()));
+            viewHolder.mGoodsNameTv.setText(goods.getGoodsName());
+            viewHolder.mTvGoodsMoney.setText(goods.getPrice());
             viewHolder.mCountTv.setText(String.valueOf(goods.getCount()));
-            viewHolder.mSubtractIv.setTag(goods.getMoney());
-            viewHolder.mAddIv.setTag(goods.getMoney());
-            mTotalMoney += goods.getMoney();
+            viewHolder.mSubtractIv.setTag(Double.parseDouble(goods.getPrice()));
+            viewHolder.mAddIv.setTag(Double.parseDouble(goods.getPrice()));
+            mTotalMoney += Double.parseDouble(goods.getPrice());
         }
         mContext.updateTotalMoney(mTotalMoney);
     }

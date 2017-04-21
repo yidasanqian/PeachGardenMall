@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -43,14 +44,18 @@ import me.zoro.peachgardenmall.activity.AdActivity;
 import me.zoro.peachgardenmall.adapter.GoodsGridAdapter;
 import me.zoro.peachgardenmall.datasource.BannerDatasource;
 import me.zoro.peachgardenmall.datasource.BannerRepository;
+import me.zoro.peachgardenmall.datasource.GoodsDatasource;
+import me.zoro.peachgardenmall.datasource.GoodsRepository;
 import me.zoro.peachgardenmall.datasource.domain.BannerInfo;
+import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.remote.BannerRemoteDatasource;
+import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 
 /**
  * Created by dengfengdecao on 17/4/7.
  */
 
-public class HomeFragment extends Fragment implements OnBannerClickListener, AdapterView.OnItemClickListener {
+public class HomeFragment extends Fragment implements OnBannerClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
     private static final String TAG = "HomeFragment";
     public static final String AD_URL_EXTRA = "ad_url";
     @BindView(R.id.toolbar)
@@ -70,6 +75,22 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
    /* private ArrayAdapter<String> mSpinnerAdapter;
     private String[] mCategory;*/
 
+    private GoodsRepository mGoodsRepository;
+    private GoodsGridAdapter mGridAdapter;
+    private List<Goods> mGoodses;
+    /**
+     * 默认获取第一页
+     */
+    private int mPageNum = 1;
+    /**
+     * 默认获取10条
+     */
+    private int mPageSize = 10;
+    /**
+     * 是否正在加载更多，true，表示正在加载，false，则不是
+     */
+    private boolean isLoadingMore;
+
     public static HomeFragment newInstance(String s) {
 
         Bundle args = new Bundle();
@@ -83,20 +104,19 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mBannerRepository = BannerRepository.getInstance(BannerRemoteDatasource
-                .getInstance(getContext().getApplicationContext()));
+        mBannerRepository = BannerRepository.getInstance(BannerRemoteDatasource.getInstance(
+                getContext().getApplicationContext()));
 
-        if (mBannerInfo != null) {
-            setupBanner(mBannerInfo);
-        } else {
-            new FetchBannerTask().execute();
-        }
+        mGoodsRepository = GoodsRepository.getInstance(GoodsRemoteDatasource.getInstance(
+                getContext().getApplicationContext()
+        ));
 
-        // TODO: 17/4/9 banner跳转url
       /*  mImagesUrl.add("http://img3.imgtn.bdimg.com/it/u=2264776075,3168614604&fm=21&gp=0.jpg");
         mImagesUrl.add("http://img3.duitang.com/uploads/item/201604/30/20160430003024_FwSEG.thumb.700_0.jpeg");
         mImagesUrl.add("http://g.hiphotos.baidu.com/zhidao/pic/item/bd315c6034a85edf433f02544f540923dd547512.jpg");
         mImagesUrl.add("http://i-7.vcimg.com/trim/b7316e98fe939f0f9b064b8ac2de99d0351027/trim.jpg");*/
+
+        mGoodses = new ArrayList<>();
     }
 
     @Nullable
@@ -105,6 +125,11 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, root);
 
+        if (mBannerInfo != null) {
+            setupBanner(mBannerInfo);
+        } else {
+            new FetchBannerTask().execute();
+        }
         mBanner.setOnBannerClickListener(this);
 
         // 初始化spinner中显示的数据
@@ -114,17 +139,22 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         mSpinner.setAdapter(mSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(this);*/
 
-        // TODO: 17/4/9 banner显示的图片
-        List<Integer> images = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
-            images.add(R.drawable.ic_gaoyuanyuan);
-        }
-        GoodsGridAdapter goodsAdapter = new GoodsGridAdapter(getContext(), images);
-        mGridView.setAdapter(goodsAdapter);
+
+        mGridAdapter = new GoodsGridAdapter(getContext(), mGoodses);
+        mGridView.setAdapter(mGridAdapter);
         mGridView.setOnItemClickListener(this);
+        mGridView.setOnScrollListener(this);
         return root;
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mGoodses.size() < 1) {
+            new FetchGoodsesTask().execute();
+        }
+    }
 
     @Override
     public void OnBannerClick(int position) {
@@ -147,6 +177,7 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
             }
         } catch (IndexOutOfBoundsException e) {
             Log.e(TAG, "OnBannerClick: 数组越界", e);
+            return;
         }
 
         if (type == 0) {
@@ -160,8 +191,9 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Goods goods = mGoodses.get(position);
         // TODO: 17/4/9 商品点击事件
-        Toast.makeText(getActivity(), position + "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), goods.getGoodsName(), Toast.LENGTH_SHORT).show();
     }
 
     // 显示客服信息
@@ -181,6 +213,22 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
                     .setMessage(ss)
                     .setCancelable(true)
                     .show();
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        // TODO: 17/4/21 上拉加载
+        int y = view.getScrollY();
+        // 到底部
+        if (view.getLastVisiblePosition() == totalItemCount - 1 && !isLoadingMore && y > 0) {
+            isLoadingMore = true;
+            mPageNum++;
+            new FetchGoodsesTask().execute();
         }
     }
 
@@ -272,6 +320,36 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     private void showMessage(String msg) {
         if (!getActivity().isFinishing()) {
             Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class FetchGoodsesTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            isLoadingMore = true;
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("pn", mPageNum);
+            map.put("ps", mPageSize);
+            mGoodsRepository.getGoodses(map, new GoodsDatasource.GetGoodsesCallback() {
+                @Override
+                public void onGoodsesLoaded(List<Goods> goodses) {
+                    mGoodses = goodses;
+                    if (mPageNum > 1) {
+                        mGridAdapter.appendData(goodses);
+                    } else {
+                        mGridAdapter.replaceData(goodses);
+                    }
+                    isLoadingMore = false;
+                }
+
+                @Override
+                public void onDataNotAvailable(String errorMsg) {
+                    showMessage(errorMsg);
+                    isLoadingMore = false;
+                }
+            });
+            return null;
         }
     }
 }

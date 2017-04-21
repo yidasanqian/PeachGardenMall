@@ -60,10 +60,10 @@ public class MyShoppingCartActivity extends AppCompatActivity {
         mGoodses = new ArrayList<Goods>();
         Goods goods = new Goods();
         Goods goods1 = new Goods();
-        goods.setName("高圆圆");
-        goods.setMoney(90);
-        goods1.setName("高圆圆1");
-        goods1.setMoney(80);
+        goods.setGoodsName("高圆圆");
+        goods.setPrice(String.valueOf(90));
+        goods1.setGoodsName("高圆圆1");
+        goods1.setPrice(String.valueOf(80));
         mGoodses.add(goods);
         mGoodses.add(goods1);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

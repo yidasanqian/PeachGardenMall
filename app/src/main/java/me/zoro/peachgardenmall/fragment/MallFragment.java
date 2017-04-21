@@ -1,5 +1,6 @@
 package me.zoro.peachgardenmall.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,13 +15,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.GoodsCategoryGridAdapter;
+import me.zoro.peachgardenmall.datasource.GoodsDatasource;
+import me.zoro.peachgardenmall.datasource.GoodsRepository;
+import me.zoro.peachgardenmall.datasource.domain.GoodsCategory;
+import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 
 /**
  * Created by dengfengdecao on 17/4/7.
@@ -33,6 +40,18 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
     GridView mGridView;
     Unbinder unbinder;
 
+    private GoodsRepository mGoodsRepository;
+    private GoodsCategoryGridAdapter mCategoryGridAdapter;
+    private List<GoodsCategory> mGoodsCategories;
+    /**
+     * 默认获取第一页
+     */
+    private int mPageNum = 1;
+    /**
+     * 默认获取10条
+     */
+    private int mPageSize = 10;
+
     public static MallFragment newInstance(String s) {
 
         Bundle args = new Bundle();
@@ -40,6 +59,16 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
         MallFragment fragment = new MallFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mGoodsRepository = GoodsRepository.getInstance(GoodsRemoteDatasource.getInstance(
+                getContext().getApplicationContext()
+        ));
+        mGoodsCategories = new ArrayList<>();
     }
 
     @Nullable
@@ -61,14 +90,20 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
         // 设置搜索文本监听
         mSearchView.setOnQueryTextListener(this);
 
-        List<Integer> images = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
-            images.add(R.drawable.ic_gaoyuanyuan);
-        }
-        GoodsCategoryGridAdapter goodsAdapter = new GoodsCategoryGridAdapter(getContext(), images);
-        mGridView.setAdapter(goodsAdapter);
+
+        mCategoryGridAdapter = new GoodsCategoryGridAdapter(getContext(), mGoodsCategories);
+        mGridView.setAdapter(mCategoryGridAdapter);
         mGridView.setOnItemClickListener(this);
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mGoodsCategories.size() < 1) {
+            new FetchGoodsCategoriesTask().execute();
+
+        }
     }
 
     @Override
@@ -91,6 +126,35 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // TODO: 17/4/9 商品目录点击事件
-        Toast.makeText(getActivity(), position + "", Toast.LENGTH_SHORT).show();
+        GoodsCategory category = mGoodsCategories.get(position);
+        Toast.makeText(getActivity(), "类别id" + category.getId(), Toast.LENGTH_SHORT).show();
+    }
+
+    private class FetchGoodsCategoriesTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("pn", mPageNum);
+            map.put("ps", mPageSize);
+            mGoodsRepository.getGoodsCategories(map, new GoodsDatasource.GetGoodsCategoriesCallback() {
+                @Override
+                public void onGoodsCategoriesLoaded(List<GoodsCategory> goodsCategories) {
+                    mGoodsCategories = goodsCategories;
+                    mCategoryGridAdapter.replaceData(goodsCategories);
+                }
+
+                @Override
+                public void onDataNotAvailable(String errorMsg) {
+                    showMessage(errorMsg);
+                }
+            });
+            return null;
+        }
+    }
+
+    private void showMessage(String msg) {
+        if (!getActivity().isFinishing()) {
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        }
     }
 }

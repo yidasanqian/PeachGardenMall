@@ -8,9 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.datasource.domain.GoodsCategory;
 
 /**
  * Created by dengfengdecao on 17/4/7.
@@ -19,56 +22,58 @@ import me.zoro.peachgardenmall.R;
 public class GoodsCategoryGridAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<Integer> mImages;
+    private List<GoodsCategory> mGoodsCategories;
 
-    public GoodsCategoryGridAdapter(Context context, List<Integer> images) {
+    public GoodsCategoryGridAdapter(Context context, List<GoodsCategory> goodsCategories) {
         mContext = context;
-        mImages = images;
+        mGoodsCategories = goodsCategories;
     }
 
     @Override
     public int getCount() {
-        return mImages.size();
+        return mGoodsCategories.size();
     }
 
     @Override
-    public Object getItem(int i) {
-        return mImages.get(i);
+    public GoodsCategory getItem(int i) {
+        return mGoodsCategories.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return i;
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        ItemViewTag viewTag;
+        ViewHolder viewHolder;
         if (view == null) {
             view = LayoutInflater.from(mContext).inflate(R.layout.goods_category_gv_item, viewGroup, false);
-            viewTag = new ItemViewTag((ImageView) view.findViewById(R.id.goods_img_iv),
+            viewHolder = new ViewHolder((ImageView) view.findViewById(R.id.goods_img_iv),
                     (TextView) view.findViewById(R.id.goods_name_tv));
-            view.setTag(viewTag);
+            view.setTag(viewHolder);
         } else {
-            viewTag = (ItemViewTag) view.getTag();
+            viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewTag.mName.setText("高圆圆");
-        viewTag.mIcon.setImageResource(R.drawable.ic_gaoyuanyuan);
+        GoodsCategory goodsCategory = getItem(i);
+        Picasso.with(mContext)
+                .load(goodsCategory.getImageUrl())
+                .fit()
+                .into(viewHolder.mIcon);
         return view;
     }
 
-    static class ItemViewTag {
+    public void replaceData(List<GoodsCategory> goodsCategories) {
+        mGoodsCategories = goodsCategories;
+        notifyDataSetChanged();
+    }
+
+    private static class ViewHolder {
         protected ImageView mIcon;
         protected TextView mName;
 
-        /**
-         * The constructor to construct a navigation view tag
-         *
-         * @param name the name view of the item
-         * @param icon the icon view of the item
-         */
-        public ItemViewTag(ImageView icon, TextView name) {
+        public ViewHolder(ImageView icon, TextView name) {
             this.mName = name;
             this.mIcon = icon;
         }
