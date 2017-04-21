@@ -13,16 +13,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.GoodsGridAdapter;
+import me.zoro.peachgardenmall.datasource.GoodsDatasource;
 import me.zoro.peachgardenmall.datasource.GoodsRepository;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
-import me.zoro.peachgardenmall.fragment.MallFragment;
+
+import static me.zoro.peachgardenmall.fragment.MallFragment.GOODSES_EXTRA;
+import static me.zoro.peachgardenmall.fragment.MallFragment.QUERY_EXTRA;
 
 /**
  * Created by dengfengdecao on 17/4/21.
@@ -55,6 +60,8 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
      */
     private int mPageSize = 10;
 
+    private String mQuery;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +79,8 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
         ));
 
         if (getIntent() != null) {
-            mGoodses = (ArrayList<Goods>) getIntent().getSerializableExtra(MallFragment.GOODSES_EXTRA);
+            mGoodses = (ArrayList<Goods>) getIntent().getSerializableExtra(GOODSES_EXTRA);
+            mQuery = getIntent().getStringExtra(QUERY_EXTRA);
         }
         mGoodsGridAdapter = new GoodsGridAdapter(this, mGoodses);
         mGridView.setAdapter(mGoodsGridAdapter);
@@ -95,7 +103,10 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+        if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() == mPageSize) {
+            isLoadingMore = false;
+            mPageNum = 1;
+        }
     }
 
     @Override
@@ -104,7 +115,41 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
         if (view.getLastVisiblePosition() == totalItemCount - 1 && !isLoadingMore) {
             isLoadingMore = true;
             mPageNum++;
-            // TODO: 17/4/21 搜索分页
+            searchGoodes(mQuery);
         }
     }
+
+    private void searchGoodes(final String query) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", query);
+        params.put("pn", mPageNum);
+        params.put("ps", mPageSize);
+        mGoodsRepository.searchGoodses(params, new GoodsDatasource.SearchGoodsesCallback() {
+            @Override
+            public void onSearchSucces(ArrayList<Goods> goodses) {
+                if (goodses.size() > 0) {
+                    mGoodses = goodses;
+                    if (mPageNum > 1) {
+                        mGoodsGridAdapter.appendData(goodses);
+                    } else {
+                        mGoodsGridAdapter.replaceData(goodses);
+                    }
+                    isLoadingMore = false;
+                }
+            }
+
+            @Override
+            public void onSearchFailure(String msg) {
+                showMessage(msg);
+                isLoadingMore = false;
+            }
+        });
+    }
+
+    private void showMessage(String msg) {
+        if (!isFinishing()) {
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

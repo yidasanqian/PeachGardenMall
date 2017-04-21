@@ -39,6 +39,7 @@ import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 
 public class MallFragment extends Fragment implements SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
     public static final String GOODSES_EXTRA = "goodes";
+    public static final String QUERY_EXTRA = "query";
     @BindView(R.id.searchView)
     SearchView mSearchView;
     @BindView(R.id.grid_view)
@@ -121,25 +122,30 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
     @Override
     public boolean onQueryTextSubmit(String query) {
         if (!TextUtils.isEmpty(query)) {
-            Map<String, Object> params = new HashMap<>();
-            params.put("name", query);
-            params.put("pn", mPageNum);
-            params.put("ps", mPageSize);
-            mGoodsRepository.searchGoodses(params, new GoodsDatasource.SearchGoodsesCallback() {
-                @Override
-                public void onSearchSucces(ArrayList<Goods> goodses) {
-                    Intent intent = new Intent(getActivity(), SearchGoodsActivity.class);
-                    intent.putExtra(GOODSES_EXTRA, goodses);
-                    startActivity(intent);
-                }
-
-                @Override
-                public void onSearchFailure(String msg) {
-                    showMessage(msg);
-                }
-            });
+            searchGoodes(query);
         }
         return false;
+    }
+
+    private void searchGoodes(final String query) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", query);
+        params.put("pn", mPageNum);
+        params.put("ps", mPageSize);
+        mGoodsRepository.searchGoodses(params, new GoodsDatasource.SearchGoodsesCallback() {
+            @Override
+            public void onSearchSucces(ArrayList<Goods> goodses) {
+                Intent intent = new Intent(getActivity(), SearchGoodsActivity.class);
+                intent.putExtra(GOODSES_EXTRA, goodses);
+                intent.putExtra(QUERY_EXTRA, query);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onSearchFailure(String msg) {
+                showMessage(msg);
+            }
+        });
     }
 
     @Override
