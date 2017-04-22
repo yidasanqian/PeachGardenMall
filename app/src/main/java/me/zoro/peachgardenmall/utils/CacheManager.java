@@ -50,7 +50,7 @@ public class CacheManager {
                 cacheSize += getFolderSize(context.getExternalCacheDir());
             }
         } catch (Exception e) {
-            Log.e(TAG, "getTotalCacheSize: 获取缓存目录文件大小", e);
+            Log.e(TAG, "getTotalCacheSize: 获取缓存目录文件大小时，出现异常", e);
         }
 
         return Formatter.formatFileSize(context, cacheSize);

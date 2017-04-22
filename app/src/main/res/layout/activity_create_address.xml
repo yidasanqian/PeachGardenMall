@@ -53,8 +53,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/layout_padding"
         android:orientation="vertical"
+        android:padding="@dimen/layout_padding"
         >
 
         <EditText
@@ -68,33 +68,33 @@
             android:id="@+id/phone_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="手机号码"
             android:layout_marginTop="@dimen/layout_margin"
+            android:hint="手机号码"
             />
 
         <EditText
             android:id="@+id/address_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="省份、城市、区县"
             android:layout_marginTop="@dimen/layout_margin"
+            android:hint="省份、城市、区县"
             />
 
         <EditText
             android:id="@+id/detail_address_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="详细地址，如接到、楼牌号等"
             android:layout_marginTop="@dimen/layout_margin"
+            android:hint="详细地址，如接到、楼牌号等"
             />
 
-        <RadioButton
-            android:id="@+id/set_default_addr_rb"
+        <CheckBox
+            android:id="@+id/cb_set_default_addr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="设为默认地址"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/layout_margin"
+            android:text="设为默认地址"
             />
 
     </LinearLayout>

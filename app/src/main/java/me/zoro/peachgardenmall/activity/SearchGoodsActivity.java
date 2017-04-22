@@ -50,7 +50,7 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
     /**
      * 是否正在加载更多，true，表示正在加载，false，则不是
      */
-    private boolean isLoadingMore;
+    private boolean mIsLoadingMore;
     /**
      * 默认获取第一页
      */
@@ -104,7 +104,7 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() == mPageSize) {
-            isLoadingMore = false;
+            mIsLoadingMore = false;
             mPageNum = 1;
         }
     }
@@ -112,8 +112,8 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // 上拉加载
-        if (view.getLastVisiblePosition() == totalItemCount - 1 && !isLoadingMore) {
-            isLoadingMore = true;
+        if (view.getLastVisiblePosition() == totalItemCount - 1 && !mIsLoadingMore) {
+            mIsLoadingMore = true;
             mPageNum++;
             searchGoodes(mQuery);
         }
@@ -134,14 +134,14 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
                     } else {
                         mGoodsGridAdapter.replaceData(goodses);
                     }
-                    isLoadingMore = false;
+                    mIsLoadingMore = false;
                 }
             }
 
             @Override
             public void onSearchFailure(String msg) {
                 showMessage(msg);
-                isLoadingMore = false;
+                mIsLoadingMore = false;
             }
         });
     }

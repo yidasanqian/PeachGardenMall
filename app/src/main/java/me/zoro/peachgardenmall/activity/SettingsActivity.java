@@ -114,6 +114,8 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.delivery_address:
+                intent = new Intent(this, DeliveryAddressActivity.class);
+                startActivity(intent);
                 break;
             case R.id.coupon:
                 intent = new Intent(this, CouponActivity.class);
@@ -128,24 +130,28 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.logout_btn:
-                mUserRepository.logout(mUserInfo.getUserId(), new UserDatasource.LogoutCallback() {
-                    @Override
-                    public void onLogout() {
-                        PreferencesUtil.getDefaultPreferences(SettingsActivity.this, Const.PREF_TOKEN)
-                                .edit()
-                                .clear()
-                                .apply();
-                        PreferencesUtil.getDefaultPreferences(SettingsActivity.this, Const.PREF_USER_INFO)
-                                .edit()
-                                .clear()
-                                .apply();
-                        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
+                logout();
                 break;
         }
+    }
+
+    private void logout() {
+        mUserRepository.logout(mUserInfo.getUserId(), new UserDatasource.LogoutCallback() {
+            @Override
+            public void onLogout() {
+                PreferencesUtil.getDefaultPreferences(SettingsActivity.this, Const.PREF_TOKEN)
+                        .edit()
+                        .clear()
+                        .apply();
+                PreferencesUtil.getDefaultPreferences(SettingsActivity.this, Const.PREF_USER_INFO)
+                        .edit()
+                        .clear()
+                        .apply();
+                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void clearCache() {

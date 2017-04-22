@@ -71,7 +71,7 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
     /**
      * 是否正在加载更多，true，表示正在加载，false，则不是
      */
-    private boolean isLoadingMore;
+    private boolean mIsLoadingMore;
     /**
      * 默认获取第一页
      */
@@ -219,7 +219,7 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() == mPageSize) {
-            isLoadingMore = false;
+            mIsLoadingMore = false;
             mPageNum = 1;
         }
     }
@@ -227,8 +227,8 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // 上拉加载
-        if (view.getLastVisiblePosition() == totalItemCount - 1 && !isLoadingMore && mCategoryId != -1) {
-            isLoadingMore = true;
+        if (view.getLastVisiblePosition() == totalItemCount - 1 && !mIsLoadingMore && mCategoryId != -1) {
+            mIsLoadingMore = true;
             mPageNum++;
             new FetchGoodsesTask().execute(mCategoryId);
         }
@@ -257,12 +257,21 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
         mGoodsRepository.searchGoodses(params, new GoodsDatasource.SearchGoodsesCallback() {
             @Override
             public void onSearchSucces(ArrayList<Goods> goodses) {
-
+                if (goodses.size() > 0) {
+                    mGoodses = goodses;
+                    if (mPageNum > 1) {
+                        mGoodsGridAdapter.appendData(goodses);
+                    } else {
+                        mGoodsGridAdapter.replaceData(goodses);
+                    }
+                    mIsLoadingMore = false;
+                }
             }
 
             @Override
             public void onSearchFailure(String msg) {
                 showMessage(msg);
+                mIsLoadingMore = false;
             }
         });
     }
@@ -284,14 +293,14 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
                         } else {
                             mGoodsGridAdapter.replaceData(goodses);
                         }
-                        isLoadingMore = false;
+                        mIsLoadingMore = false;
                     }
                 }
 
                 @Override
                 public void onDataNotAvailable(String errorMsg) {
                     showMessage(errorMsg);
-                    isLoadingMore = false;
+                    mIsLoadingMore = false;
                 }
             });
             return null;

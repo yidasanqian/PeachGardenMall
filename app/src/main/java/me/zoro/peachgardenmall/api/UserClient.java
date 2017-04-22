@@ -56,7 +56,7 @@ public interface UserClient {
 
     //修改用户信息
     @POST("user")
-    Call<JsonObject> userInfoRevise(@QueryMap Map<String, Object> params);
+    Call<JsonObject> userInfoRevise(@Body Map<String, Object> params);
 
     @Multipart
     @POST("user")
