@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +39,9 @@ import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.MallFragment;
 
-public class GoodsListActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+import static me.zoro.peachgardenmall.fragment.MallFragment.GOODSES_EXTRA;
+
+public class GoodsListActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "GoodsListActivity";
     @BindView(R.id.searchView)
@@ -92,19 +96,32 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
 
         initPopupWindow();
 
-        if (getIntent() != null) {
-            mGoodses = (ArrayList<Goods>) getIntent().getSerializableExtra(MallFragment.GOODSES_EXTRA);
-            mCategoryId = getIntent().getIntExtra(MallFragment.GOODS_CATEGORY_EXTRA, -1);
-        }
-
         mGoodsRepository = GoodsRepository.getInstance(GoodsRemoteDatasource.getInstance(
                 getApplicationContext()
         ));
+
+        if (getIntent() != null) {
+            mGoodses = (ArrayList<Goods>) getIntent().getSerializableExtra(GOODSES_EXTRA);
+            mCategoryId = getIntent().getIntExtra(MallFragment.GOODS_CATEGORY_EXTRA, -1);
+        }
 
         mGoodsGridAdapter = new GoodsGridAdapter(this, mGoodses);
         mGridView.setAdapter(mGoodsGridAdapter);
         mGridView.setOnItemClickListener(this);
         mGridView.setOnScrollListener(this);
+
+        // 获取到TextView的ID
+        int id = mSearchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        // 获取到TextView的控件
+        TextView textView = (TextView) mSearchView.findViewById(id);
+        // 设置字体大小为14sp
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);//14sp
+        // 设置字体颜色
+        //textView.setTextColor(getActivity().getResources().getColor(R.color.search_txt_color));
+        // 设置提示文字颜色
+        textView.setHintTextColor(getResources().getColor(R.color.textColorSecondary));
+        // 设置搜索文本监听
+        mSearchView.setOnQueryTextListener(this);
     }
 
     private void initPopupWindow() {
@@ -125,7 +142,7 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
 
 
         mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         GoodsFilterAdapter leftAdapter = new GoodsFilterAdapter(this, mCategory);
         mLeftRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mLeftRecyclerView.setAdapter(leftAdapter);
@@ -215,6 +232,39 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
             mPageNum++;
             new FetchGoodsesTask().execute(mCategoryId);
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if (!TextUtils.isEmpty(query)) {
+            searchGoodes(query);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    private void searchGoodes(final String query) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", query);
+        params.put("categoryId", mCategoryId);
+        params.put("pn", mPageNum);
+        params.put("ps", mPageSize);
+        mGoodsRepository.searchGoodses(params, new GoodsDatasource.SearchGoodsesCallback() {
+            @Override
+            public void onSearchSucces(ArrayList<Goods> goodses) {
+
+            }
+
+            @Override
+            public void onSearchFailure(String msg) {
+                showMessage(msg);
+            }
+        });
     }
 
     private class FetchGoodsesTask extends AsyncTask<Integer, Void, Void> {
