@@ -37,6 +37,7 @@ import me.zoro.peachgardenmall.datasource.UserDatasource;
 import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
+import me.zoro.peachgardenmall.utils.CacheManager;
 import me.zoro.peachgardenmall.utils.PreferencesUtil;
 import me.zoro.peachgardenmall.view.RichText;
 
@@ -100,15 +101,37 @@ public class MyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_my, container, false);
         unbinder = ButterKnife.bind(this, root);
+
+        Log.d(TAG, "onCreateView: ");
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-
-        invalidateUI();
+        Log.d(TAG, "onResume: ");
+        if (mUserInfo != null) {
+            mUserRepository.setDirty(true);
+            new FetchUserInfoTask().execute(mUserInfo.getUserId());
+        }
     }
 
     @OnClick({R.id.user_avatar, R.id.edit_user_info_tv, R.id.my_shopping_cart, R.id.my_orders,
@@ -200,6 +223,7 @@ public class MyFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.d(TAG, "onAttach: ");
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -212,12 +236,14 @@ public class MyFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        Log.d(TAG, "onDetach: ");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        Log.d(TAG, "onDestroyView: ");
     }
 
     /**
@@ -233,7 +259,8 @@ public class MyFragment extends Fragment {
                     mUserInfo = userInfo;
                     updateUserInfo(userInfo);
                     invalidateUI();
-                    PreferencesUtil.persistentUserInfo(getContext(), userInfo);
+                    CacheManager.getInstance().put(Const.USER_INFO_CACHE_KEY, mUserInfo);
+                    PreferencesUtil.persistentUserInfo(getContext(), mUserInfo);
                 }
 
                 @Override

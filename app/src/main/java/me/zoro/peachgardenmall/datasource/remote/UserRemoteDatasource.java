@@ -388,7 +388,8 @@ public class UserRemoteDatasource implements UserDatasource {
                     int code = bodyJson.get(Const.CODE).getAsInt();
                     if (code == 0) {
                         JsonObject resultJson = bodyJson.get(Const.RESULT).getAsJsonObject();
-
+                        String avatarUrl = resultJson.get("avatarUrl").getAsString();
+                        callback.onUploaded(avatarUrl);
                     } else {
                         callback.onUploadFailure();
                     }

@@ -23,6 +23,15 @@ public class UserRepository implements UserDatasource {
 
     private UserDatasource mRemoteDatasource;
 
+    public void setDirty(boolean dirty) {
+        mIsDirty = dirty;
+    }
+
+    /**
+     * true,表示缓存存在过期数据，false，表示缓存数据是最新的
+     */
+    private boolean mIsDirty = true;
+
     // 防止被直接实例化
     private UserRepository(UserDatasource remoteDatasource) {
         mRemoteDatasource = remoteDatasource;
@@ -186,16 +195,18 @@ public class UserRepository implements UserDatasource {
     @Override
     public void fetchUserInfo(final int userId, @NonNull final GetUserInfoCallback callback) {
         UserInfo userInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
-        if (userInfo == null) {
+        if (mIsDirty) {
             mRemoteDatasource.fetchUserInfo(userId, new GetUserInfoCallback() {
                 @Override
                 public void onUserInfoLoaded(UserInfo userInfo) {
                     CacheManager.getInstance().put(Const.USER_INFO_CACHE_KEY, userInfo);
+                    mIsDirty = false;
                     callback.onUserInfoLoaded(userInfo);
                 }
 
                 @Override
                 public void onDataNotAvailable(String errorMsg) {
+                    mIsDirty = false;
                     callback.onDataNotAvailable(errorMsg);
                 }
             });

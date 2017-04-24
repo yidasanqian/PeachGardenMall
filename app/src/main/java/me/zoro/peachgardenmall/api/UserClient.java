@@ -55,14 +55,13 @@ public interface UserClient {
     Call<JsonObject> getUserInfo(@Path("username") String username);
 
     //修改用户信息
-    @POST("user")
+    @POST("User/setUserInfo")
     Call<JsonObject> userInfoRevise(@Body Map<String, Object> params);
 
     @Multipart
-    @POST("user")
+    @POST("User/uploadHeadtop")
     Call<JsonObject> uploadAvatar(@PartMap Map<String, RequestBody> partMap,
                                   @Part MultipartBody.Part file);
-
 
     //忘记密码
     @POST("anon/user/new/password")

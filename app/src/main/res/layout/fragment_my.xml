@@ -48,7 +48,6 @@
         android:id="@+id/user_avatar"
         android:layout_width="@dimen/avatar_width"
         android:layout_height="@dimen/avatar_height"
-        android:src="@drawable/ic_gaoyuanyuan"
         android:layout_gravity="center"
         android:layout_margin="@dimen/layout_margin"
         />

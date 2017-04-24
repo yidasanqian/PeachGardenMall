@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<inset xmlns:android="http://schemas.android.com/apk/res/android"
-       android:insetLeft="4dp"
-       android:insetTop="6dp"
-       android:insetRight="4dp"
-       android:insetBottom="6dp">
+<inset xmlns:android="http://schemas.android.com/apk/res/android">
     <layer-list>
         <item>
             <shape
                 android:shape="rectangle"
                 android:tint="?attr/colorPrimary">
                 <solid android:color="@android:color/white"/>
-                <padding
-                    android:left="8dp"
-                    android:top="4dp"
-                    android:right="8dp"
-                    android:bottom="4dp"/>
             </shape>
         </item>
 
         <item android:gravity="left">
             <shape android:shape="rectangle">
-                <size android:width="8dp"/>
+                <size android:width="4dp"/>
                 <solid android:color="@color/colorAccent"/>
             </shape>
         </item>

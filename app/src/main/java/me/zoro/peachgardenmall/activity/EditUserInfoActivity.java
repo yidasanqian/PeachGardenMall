@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
@@ -29,11 +30,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.UserDatasource;
 import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.MyFragment;
+import me.zoro.peachgardenmall.utils.CacheManager;
+import me.zoro.peachgardenmall.utils.PreferencesUtil;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -87,14 +91,21 @@ public class EditUserInfoActivity extends AppCompatActivity {
         mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(getApplicationContext()));
 
 
-        if (getIntent() != null) {
-            mUserInfo = (UserInfo) getIntent().getSerializableExtra(MyFragment.USERINFO_EXTRA);
-            if (mUserInfo != null) {
-                invalidateUI(mUserInfo);
-            } else {
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivityForResult(intent, EditUserInfoActivity.LOGIN_REQUEST_CODE);
-            }
+        mUserInfo = (UserInfo) getIntent().getSerializableExtra(MyFragment.USERINFO_EXTRA);
+        if (mUserInfo != null) {
+            invalidateUI(mUserInfo);
+        } else {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, EditUserInfoActivity.LOGIN_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mUserInfo != null) {
+            mUserRepository.setDirty(true);
+            new FetchUserInfoTask().execute(mUserInfo.getUserId());
         }
     }
 
@@ -141,6 +152,9 @@ public class EditUserInfoActivity extends AppCompatActivity {
                             .load(avatarUrl)
                             .fit()
                             .into(mIvAvatar);
+                    mUserInfo.setHeadPic(avatarUrl);
+                    CacheManager.getInstance().put(Const.USER_INFO_CACHE_KEY, mUserInfo);
+                    PreferencesUtil.persistentUserInfo(EditUserInfoActivity.this, mUserInfo);
                 }
 
                 @Override
@@ -182,27 +196,25 @@ public class EditUserInfoActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_UPDATE_AVATAR);
                 break;
             case R.id.edit_nickname:
-                String title = "修改昵称", key = "nickname", value = editText.getText().toString();
-                reviseUserInfo(editText, title, key, value);
+                String title = "修改昵称", key = "nickname";
+                reviseUserInfo(editText, title, key);
                 break;
             case R.id.edit_sex:
                 title = "修改性别";
                 key = "sex";
-                value = editText.getText().toString();
-                reviseUserInfo(editText, title, key, value);
+                reviseUserInfo(editText, title, key);
                 break;
             case R.id.edit_account:
                 break;
             case R.id.edit_autograph:
                 title = "设置个性签名";
                 key = "autograph";
-                value = editText.getText().toString();
-                reviseUserInfo(editText, title, key, value);
+                reviseUserInfo(editText, title, key);
                 break;
         }
     }
 
-    private void reviseUserInfo(final EditText editText, String title, final String key, final String value) {
+    private void reviseUserInfo(final EditText editText, String title, final String key) {
         new AlertDialog.Builder(this)
                 .setView(editText)
                 .setTitle(title)
@@ -210,6 +222,7 @@ public class EditUserInfoActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String value = editText.getText().toString();
                         if (TextUtils.isEmpty(value)) {
                             showMessage(getString(R.string.empty_value_msg));
                         } else {
@@ -219,6 +232,8 @@ public class EditUserInfoActivity extends AppCompatActivity {
                             mUserRepository.userInfoRevise(params, new UserDatasource.UserInfoReviseCallback() {
                                 @Override
                                 public void onUserInfoReviseSuccess() {
+                                    mUserRepository.setDirty(true);
+                                    new FetchUserInfoTask().execute(mUserInfo.getUserId());
                                     showMessage(getString(R.string.revise_success_msg));
                                 }
 
@@ -243,5 +258,40 @@ public class EditUserInfoActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
+    }
+
+    /**
+     * 获取用户信息
+     */
+    private class FetchUserInfoTask extends AsyncTask<Integer, Void, Void> {
+        @Override
+        protected Void doInBackground(Integer... params) {
+            int userId = params[0];
+            mUserRepository.fetchUserInfo(userId, new UserDatasource.GetUserInfoCallback() {
+                @Override
+                public void onUserInfoLoaded(final UserInfo userInfo) {
+                    mUserInfo = userInfo;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            invalidateUI(userInfo);
+                        }
+                    });
+
+                    CacheManager.getInstance().put(Const.USER_INFO_CACHE_KEY, mUserInfo);
+                    PreferencesUtil.persistentUserInfo(EditUserInfoActivity.this, mUserInfo);
+                }
+
+                @Override
+                public void onDataNotAvailable(String errorMsg) {
+                    Log.w(TAG, "onDataNotAvailable: " + errorMsg);
+                    if (Const.SERVER_AVALIABLE.equals(errorMsg)) {
+                        showMessage(errorMsg);
+                    }
+                }
+            });
+
+            return null;
+        }
     }
 }

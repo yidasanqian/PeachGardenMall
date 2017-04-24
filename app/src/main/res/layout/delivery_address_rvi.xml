@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/ll_addr_item"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal">
@@ -8,16 +9,16 @@
         android:id="@+id/tv_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="兔兔"
         android:padding="@dimen/layout_padding"
         style="@style/TextAppearance.AppCompat.Title"
         />
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/ll_addr_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -28,18 +29,17 @@
                 android:id="@+id/tv_contact_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="18112111123"
                 style="@style/TextAppearance.AppCompat.Title"
                 />
 
             <TextView
                 android:id="@+id/tv_contact_address"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="ahahahahahhahahah"
                 style="@style/TextAppearance.AppCompat.Medium"
                 />
         </LinearLayout>
+
 
         <ImageButton
             android:id="@+id/ib_edit_address"
@@ -50,7 +50,6 @@
             android:layout_margin="@dimen/layout_margin"
             android:background="@android:drawable/ic_menu_edit"
             />
-
     </RelativeLayout>
 
 </LinearLayout>
