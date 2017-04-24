@@ -86,7 +86,10 @@ public class CreateAddressActivity extends AppCompatActivity implements Compound
         if (mAddress != null) {
             mNameEt.setText(mAddress.getConsignee());
             mPhoneEt.setText(mAddress.getMobile());
-            mDetailAddressEt.setText(mAddress.getAddress());
+            String[] addr = mAddress.getAddress().split(",");
+            mAddressEt.setText(addr[0]);
+            mDetailAddressEt.setText(addr[1]);
+            mCbSetDefaultAddr.setChecked(mAddress.isIsDefault());
         }
     }
 
@@ -128,13 +131,14 @@ public class CreateAddressActivity extends AppCompatActivity implements Compound
             }
 
             Map<String, Object> params = new HashMap<>();
+            // 如果参数包含字段addressId，则表示修改地址
             if (mAddress != null) {
                 params.put("addressId", mAddress.getId());
             }
             params.put("userId", userInfo.getUserId());
             params.put("name", name);
             params.put("phone", phone);
-            params.put("address", address + detailAddr);
+            params.put("address", address + "," + detailAddr);
             params.put("isDefault", mIsDefault);
             new SavedAddrTask().execute(params);
         }

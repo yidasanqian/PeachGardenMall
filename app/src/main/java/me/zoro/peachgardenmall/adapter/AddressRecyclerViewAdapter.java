@@ -63,6 +63,7 @@ public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             if (address != null) {
                 if (address.isIsDefault()) {
                     viewHolder.mLlAddrItem.setBackgroundResource(R.drawable.delivery_addr_item_background);
+
                 } else {
                     viewHolder.mLlAddrItem.setBackgroundResource(R.drawable.delivery_addr_item_normal_background);
                 }
@@ -116,7 +117,6 @@ public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @OnClick(R.id.ib_edit_address)
         public void onViewClicked() {
-            // TODO: 17/4/24 修改地址
             Address address = (Address) mIbEditAddress.getTag();
             Intent intent = new Intent(mContext, CreateAddressActivity.class);
             intent.putExtra(ADDRESS_EXTRA, address);
