@@ -99,5 +99,4 @@
     <dimen name="card_corner_radius">2dp</dimen>
     <dimen name="avatar_width">48dp</dimen>
     <dimen name="avatar_height">48dp</dimen>
-    <dimen name="toolbar_padding_top">25dp</dimen>
 </resources>

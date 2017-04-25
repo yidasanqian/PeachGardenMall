@@ -75,4 +75,19 @@ public class GoodsRepository implements GoodsDatasource {
             }
         });
     }
+
+    @Override
+    public void getGoodsDetail(int goodsId, @NonNull final GetGoodsDetailCallback callback) {
+        mRemoteDatasource.getGoodsDetail(goodsId, new GetGoodsDetailCallback() {
+            @Override
+            public void onGoodsLoaded(Goods goods) {
+                callback.onGoodsLoaded(goods);
+            }
+
+            @Override
+            public void onDataNotAvailable(String errorMsg) {
+                callback.onDataNotAvailable(errorMsg);
+            }
+        });
+    }
 }

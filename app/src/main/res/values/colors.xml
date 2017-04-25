@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorPrimaryDark">@android:color/transparent</color>
     <color name="colorAccent">#2D3F20</color>
     <color name="textColorPrimary">#000000</color>
     <color name="textColor">#000000</color>
     <color name="textColorSecondary">#8a000000</color>
     <color name="subheadColor">#de000000</color>
     <color name="colorButtonNormal">#d6d7d7</color>
-    <drawable name="progress_bar_background">#90000000</drawable>
+    <color name="progress_bar_background">#90000000</color>
 </resources>

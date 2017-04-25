@@ -112,7 +112,7 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // 上拉加载
-        if (view.getLastVisiblePosition() == totalItemCount - 1 && !mIsLoadingMore) {
+        if (view.getLastVisiblePosition() == totalItemCount - 1 && visibleItemCount > 0 && !mIsLoadingMore) {
             mIsLoadingMore = true;
             mPageNum++;
             searchGoodes(mQuery);

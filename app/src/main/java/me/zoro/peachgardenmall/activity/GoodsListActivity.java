@@ -100,10 +100,9 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
                 getApplicationContext()
         ));
 
-        if (getIntent() != null) {
-            mGoodses = (ArrayList<Goods>) getIntent().getSerializableExtra(GOODSES_EXTRA);
-            mCategoryId = getIntent().getIntExtra(MallFragment.GOODS_CATEGORY_EXTRA, -1);
-        }
+
+        mGoodses = (ArrayList<Goods>) getIntent().getSerializableExtra(GOODSES_EXTRA);
+        mCategoryId = getIntent().getIntExtra(MallFragment.GOODS_CATEGORY_EXTRA, -1);
 
         mGoodsGridAdapter = new GoodsGridAdapter(this, mGoodses);
         mGridView.setAdapter(mGoodsGridAdapter);

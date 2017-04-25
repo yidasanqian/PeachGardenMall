@@ -21,6 +21,14 @@ public interface GoodsDatasource {
 
     void searchGoodses(Map<String, Object> params, @NonNull SearchGoodsesCallback callback);
 
+    void getGoodsDetail(int goodsId, @NonNull GetGoodsDetailCallback callback);
+
+    interface GetGoodsDetailCallback {
+        void onGoodsLoaded(Goods goods);
+
+        void onDataNotAvailable(String errorMsg);
+    }
+
     interface GetGoodsesCallback {
         void onGoodsesLoaded(ArrayList<Goods> goodses);
 

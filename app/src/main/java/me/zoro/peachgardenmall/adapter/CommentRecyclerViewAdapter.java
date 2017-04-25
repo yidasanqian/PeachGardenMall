@@ -98,8 +98,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         TextView mTvNickname;
         @BindView(R.id.tv_comment_content)
         TextView mTvCommentContent;
-        @BindView(R.id.tv_goods_count)
-        TextView mTvGoodsCount;
+        @BindView(R.id.tv_goods_spec)
+        TextView mTvGoodsSpec;
 
         public RecyclerItemViewHolder(View itemView) {
             super(itemView);

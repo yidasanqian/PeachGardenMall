@@ -25,9 +25,11 @@ import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.datasource.UserDatasource;
 import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
+import me.zoro.peachgardenmall.utils.DensityUtil;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private static final String TAG = "RegisterActivity";
     public static final String USERNAME_EXTRA = "username";
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
@@ -58,13 +60,24 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            final int statusBarHeight = DensityUtil.getStatusBarHeight(this);
+            mToolbar.post(new Runnable() {
+                @Override
+                public void run() {
+                    mToolbar.getLayoutParams().height += statusBarHeight;
+                    mToolbar.setPadding(mToolbar.getPaddingLeft(),
+                            statusBarHeight + mToolbar.getPaddingTop(),
+                            mToolbar.getPaddingRight(),
+                            mToolbar.getPaddingBottom());
+
+                }
+            });
+        }
+
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-        }
 
         mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(getApplicationContext()));
     }

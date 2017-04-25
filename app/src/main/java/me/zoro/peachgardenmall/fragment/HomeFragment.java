@@ -41,6 +41,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.activity.AdActivity;
+import me.zoro.peachgardenmall.activity.GoodsDetailActivity;
 import me.zoro.peachgardenmall.adapter.GoodsGridAdapter;
 import me.zoro.peachgardenmall.datasource.BannerDatasource;
 import me.zoro.peachgardenmall.datasource.BannerRepository;
@@ -58,6 +59,7 @@ import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 public class HomeFragment extends Fragment implements OnBannerClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
     private static final String TAG = "HomeFragment";
     public static final String AD_URL_EXTRA = "ad_url";
+    public static final String GOODS_ID_EXTRA = "goods_id";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.toolbar_right_img)
@@ -89,7 +91,7 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     /**
      * 是否正在加载更多，true，表示正在加载，false，则不是
      */
-    private boolean isLoadingMore;
+    private boolean mIsLoadingMore;
 
     public static HomeFragment newInstance(String s) {
 
@@ -192,8 +194,10 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Goods goods = mGoodses.get(position);
-        // TODO: 17/4/9 商品点击事件
-        Toast.makeText(getActivity(), goods.getGoodsName(), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(), goods.getGoodsName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
+        intent.putExtra(GOODS_ID_EXTRA, goods.getGoodsId());
+        startActivity(intent);
     }
 
     // 显示客服信息
@@ -219,7 +223,7 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() == mPageSize) {
-            isLoadingMore = false;
+            mIsLoadingMore = false;
             mPageNum = 1;
         }
     }
@@ -227,8 +231,8 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // 上拉加载
-        if (view.getLastVisiblePosition() == totalItemCount - 1 && !isLoadingMore) {
-            isLoadingMore = true;
+        if (view.getLastVisiblePosition() == totalItemCount - 1 && visibleItemCount > 0 && !mIsLoadingMore) {
+            mIsLoadingMore = true;
             mPageNum++;
             new FetchGoodsesTask().execute();
         }
@@ -335,20 +339,21 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
                 @Override
                 public void onGoodsesLoaded(ArrayList<Goods> goodses) {
                     if (goodses.size() > 0) {
-                        mGoodses = goodses;
                         if (mPageNum > 1) {
+                            mGoodses.addAll(goodses);
                             mGridAdapter.appendData(goodses);
                         } else {
+                            mGoodses = goodses;
                             mGridAdapter.replaceData(goodses);
                         }
-                        isLoadingMore = false;
+                        mIsLoadingMore = false;
                     }
                 }
 
                 @Override
                 public void onDataNotAvailable(String errorMsg) {
                     showMessage(errorMsg);
-                    isLoadingMore = false;
+                    mIsLoadingMore = false;
                 }
             });
             return null;

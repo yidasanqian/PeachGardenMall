@@ -151,4 +151,28 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             }
         });
     }
+
+    @Override
+    public void getGoodsDetail(int goodsId, @NonNull final GetGoodsDetailCallback callback) {
+        Call<JsonObject> call = mGoodsClient.getGoodsDetail(goodsId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null || bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                } else {
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    Goods goods = gson.fromJson(bodyJson.get(Const.RESULT), Goods.class);
+                    callback.onGoodsLoaded(goods);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 获取商品详情异常", t);
+                callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+            }
+        });
+    }
 }

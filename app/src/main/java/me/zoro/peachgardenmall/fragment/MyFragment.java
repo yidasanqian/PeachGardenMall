@@ -258,7 +258,12 @@ public class MyFragment extends Fragment {
                 public void onUserInfoLoaded(UserInfo userInfo) {
                     mUserInfo = userInfo;
                     updateUserInfo(userInfo);
-                    invalidateUI();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            invalidateUI();
+                        }
+                    });
                     CacheManager.getInstance().put(Const.USER_INFO_CACHE_KEY, mUserInfo);
                     PreferencesUtil.persistentUserInfo(getContext(), mUserInfo);
                 }
