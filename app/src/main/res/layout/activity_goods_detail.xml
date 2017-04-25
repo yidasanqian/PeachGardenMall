@@ -218,6 +218,7 @@
             android:id="@+id/edit_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             >
 
 
@@ -323,8 +324,109 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-
     </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        >
+
+        <View
+            android:id="@+id/list_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/list_divider"
+            android:layout_gravity="bottom|center_horizontal"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fixed_height"
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="horizontal"
+            android:layout_below="@id/list_divider"
+            android:background="#FAFAFA"
+            >
+
+
+            <ImageView
+                android:id="@+id/iv_service"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_service"
+                android:foreground="?selectableItemBackground"
+                android:padding="12dp"
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/list_divider"
+                />
+
+            <ImageView
+                android:id="@+id/iv_shopping_cart"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_shopping_cart"
+                android:foreground="?selectableItemBackground"
+                android:padding="12dp"
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/list_divider"
+                />
+
+            <ImageView
+                android:id="@+id/iv_collection"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_collection"
+                android:foreground="?selectableItemBackground"
+                android:padding="12dp"
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/list_divider"
+                />
+
+            <TextView
+                android:id="@+id/tv_purchase"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:text="立即购买"
+                android:gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:foreground="?selectableItemBackground"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_add_to_shopping_cart"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:text="加入购物车"
+                android:gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:background="@color/colorAccent"
+                android:foreground="?selectableItemBackground"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                />
+
+        </LinearLayout>
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

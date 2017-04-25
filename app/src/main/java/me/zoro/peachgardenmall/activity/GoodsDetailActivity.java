@@ -6,9 +6,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,8 +39,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.adapter.CommentRecyclerViewAdapter;
 import me.zoro.peachgardenmall.datasource.GoodsDatasource;
 import me.zoro.peachgardenmall.datasource.GoodsRepository;
+import me.zoro.peachgardenmall.datasource.domain.Comment;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.HomeFragment;
@@ -81,8 +88,24 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     RecyclerView mRecyclerView;
     @BindView(R.id.web_view)
     WebView mWebView;
+    @BindView(R.id.iv_service)
+    ImageView mIvService;
+    @BindView(R.id.iv_shopping_cart)
+    ImageView mIvShoppingCart;
+    @BindView(R.id.iv_collection)
+    ImageView mIvCollection;
+    @BindView(R.id.tv_purchase)
+    TextView mTvPurchase;
+    @BindView(R.id.tv_add_to_shopping_cart)
+    TextView mTvAddToShoppingCart;
 
     private GoodsRepository mGoodsRepository;
+
+    /**
+     * 该商品对应的评论列表
+     */
+    private List<Comment> mComments;
+    private CommentRecyclerViewAdapter mCommentRecyclerViewAdapter;
 
     private int mGoodsId;
 
@@ -124,6 +147,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
 
         mGoodsId = getIntent().getIntExtra(HomeFragment.GOODS_ID_EXTRA, -1);
 
+        mComments = new ArrayList<>();
+        mCommentRecyclerViewAdapter = new CommentRecyclerViewAdapter(this, mComments);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mCommentRecyclerViewAdapter);
     }
 
 
@@ -182,7 +209,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         return true;
     }
 
-    @OnClick({R.id.edit_select_spec, R.id.edit_promotion, R.id.edit_comment})
+    @OnClick({R.id.edit_select_spec, R.id.edit_promotion, R.id.edit_comment,
+            R.id.iv_service, R.id.iv_shopping_cart, R.id.iv_collection, R.id.tv_purchase,
+            R.id.tv_add_to_shopping_cart})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             // TODO: 17/4/25 选择规格
@@ -194,6 +223,39 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             // TODO: 17/4/25 查看评论
             case R.id.edit_comment:
                 break;
+            case R.id.iv_service:
+                showServiceInfo();
+                break;
+            // TODO: 17/4/25 查看购物车
+            case R.id.iv_shopping_cart:
+                break;
+            // TODO: 17/4/25 收藏
+            case R.id.iv_collection:
+                break;
+            // TODO: 17/4/25 购买
+            case R.id.tv_purchase:
+                break;
+            // TODO: 17/4/25 加入购物车
+            case R.id.tv_add_to_shopping_cart:
+                break;
+        }
+    }
+
+    private void showServiceInfo() {
+        if (!isFinishing()) {
+            SpannableString ss = new SpannableString(getString(R.string.service_contact_information));
+            ss.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    Log.d("", "onClick........" + widget);
+                }
+            }, 5, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            new AlertDialog.Builder(this)
+                    .setTitle("客服信息")
+                    .setMessage(ss)
+                    .setCancelable(true)
+                    .show();
         }
     }
 
@@ -261,5 +323,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mTvPrice.setText(goods.getPrice());
         int num = goods.getCommentData().getNumber();
         mTvCommentNumber.setText("（" + num + "）");
+        mWebView.loadUrl(goods.getDetailInfoUrl());
     }
 }

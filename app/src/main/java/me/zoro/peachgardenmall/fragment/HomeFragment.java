@@ -203,7 +203,12 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     // 显示客服信息
     @OnClick(R.id.toolbar_right_img)
     public void onViewClicked() {
+        showServiceInfo();
+    }
+
+    private void showServiceInfo() {
         if (!getActivity().isFinishing()) {
+            // TODO: 17/4/25 修改客服信息
             SpannableString ss = new SpannableString(getString(R.string.service_contact_information));
             ss.setSpan(new ClickableSpan() {
                 @Override

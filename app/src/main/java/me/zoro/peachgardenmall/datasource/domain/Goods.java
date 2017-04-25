@@ -143,6 +143,11 @@ public class Goods implements Serializable {
     private List<ImageDataEntity> imageData;
     @SerializedName("filter_spec")
     private List<FilterSpecEntity> filterSpec;
+    /**
+     * 商品图文详情地址
+     */
+    @SerializedName("content_url")
+    private String mDetailInfoUrl;
 
     public int getCount() {
         return count;
@@ -486,6 +491,14 @@ public class Goods implements Serializable {
 
     public void setFilterSpec(List<FilterSpecEntity> filterSpec) {
         this.filterSpec = filterSpec;
+    }
+
+    public String getDetailInfoUrl() {
+        return mDetailInfoUrl;
+    }
+
+    public void setDetailInfoUrl(String detailInfoUrl) {
+        mDetailInfoUrl = detailInfoUrl;
     }
 
     public static class CommentDataEntity implements Serializable {
