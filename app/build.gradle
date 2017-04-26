@@ -64,4 +64,6 @@ dependencies {
 
     // 支付宝sdk
     compile files('libs/alipaySdk-20161129.jar')
+
+    compile 'com.google.android:flexbox:0.2.6'
 }

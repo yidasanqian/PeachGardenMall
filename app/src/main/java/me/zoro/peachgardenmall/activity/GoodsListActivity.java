@@ -124,7 +124,7 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initPopupWindow() {
-        View contentView = LayoutInflater.from(this).inflate(R.layout.filter_content, null);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.popup_filter_content, null);
         mBtnPromotion = (Button) contentView.findViewById(R.id.btn_promotion);
         mBtnSelfSupport = (Button) contentView.findViewById(R.id.btn_self_support);
         mLeftRecyclerView = (RecyclerView) contentView.findViewById(R.id.left_recycler_view);
