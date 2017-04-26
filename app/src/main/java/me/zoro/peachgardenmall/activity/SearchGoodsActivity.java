@@ -1,5 +1,6 @@
 package me.zoro.peachgardenmall.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -26,6 +27,7 @@ import me.zoro.peachgardenmall.datasource.GoodsRepository;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 
+import static me.zoro.peachgardenmall.fragment.HomeFragment.GOODS_ID_EXTRA;
 import static me.zoro.peachgardenmall.fragment.MallFragment.GOODSES_EXTRA;
 import static me.zoro.peachgardenmall.fragment.MallFragment.QUERY_EXTRA;
 
@@ -96,9 +98,10 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: 17/4/9 商品点击事件
         Goods goods = mGoodses.get(position);
-        Toast.makeText(this, goods.getGoodsName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, GoodsDetailActivity.class);
+        intent.putExtra(GOODS_ID_EXTRA, goods.getGoodsId());
+        startActivity(intent);
     }
 
     @Override

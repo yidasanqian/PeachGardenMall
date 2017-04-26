@@ -1,5 +1,6 @@
 package me.zoro.peachgardenmall.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -39,6 +40,7 @@ import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.MallFragment;
 
+import static me.zoro.peachgardenmall.fragment.HomeFragment.GOODS_ID_EXTRA;
 import static me.zoro.peachgardenmall.fragment.MallFragment.GOODSES_EXTRA;
 
 public class GoodsListActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener, SearchView.OnQueryTextListener {
@@ -211,8 +213,9 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Goods goods = mGoodses.get(position);
-        // TODO: 17/4/9 商品点击事件
-        Toast.makeText(this, goods.getGoodsName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, GoodsDetailActivity.class);
+        intent.putExtra(GOODS_ID_EXTRA, goods.getGoodsId());
+        startActivity(intent);
     }
 
     @Override
