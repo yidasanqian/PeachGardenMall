@@ -24,4 +24,5 @@
     <string name="revise_success_msg">修改成功</string>
     <string name="empty_value_msg">值不能为空</string>
     <string name="data_not_avoidable">未获取到有效数据</string>
+    <string name="star_success_msg">收藏成功</string>
 </resources>

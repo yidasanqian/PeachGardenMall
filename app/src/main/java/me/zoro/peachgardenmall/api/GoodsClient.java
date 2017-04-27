@@ -6,6 +6,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -26,4 +27,10 @@ public interface GoodsClient {
 
     @GET("Goods/introduction")
     Call<JsonObject> getGoodsDetail(@Query("goodsId") int goodsId);
+
+    @GET("Goods/getGoodsList")
+    Call<JsonObject> getStarGoodses(@QueryMap Map<String, Object> params);
+
+    @POST
+    Call<JsonObject> starGoods(@QueryMap Map<String, Object> params);
 }

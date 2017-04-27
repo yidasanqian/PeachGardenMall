@@ -90,4 +90,44 @@ public class GoodsRepository implements GoodsDatasource {
             }
         });
     }
+
+    @Override
+    public void getStarGoodses(Map<String, Object> params, @NonNull final GetStarGoodsesCallback callback) {
+        mRemoteDatasource.getStarGoodses(params, new GetStarGoodsesCallback() {
+            @Override
+            public void onGoodsesLoaded(ArrayList<Goods> goodses) {
+                callback.onGoodsesLoaded(goodses);
+            }
+
+            @Override
+            public void onDataNotAvailable(String errorMsg) {
+                callback.onDataNotAvailable(errorMsg);
+            }
+        });
+    }
+
+    @Override
+    public void starGoods(Map<String, Object> params, @NonNull final StarGoodsCallback callback) {
+        mRemoteDatasource.starGoods(params, new StarGoodsCallback() {
+            @Override
+            public void onStarSuccess() {
+                callback.onStarSuccess();
+            }
+
+            @Override
+            public void onStarFailure(String errorMsg) {
+                callback.onStarFailure(errorMsg);
+            }
+        });
+    }
+
+    @Override
+    public void addToShoppingCart(Map<String, Object> params, @NonNull AddToShoppingCartCallback callback) {
+
+    }
+
+    @Override
+    public void deleteFromShoppingCart(Map<String, Object> params, @NonNull DeleteFromShoppingCartCallback callback) {
+
+    }
 }

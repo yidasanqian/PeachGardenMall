@@ -260,10 +260,11 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onSearchSucces(ArrayList<Goods> goodses) {
                 if (goodses.size() > 0) {
-                    mGoodses = goodses;
                     if (mPageNum > 1) {
+                        mGoodses.addAll(goodses);
                         mGoodsGridAdapter.appendData(goodses);
                     } else {
+                        mGoodses = goodses;
                         mGoodsGridAdapter.replaceData(goodses);
                     }
                     mIsLoadingMore = false;
@@ -289,10 +290,11 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void onGoodsesLoaded(ArrayList<Goods> goodses) {
                     if (goodses.size() > 0) {
-                        mGoodses = goodses;
                         if (mPageNum > 1) {
+                            mGoodses.addAll(goodses);
                             mGoodsGridAdapter.appendData(goodses);
                         } else {
+                            mGoodses = goodses;
                             mGoodsGridAdapter.replaceData(goodses);
                         }
                         mIsLoadingMore = false;

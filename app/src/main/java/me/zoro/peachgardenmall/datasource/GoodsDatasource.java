@@ -23,6 +23,39 @@ public interface GoodsDatasource {
 
     void getGoodsDetail(int goodsId, @NonNull GetGoodsDetailCallback callback);
 
+    void getStarGoodses(Map<String, Object> params, @NonNull GetStarGoodsesCallback callback);
+
+    void starGoods(Map<String, Object> params, @NonNull StarGoodsCallback callback);
+
+    void addToShoppingCart(Map<String, Object> params, @NonNull AddToShoppingCartCallback callback);
+
+    void deleteFromShoppingCart(Map<String, Object> params, @NonNull DeleteFromShoppingCartCallback callback);
+
+    interface DeleteFromShoppingCartCallback {
+        void onDeleteSuccess();
+
+        void onDeleteFailure(String errorMsg);
+    }
+
+    interface AddToShoppingCartCallback {
+        void onAddSuccess();
+
+        void onAddFailure(String errorMsg);
+
+    }
+
+    interface StarGoodsCallback {
+        void onStarSuccess();
+
+        void onStarFailure(String errorMsg);
+    }
+
+    interface GetStarGoodsesCallback {
+        void onGoodsesLoaded(ArrayList<Goods> goodses);
+
+        void onDataNotAvailable(String errorMsg);
+    }
+
     interface GetGoodsDetailCallback {
         void onGoodsLoaded(Goods goods);
 

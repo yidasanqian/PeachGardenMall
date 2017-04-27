@@ -175,4 +175,70 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             }
         });
     }
+
+    @Override
+    public void getStarGoodses(Map<String, Object> params, @NonNull final GetStarGoodsesCallback callback) {
+        Call<JsonObject> call = mGoodsClient.getStarGoodses(params);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null) {
+                    callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
+                } else {
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    JsonArray jsonArray = bodyJson.get(Const.RESULT).getAsJsonArray();
+                    ArrayList<Goods> goodsList = new ArrayList<Goods>();
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JsonObject json = jsonArray.get(i).getAsJsonObject();
+                        Goods goods = gson.fromJson(json, Goods.class);
+                        goodsList.add(goods);
+                    }
+                    callback.onGoodsesLoaded(goodsList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 获取收藏的商品信息出现异常", t);
+                callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+            }
+        });
+    }
+
+    @Override
+    public void starGoods(Map<String, Object> params, @NonNull final StarGoodsCallback callback) {
+        Call<JsonObject> call = mGoodsClient.starGoods(params);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null) {
+                    callback.onStarFailure(Const.SERVER_AVALIABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onStarFailure(bodyJson.get(Const.MESSAGE).getAsString());
+                } else {
+                    callback.onStarSuccess();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 收藏商品信息出现异常", t);
+                callback.onStarFailure(Const.SERVER_AVALIABLE);
+            }
+        });
+    }
+
+    @Override
+    public void addToShoppingCart(Map<String, Object> params, @NonNull AddToShoppingCartCallback callback) {
+
+    }
+
+    @Override
+    public void deleteFromShoppingCart(Map<String, Object> params, @NonNull DeleteFromShoppingCartCallback callback) {
+
+    }
 }

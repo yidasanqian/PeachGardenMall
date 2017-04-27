@@ -138,16 +138,26 @@ public class Goods implements Serializable {
     @SerializedName("shipping_area_ids")
     private String shippingAreaIds;
     @SerializedName("comment_data")
-    private CommentDataEntity commentData;
+    private Comment comment;
+    /**
+     * 商品图片地址列表
+     */
     @SerializedName("image_data")
     private List<ImageDataEntity> imageData;
-    @SerializedName("filter_spec")
-    private List<FilterSpecEntity> filterSpec;
+
     /**
      * 商品图文详情地址
      */
     @SerializedName("content_url")
     private String mDetailInfoUrl;
+    /**
+     * filter_spec : [{"title":"颜色","spec_items":[{"item_id":125,"item":"红茶","src":"http://112.5.195.56:8098/Public/upload/goods/2017/04-27/59016e923ecc4.jpg"},{"item_id":126,"item":"绿茶","src":"http://112.5.195.56:8098/Public/upload/goods/2017/04-27/59016eca912ec.jpg"}]},{"title":"大小","spec_items":[{"item_id":127,"item":"小杯","src":""},{"item_id":128,"item":"中杯","src":""},{"item_id":129,"item":"大杯","src":""}]}]
+     * spec_relation : [{"goods_id":2,"key":"125_127","key_name":"颜色:红茶 大小:小杯","price":"10.00","store_count":20,"bar_code":"","sku":""},{"goods_id":2,"key":"125_128","key_name":"颜色:红茶 大小:中杯","price":"15.00","store_count":30,"bar_code":"","sku":""},{"goods_id":2,"key":"125_129","key_name":"颜色:红茶 大小:大杯","price":"25.00","store_count":35,"bar_code":"","sku":""},{"goods_id":2,"key":"126_127","key_name":"颜色:绿茶 大小:小杯","price":"12.00","store_count":22,"bar_code":"","sku":""},{"goods_id":2,"key":"126_128","key_name":"颜色:绿茶 大小:中杯","price":"33.00","store_count":11,"bar_code":"","sku":""},{"goods_id":2,"key":"126_129","key_name":"颜色:绿茶 大小:大杯","price":"444.00","store_count":1,"bar_code":"","sku":""}]
+     */
+    @SerializedName("filter_spec")
+    private List<FilterSpecEntity> filterSpec;
+    @SerializedName("spec_relation")
+    private List<SpecRelationEntity> specRelation;
 
     public int getCount() {
         return count;
@@ -469,20 +479,29 @@ public class Goods implements Serializable {
         this.shippingAreaIds = shippingAreaIds;
     }
 
-    public CommentDataEntity getCommentData() {
-        return commentData;
-    }
-
-    public void setCommentData(CommentDataEntity commentData) {
-        this.commentData = commentData;
-    }
-
     public List<ImageDataEntity> getImageData() {
         return imageData;
     }
 
     public void setImageData(List<ImageDataEntity> imageData) {
         this.imageData = imageData;
+    }
+
+
+    public String getDetailInfoUrl() {
+        return mDetailInfoUrl;
+    }
+
+    public void setDetailInfoUrl(String detailInfoUrl) {
+        mDetailInfoUrl = detailInfoUrl;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 
     public List<FilterSpecEntity> getFilterSpec() {
@@ -493,28 +512,12 @@ public class Goods implements Serializable {
         this.filterSpec = filterSpec;
     }
 
-    public String getDetailInfoUrl() {
-        return mDetailInfoUrl;
+    public List<SpecRelationEntity> getSpecRelation() {
+        return specRelation;
     }
 
-    public void setDetailInfoUrl(String detailInfoUrl) {
-        mDetailInfoUrl = detailInfoUrl;
-    }
-
-    public static class CommentDataEntity implements Serializable {
-        /**
-         * number : 0
-         */
-
-        private int number;
-
-        public int getNumber() {
-            return number;
-        }
-
-        public void setNumber(int number) {
-            this.number = number;
-        }
+    public void setSpecRelation(List<SpecRelationEntity> specRelation) {
+        this.specRelation = specRelation;
     }
 
     public static class ImageDataEntity implements Serializable {
@@ -558,8 +561,8 @@ public class Goods implements Serializable {
 
     public static class FilterSpecEntity implements Serializable {
         /**
-         * title : 精品包装
-         * spec_items : [{"item_id":116,"item":"普通包装","src":"","price":"100.00","store_count":20},{"item_id":117,"item":"一般包装","src":"","price":"200.00","store_count":10},{"item_id":118,"item":"豪华包装","src":"","price":"20000.00","store_count":10}]
+         * title : 颜色
+         * spec_items : [{"item_id":125,"item":"红茶","src":"http://112.5.195.56:8098/Public/upload/goods/2017/04-27/59016e923ecc4.jpg"},{"item_id":126,"item":"绿茶","src":"http://112.5.195.56:8098/Public/upload/goods/2017/04-27/59016eca912ec.jpg"}]
          */
 
         private String title;
@@ -584,20 +587,15 @@ public class Goods implements Serializable {
 
         public static class SpecItemsEntity implements Serializable {
             /**
-             * item_id : 116
-             * item : 普通包装
-             * src :
-             * price : 100.00
-             * store_count : 20
+             * item_id : 125
+             * item : 红茶
+             * src : http://112.5.195.56:8098/Public/upload/goods/2017/04-27/59016e923ecc4.jpg
              */
 
             @SerializedName("item_id")
             private int itemId;
             private String item;
             private String src;
-            private String price;
-            @SerializedName("store_count")
-            private int storeCount;
 
             public int getItemId() {
                 return itemId;
@@ -622,22 +620,87 @@ public class Goods implements Serializable {
             public void setSrc(String src) {
                 this.src = src;
             }
+        }
+    }
 
-            public String getPrice() {
-                return price;
-            }
+    public static class SpecRelationEntity implements Serializable {
+        /**
+         * goods_id : 2
+         * key : 125_127
+         * key_name : 颜色:红茶 大小:小杯
+         * price : 10.00
+         * store_count : 20
+         * bar_code :
+         * sku :
+         */
 
-            public void setPrice(String price) {
-                this.price = price;
-            }
+        @SerializedName("goods_id")
+        private int goodsId;
+        private String key;
+        @SerializedName("key_name")
+        private String value;
+        private String price;
+        @SerializedName("store_count")
+        private int stock;
+        @SerializedName("bar_code")
+        private String barCode;
+        @SerializedName("sku")
+        private String skuX;
 
-            public int getStoreCount() {
-                return storeCount;
-            }
+        public int getGoodsId() {
+            return goodsId;
+        }
 
-            public void setStoreCount(int storeCount) {
-                this.storeCount = storeCount;
-            }
+        public void setGoodsId(int goodsId) {
+            this.goodsId = goodsId;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public int getStock() {
+            return stock;
+        }
+
+        public void setStock(int stock) {
+            this.stock = stock;
+        }
+
+        public String getBarCode() {
+            return barCode;
+        }
+
+        public void setBarCode(String barCode) {
+            this.barCode = barCode;
+        }
+
+        public String getSkuX() {
+            return skuX;
+        }
+
+        public void setSkuX(String skuX) {
+            this.skuX = skuX;
         }
     }
 }

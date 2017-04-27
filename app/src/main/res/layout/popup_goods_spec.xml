@@ -109,26 +109,73 @@
             />
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="规格"
-        android:paddingLeft="@dimen/layout_padding"
-        android:paddingRight="@dimen/layout_padding"
-        style="@style/TextAppearance.AppCompat.Title"
-        />
-
-    <me.zoro.peachgardenmall.view.FlexRadioGroup
-        android:id="@+id/rg_goods_spec"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/layout_padding"
-        app:flexWrap="wrap"
-        app:alignItems="stretch"
-        app:alignContent="stretch"
-        >
+        android:layout_height="wrap_content">
 
-    </me.zoro.peachgardenmall.view.FlexRadioGroup>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            >
+
+            <LinearLayout
+                android:id="@+id/ll_spec1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_spec_title1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/layout_padding"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    />
+
+                <me.zoro.peachgardenmall.view.FlexRadioGroup
+                    android:id="@+id/rg_goods_spec1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_padding"
+                    app:flexWrap="wrap"
+                    app:alignItems="stretch"
+                    app:alignContent="stretch"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_spec2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+
+                <TextView
+                    android:id="@+id/tv_spec_title2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/layout_padding"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    />
+
+                <me.zoro.peachgardenmall.view.FlexRadioGroup
+                    android:id="@+id/rg_goods_spec2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_padding"
+                    app:flexWrap="wrap"
+                    app:alignItems="stretch"
+                    app:alignContent="stretch"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <TextView
         android:layout_width="wrap_content"

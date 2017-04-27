@@ -1,6 +1,7 @@
 package me.zoro.peachgardenmall.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,13 +29,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.flexbox.FlexboxLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
@@ -42,18 +44,23 @@ import com.youth.banner.Transformer;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.CommentRecyclerViewAdapter;
+import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.GoodsDatasource;
 import me.zoro.peachgardenmall.datasource.GoodsRepository;
 import me.zoro.peachgardenmall.datasource.domain.Comment;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
+import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.HomeFragment;
+import me.zoro.peachgardenmall.utils.CacheManager;
 import me.zoro.peachgardenmall.utils.DensityUtil;
 import me.zoro.peachgardenmall.view.FlexRadioGroup;
 
@@ -61,7 +68,7 @@ import me.zoro.peachgardenmall.view.FlexRadioGroup;
  * Created by dengfengdecao on 17/4/10.
  */
 
-public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
+public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, FlexRadioGroup.OnCheckedChangeListener {
     private static final String TAG = "GoodsDetailActivity";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -109,16 +116,40 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     TextView mTvAddToShoppingCart;
 
     private PopupWindow mPopupWindow;
-    /**
-     * PopupWindow中的数量
-     */
+
+    private TextView mTvSpecPrice;
     private TextView mTvCount;
     /**
      * 规格内容
      */
     private TextView mTvGoodSpec;
 
+    /**
+     * 库存
+     */
+    private TextView mTvStock;
+
     private GoodsRepository mGoodsRepository;
+
+
+    /**
+     * 规格的种类数
+     */
+    private int mSpecNum;
+    /**
+     * 保存PopupWindow中的数量
+     */
+    private String mGoodsCount;
+    /**
+     * 保存PopupWindow中的价格
+     */
+    private String mSpecPrice;
+
+    private String mKey = "", mDelimiter = "_";
+
+    // mk1，mk2，升序并已'_'连接成mKey
+    private int mk1, mk2;
+
     /**
      * 该商品对应的评论列表
      */
@@ -127,6 +158,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     private CommentRecyclerViewAdapter mCommentRecyclerViewAdapter;
     private int mGoodsId;
     private Goods mGoods;
+    private UserInfo mUserInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -173,6 +205,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mGoodsRepository = GoodsRepository.getInstance(GoodsRemoteDatasource.getInstance(
                 getApplicationContext()
         ));
+        mUserInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
 
         mGoodsId = getIntent().getIntExtra(HomeFragment.GOODS_ID_EXTRA, -1);
 
@@ -256,15 +289,31 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             // TODO: 17/4/25 查看购物车
             case R.id.iv_shopping_cart:
                 break;
-            // TODO: 17/4/25 收藏
+            // TODO: 17/4/25 判断是否已收藏
             case R.id.iv_collection:
+                if (mUserInfo != null) {
+                    new CollectionGoodsTask().execute();
+                } else {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
                 break;
             // TODO: 17/4/25 购买
             case R.id.tv_purchase:
                 break;
             // TODO: 17/4/25 加入购物车
             case R.id.tv_add_to_shopping_cart:
+                if (mUserInfo != null) {
+                    new AddGoodsToShoppingCartTask().execute();
+                } else {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
                 break;
+            // TODO: 17/4/27 数量改变时，规格价格UI待同步
             case R.id.iv_subtract:
                 int count = Integer.parseInt(mTvCount.getText().toString());
                 count--;
@@ -291,6 +340,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 mPopupWindow.dismiss();
                 String spec = mTvGoodSpec.getText().toString().replaceFirst("已选：", "");
                 mTvSelectSpec.setText(spec);
+                // 保存选择的数量
+                mGoodsCount = mTvCount.getText().toString();
+                // 保存价格
+                mSpecPrice = mTvSpecPrice.getText().toString();
                 break;
         }
     }
@@ -298,16 +351,21 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     private void showSpecPopupWindow() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.popup_goods_spec, null);
         ImageView ivGoodsImg = (ImageView) contentView.findViewById(R.id.iv_goods_img);
-        TextView tvPrice = (TextView) contentView.findViewById(R.id.tv_goods_money);
-        final TextView tvStock = (TextView) contentView.findViewById(R.id.tv_stock);
+        mTvSpecPrice = (TextView) contentView.findViewById(R.id.tv_goods_money);
+        mTvStock = (TextView) contentView.findViewById(R.id.tv_stock);
         mTvGoodSpec = (TextView) contentView.findViewById(R.id.tv_goods_spec);
         mTvCount = (TextView) contentView.findViewById(R.id.tv_count);
         ImageView ivSubstract = (ImageView) contentView.findViewById(R.id.iv_subtract);
         ImageView ivAdd = (ImageView) contentView.findViewById(R.id.iv_add);
         ImageView ivCloseWindow = (ImageView) contentView.findViewById(R.id.iv_close_window);
 
-        FlexRadioGroup llGoodsSpecList = (FlexRadioGroup) contentView.findViewById(R.id.rg_goods_spec);
-
+        LinearLayout llSpec1 = (LinearLayout) contentView.findViewById(R.id.ll_spec1);
+        // 默认隐藏llSpec2
+        LinearLayout llSpec2 = (LinearLayout) contentView.findViewById(R.id.ll_spec2);
+        FlexRadioGroup lrSpecContent1 = (FlexRadioGroup) contentView.findViewById(R.id.rg_goods_spec1);
+        FlexRadioGroup lrSpecContent2 = (FlexRadioGroup) contentView.findViewById(R.id.rg_goods_spec2);
+        TextView tvSpecTitle1 = (TextView) contentView.findViewById(R.id.tv_spec_title1);
+        TextView tvSpecTitle2 = (TextView) contentView.findViewById(R.id.tv_spec_title2);
 
         ImageView ivService = (ImageView) contentView.findViewById(R.id.iv_service);
         ImageView ivShoppingCart = (ImageView) contentView.findViewById(R.id.iv_shopping_cart);
@@ -325,48 +383,149 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         tvPurchase.setOnClickListener(this);
         tvAddToShoppingCart.setOnClickListener(this);
 
-        llGoodsSpecList.setOnCheckedChangeListener(new FlexRadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(FlexRadioGroup group, @IdRes int checkedId) {
-                for (int i = 0; i < group.getChildCount(); i++) {
-                    // TODO: 17/4/26 价格同步待完成
-                    RadioButton radioButton = (RadioButton) group.getChildAt(i);
-                    Goods.FilterSpecEntity.SpecItemsEntity specItem = (Goods.FilterSpecEntity.SpecItemsEntity) radioButton.getTag();
-                    if (radioButton.getId() == checkedId) {
-                        Log.d(TAG, "onCheckedChanged: 单选按钮文字：" + radioButton.getText());
-                        mTvGoodSpec.setText("已选：" + radioButton.getText() + " x" + mTvCount.getText());
-                        tvStock.setText(String.valueOf(specItem.getStoreCount()));
-                        break;
-                    }
-                }
-            }
-        });
+        lrSpecContent1.setOnCheckedChangeListener(this);
+        lrSpecContent2.setOnCheckedChangeListener(this);
+
+        List<Goods.FilterSpecEntity> filterSpecList = mGoods.getFilterSpec();
+        if (filterSpecList != null) {
+            mSpecNum = filterSpecList.size();
+        }
+
 
         Picasso.with(this)
                 .load(mGoods.getOriginalImg())
                 .fit()
                 .into(ivGoodsImg);
-        tvPrice.setText(mGoods.getPrice());
-        tvStock.setText(String.valueOf(mGoods.getStoreCount()));
+        if (TextUtils.isEmpty(mSpecPrice)) {
+            mTvSpecPrice.setText(mGoods.getPrice());
+        } else {
+            mTvSpecPrice.setText(mSpecPrice);
+        }
+        mTvStock.setText(String.valueOf(mGoods.getStoreCount()));
+        if (TextUtils.isEmpty(mGoodsCount)) {
+            mTvCount.setText(String.valueOf(1));
+        } else {
+            mTvCount.setText(mGoodsCount);
+        }
 
-        if (mGoods.getFilterSpec() != null) {
-            List<Goods.FilterSpecEntity.SpecItemsEntity> specItemsEntityList = mGoods.getFilterSpec().get(0).getSpecItems();
-            for (int i = 0; i < specItemsEntityList.size(); i++) {
-                RadioButton radioButton = new RadioButton(this);
-                radioButton.setButtonDrawable(null);
-                radioButton.setTextColor(getResources().getColorStateList(R.color.rb_popup_spec_text_color_selector));
-                radioButton.setBackgroundResource(R.drawable.rb_popup_spec_selector);
-                radioButton.setPadding(16, 16, 16, 16);
-                FlexboxLayout.LayoutParams layoutParams = new FlexboxLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 4, 4, 0);
-                radioButton.setLayoutParams(layoutParams);
-                Goods.FilterSpecEntity.SpecItemsEntity specItem = specItemsEntityList.get(i);
-                String spec = specItem.getItem() + specItem.getPrice();
-                radioButton.setText(spec);
-                radioButton.setTag(specItem);
-                llGoodsSpecList.addView(radioButton);
+        if (mSpecNum != 0) {
+            // 规格有两种,显示第二种布局
+            if (mSpecNum == 2) {
+                llSpec2.setVisibility(View.VISIBLE);
+                Goods.FilterSpecEntity filterSpecEntity1 = filterSpecList.get(0);
+                tvSpecTitle1.setText(filterSpecEntity1.getTitle());
+                Goods.FilterSpecEntity filterSpecEntity2 = filterSpecList.get(1);
+                tvSpecTitle2.setText(filterSpecEntity2.getTitle());
+                List<Goods.FilterSpecEntity.SpecItemsEntity> specItemsEntityList1 = filterSpecEntity1.getSpecItems();
+                List<Goods.FilterSpecEntity.SpecItemsEntity> specItemsEntityList2 = filterSpecEntity2.getSpecItems();
+
+
+                for (int i = 0; i < specItemsEntityList1.size(); i++) {
+                    RadioButton radioButton = new RadioButton(this);
+                    radioButton.setButtonDrawable(null);
+                    radioButton.setTextColor(getResources().getColorStateList(R.color.rb_popup_spec_text_color_selector));
+                    radioButton.setBackgroundResource(R.drawable.rb_popup_spec_selector);
+                    radioButton.setPadding(16, 16, 16, 16);
+                    FlexRadioGroup.LayoutParams layoutParams = new FlexRadioGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    layoutParams.setMargins(0, 4, 4, 0);
+                    radioButton.setLayoutParams(layoutParams);
+
+                    Goods.FilterSpecEntity.SpecItemsEntity specItem = specItemsEntityList1.get(i);
+                    String spec = specItem.getItem();
+                    radioButton.setText(spec);
+                    radioButton.setTag(specItem);
+
+                    lrSpecContent1.addView(radioButton);
+                }
+
+                for (int i = 0; i < specItemsEntityList1.size(); i++) {
+                    Goods.FilterSpecEntity.SpecItemsEntity specItem = specItemsEntityList1.get(i);
+                    RadioButton radioButton = (RadioButton) lrSpecContent1.getChildAt(i);
+                    /**
+                     * 如果{@link mKey} 不为空，则表示该用户已选择了规格，那么将对应key的RadioButton设置选中状态
+                     */
+                    if (!TextUtils.isEmpty(mKey)) {
+                        String[] key = mKey.split(mDelimiter);
+                        int k1 = Integer.parseInt(key[0]);
+                        if (specItem.getItemId() == k1) {
+                            radioButton.setChecked(true);
+                        }
+                    }
+                }
+
+                for (int i = 0; i < specItemsEntityList2.size(); i++) {
+                    RadioButton radioButton = new RadioButton(this);
+                    radioButton.setButtonDrawable(null);
+                    radioButton.setTextColor(getResources().getColorStateList(R.color.rb_popup_spec_text_color_selector));
+                    radioButton.setBackgroundResource(R.drawable.rb_popup_spec_selector);
+                    radioButton.setPadding(16, 16, 16, 16);
+                    FlexRadioGroup.LayoutParams layoutParams = new FlexRadioGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    layoutParams.setMargins(0, 4, 4, 0);
+                    radioButton.setLayoutParams(layoutParams);
+
+                    Goods.FilterSpecEntity.SpecItemsEntity specItem = specItemsEntityList2.get(i);
+                    String spec = specItem.getItem();
+                    radioButton.setText(spec);
+                    radioButton.setTag(specItem);
+
+                    lrSpecContent2.addView(radioButton);
+                }
+
+                for (int i = 0; i < specItemsEntityList2.size(); i++) {
+                    Goods.FilterSpecEntity.SpecItemsEntity specItem = specItemsEntityList2.get(i);
+                    RadioButton radioButton = (RadioButton) lrSpecContent2.getChildAt(i);
+                    /**
+                     * 如果{@link mKey} 不为空，则表示该用户已选择了规格，那么将对应key的RadioButton设置选中状态
+                     */
+                    if (!TextUtils.isEmpty(mKey)) {
+                        String[] key = mKey.split(mDelimiter);
+                        int k2 = Integer.parseInt(key[1]);
+                        if (specItem.getItemId() == k2) {
+                            radioButton.setChecked(true);
+                        }
+                    }
+                }
+
+            } else {
+                // todo 规格只有一种，待测试
+                Goods.FilterSpecEntity filterSpecEntity1 = filterSpecList.get(0);
+                tvSpecTitle1.setText(filterSpecEntity1.getTitle());
+                List<Goods.FilterSpecEntity.SpecItemsEntity> specItemsEntityList = filterSpecEntity1.getSpecItems();
+                for (int i = 0; i < specItemsEntityList.size(); i++) {
+                    RadioButton radioButton = new RadioButton(this);
+                    radioButton.setButtonDrawable(null);
+                    radioButton.setTextColor(getResources().getColorStateList(R.color.rb_popup_spec_text_color_selector));
+                    radioButton.setBackgroundResource(R.drawable.rb_popup_spec_selector);
+                    radioButton.setPadding(16, 16, 16, 16);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+                    layoutParams.setMargins(0, 4, 4, 0);
+                    radioButton.setLayoutParams(layoutParams);
+                    Goods.FilterSpecEntity.SpecItemsEntity specItem = specItemsEntityList.get(i);
+                    String spec = specItem.getItem();
+                    radioButton.setText(spec);
+                    radioButton.setTag(specItem);
+                    lrSpecContent1.addView(radioButton);
+                }
+
+                for (int i = 0; i < specItemsEntityList.size(); i++) {
+                    Goods.FilterSpecEntity.SpecItemsEntity specItem = specItemsEntityList.get(i);
+                    RadioButton radioButton = (RadioButton) lrSpecContent1.getChildAt(i);
+                    /**
+                     * 如果{@link mKey} 不为空，则表示该用户已选择了规格，那么将对应key的RadioButton设置选中状态
+                     */
+                    if (!TextUtils.isEmpty(mKey)) {
+                        String[] key = mKey.split(mDelimiter);
+                        int k1 = Integer.parseInt(key[0]);
+                        if (specItem.getItemId() == k1) {
+                            radioButton.setChecked(true);
+                        }
+                    }
+                }
             }
+
             mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT, true);
             mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
@@ -398,6 +557,103 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     .setCancelable(true)
                     .show();
         }
+    }
+
+    private void showMessage(String msg) {
+        if (!isFinishing()) {
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void invalidateUI(Goods goods) {
+        mGoods = goods;
+        List<String> imagesUrl = new ArrayList<>();
+        List<Goods.ImageDataEntity> imageDataEntityList = goods.getImageData();
+        for (int i = 0; i < imageDataEntityList.size(); i++) {
+            imagesUrl.add(imageDataEntityList.get(i).getImageUrl());
+        }
+        setupBanner(imagesUrl);
+
+        mTvGoodsName.setText(goods.getGoodsName());
+        mTvGoodsRemark.setText(goods.getGoodsRemark());
+        mTvPrice.setText(goods.getPrice());
+        int num = goods.getComment().getNumber();
+        mTvCommentNumber.setText("（" + num + "）");
+        mWebView.loadUrl(goods.getDetailInfoUrl());
+    }
+
+    @Override
+    public void onCheckedChanged(FlexRadioGroup group, @IdRes int checkedId) {
+        // 规则关系列表
+        List<Goods.SpecRelationEntity> specRelationList = mGoods.getSpecRelation();
+
+        switch (group.getId()) {
+            // 规则窗口
+            case R.id.rg_goods_spec1:
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    RadioButton radioButton = (RadioButton) group.getChildAt(i);
+                    if (radioButton.getId() == checkedId) {
+                        Goods.FilterSpecEntity.SpecItemsEntity specItem = (Goods.FilterSpecEntity.SpecItemsEntity) radioButton.getTag();
+
+                        mk1 = specItem.getItemId();
+
+                        if (mk2 != 0) {
+                            mKey = mk1 + mDelimiter + mk2;
+                        }
+
+                        Log.d(TAG, "onCheckedChanged: mKey ==> " + mKey);
+
+                        /**
+                         * 处理规则关系
+                         */
+                        for (int j = 0; j < specRelationList.size(); j++) {
+                            String key = specRelationList.get(j).getKey();
+                            if (key.equals(mKey)) {
+                                double money = Double.parseDouble(specRelationList.get(j).getPrice());
+                                int count = Integer.parseInt(mTvCount.getText().toString());
+                                double price = money * count;
+                                mTvSpecPrice.setText(String.valueOf(price));
+                                mTvStock.setText(String.valueOf(specRelationList.get(j).getStock()));
+                                mTvGoodSpec.setText("已选：" + specRelationList.get(j).getValue() + " x" + mTvCount.getText());
+                            }
+                        }
+                    }
+                }
+                break;
+            case R.id.rg_goods_spec2:
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    RadioButton radioButton = (RadioButton) group.getChildAt(i);
+                    if (radioButton.getId() == checkedId) {
+                        Goods.FilterSpecEntity.SpecItemsEntity specItem = (Goods.FilterSpecEntity.SpecItemsEntity) radioButton.getTag();
+
+                        mk2 = specItem.getItemId();
+
+                        if (mk1 != 0) {
+                            mKey = mk1 + mDelimiter + mk2;
+                        }
+
+                        Log.d(TAG, "onCheckedChanged: mKey ==> " + mKey);
+
+                        /**
+                         * 处理规则关系
+                         */
+                        for (int j = 0; j < specRelationList.size(); j++) {
+                            String key = specRelationList.get(j).getKey();
+                            if (key.equals(mKey)) {
+                                double money = Double.parseDouble(specRelationList.get(j).getPrice());
+                                int count = Integer.parseInt(mTvCount.getText().toString());
+                                double price = money * count;
+                                mTvSpecPrice.setText(String.valueOf(price));
+                                mTvStock.setText(String.valueOf(specRelationList.get(j).getStock()));
+                                mTvGoodSpec.setText("已选：" + specRelationList.get(j).getValue() + " x" + mTvCount.getText());
+                            }
+                        }
+                    }
+                }
+                break;
+
+        }
+
     }
 
     private class PicassoImageLoader implements ImageLoader {
@@ -445,26 +701,37 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         }
     }
 
-    private void showMessage(String msg) {
-        if (!isFinishing()) {
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
+    private class CollectionGoodsTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("userId", mUserInfo.getUserId());
+            map.put("goodsId", mGoods.getGoodsId());
+            map.put("isStar", true);
+            mGoodsRepository.starGoods(map, new GoodsDatasource.StarGoodsCallback() {
+                @Override
+                public void onStarSuccess() {
+                    showMessage(getString(R.string.star_success_msg));
+                }
+
+                @Override
+                public void onStarFailure(String errorMsg) {
+                    showMessage(errorMsg);
+                }
+            });
+            return null;
         }
     }
 
-    private void invalidateUI(Goods goods) {
-        mGoods = goods;
-        List<String> imagesUrl = new ArrayList<>();
-        List<Goods.ImageDataEntity> imageDataEntityList = goods.getImageData();
-        for (int i = 0; i < imageDataEntityList.size(); i++) {
-            imagesUrl.add(imageDataEntityList.get(i).getImageUrl());
+    private class AddGoodsToShoppingCartTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("userId", mUserInfo.getUserId());
+            map.put("goodsIds", mGoods.getGoodsId());
+            map.put("isAdd", true);
+            return null;
         }
-        setupBanner(imagesUrl);
-
-        mTvGoodsName.setText(goods.getGoodsName());
-        mTvGoodsRemark.setText(goods.getGoodsRemark());
-        mTvPrice.setText(goods.getPrice());
-        int num = goods.getCommentData().getNumber();
-        mTvCommentNumber.setText("（" + num + "）");
-        mWebView.loadUrl(goods.getDetailInfoUrl());
     }
 }

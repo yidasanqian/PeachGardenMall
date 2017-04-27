@@ -24,4 +24,13 @@ public class ExampleUnitTest {
         System.out.println("ExampleUnitTest.replaceString spec ==> " + spec);
 
     }
+
+    @Test
+    public void testCompareString() {
+        String k1 = 1 + "_" + 2;
+        String k2 = new String(1 + "_" + 2);
+        assertEquals(k1, k2);
+        System.out.println(k1 == k2);
+        System.out.println(k1.equals(k2));
+    }
 }

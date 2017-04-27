@@ -131,10 +131,11 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void onSearchSucces(ArrayList<Goods> goodses) {
                 if (goodses.size() > 0) {
-                    mGoodses = goodses;
                     if (mPageNum > 1) {
+                        mGoodses.addAll(goodses);
                         mGoodsGridAdapter.appendData(goodses);
                     } else {
+                        mGoodses = goodses;
                         mGoodsGridAdapter.replaceData(goodses);
                     }
                     mIsLoadingMore = false;

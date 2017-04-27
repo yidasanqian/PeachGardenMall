@@ -26,9 +26,9 @@ public class GoodsGridAdapter extends BaseAdapter {
     private Context mContext;
     private List<Goods> mGoodses;
 
-    public GoodsGridAdapter(Context context, List<Goods> images) {
+    public GoodsGridAdapter(Context context, List<Goods> goodses) {
         mContext = context;
-        mGoodses = images;
+        mGoodses = goodses;
     }
 
     @Override
@@ -71,7 +71,6 @@ public class GoodsGridAdapter extends BaseAdapter {
         viewHolder.mName.setText(goods.getGoodsName());
         Picasso.with(mContext)
                 .load(goods.getImageUrl())
-                .fit()
                 .into(viewHolder.mIcon);
 
         if (mContext instanceof GoodsListActivity) {
