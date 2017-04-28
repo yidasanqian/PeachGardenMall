@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:hint="请输入优惠码"
-            android:background="@drawable/et_coupon_code_background"
+            android:background="@drawable/bg_et_coupon_code"
             android:layout_marginRight="@dimen/layout_margin"
             android:padding="8dp"
             />

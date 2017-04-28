@@ -1,9 +1,12 @@
 package me.zoro.peachgardenmall.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -66,8 +69,30 @@ public class AboutActivity extends AppCompatActivity {
             case R.id.edit_terms_of_use:
                 break;
             case R.id.edit_about_shop:
+                new AlertDialog.Builder(this)
+                        .setTitle("关于商店")
+                        .setMessage(Html.fromHtml(getString(R.string.about_shop)))
+                        .setCancelable(true)
+                        .setNegativeButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
                 break;
             case R.id.edit_about_app:
+                new AlertDialog.Builder(this)
+                        .setTitle("关于小布")
+                        .setMessage(Html.fromHtml(getString(R.string.about_app)))
+                        .setCancelable(true)
+                        .setNegativeButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
                 break;
         }
     }

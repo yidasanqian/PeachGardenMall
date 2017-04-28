@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"
-        android:background="@drawable/btn_background"
+        android:background="@drawable/bg_btn"
         android:text="确认"
         android:textColor="@android:color/white"
         app:layout_constraintLeft_toLeftOf="parent"

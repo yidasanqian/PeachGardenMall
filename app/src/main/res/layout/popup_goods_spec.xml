@@ -142,8 +142,8 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/layout_padding"
                     app:flexWrap="wrap"
-                    app:alignItems="stretch"
-                    app:alignContent="stretch"
+                    app:showDivider="beginning|middle"
+                    app:dividerDrawable="@drawable/flex_radio_divider"
                     />
             </LinearLayout>
 
@@ -170,8 +170,8 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/layout_padding"
                     app:flexWrap="wrap"
-                    app:alignItems="stretch"
-                    app:alignContent="stretch"
+                    app:showDivider="beginning|middle"
+                    app:dividerDrawable="@drawable/flex_radio_divider"
                     />
             </LinearLayout>
         </LinearLayout>

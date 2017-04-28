@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:text="+ 新建地址"
             android:textColor="@color/colorAccent"
-            android:background="@drawable/btn_create_address_background"
+            android:background="@drawable/bg_btn_create_address"
             android:layout_margin="@dimen/layout_margin"
             android:layout_alignParentBottom="true"
             />

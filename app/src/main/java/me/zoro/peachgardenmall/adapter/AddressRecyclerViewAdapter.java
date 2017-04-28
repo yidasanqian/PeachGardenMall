@@ -62,10 +62,10 @@ public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             Address address = mAddresses.get(position);
             if (address != null) {
                 if (address.isIsDefault()) {
-                    viewHolder.mLlAddrItem.setBackgroundResource(R.drawable.delivery_addr_item_background);
+                    viewHolder.mLlAddrItem.setBackgroundResource(R.drawable.bg_delivery_addr_item);
 
                 } else {
-                    viewHolder.mLlAddrItem.setBackgroundResource(R.drawable.delivery_addr_item_normal_background);
+                    viewHolder.mLlAddrItem.setBackgroundResource(R.drawable.bg_delivery_addr_item_normal);
                 }
                 viewHolder.mTvNickname.setText(address.getConsignee());
                 viewHolder.mTvContactPhone.setText(address.getMobile());
@@ -80,6 +80,7 @@ public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return mAddresses.size() > 0 ? mAddresses.size() : 1;
     }
 
+    @Override
     public int getItemViewType(int position) {
         // item 第一个位置position为0，之后递增
         if (isEmpty()) {

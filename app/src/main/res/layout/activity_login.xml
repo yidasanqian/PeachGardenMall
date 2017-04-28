@@ -3,7 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/ic_login_and_register_background"
+                android:background="@drawable/bg_login_and_register"
                 tools:context="me.zoro.peachgardenmall.activity.RegisterActivity"
 
     >
@@ -33,7 +33,7 @@
                 android:inputType="phone"
                 android:maxLength="11"
                 android:hint="用户名"
-                android:background="@drawable/et_background"
+                android:background="@drawable/bg_et"
                 />
 
             <android.support.design.widget.TextInputEditText
@@ -44,7 +44,7 @@
                 android:layout_marginTop="@dimen/layout_margin"
                 android:hint="输入密码"
                 android:inputType="textPassword"
-                android:background="@drawable/et_background"
+                android:background="@drawable/bg_et"
                 />
 
 
@@ -56,7 +56,7 @@
             android:text="登录"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/button_text_size"
-            android:background="@drawable/btn_register_background"
+            android:background="@drawable/bg_btn_register"
             />
 
         <TextView

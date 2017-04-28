@@ -15,10 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
+import android.text.Html;
 import android.text.TextUtils;
-import android.text.style.ClickableSpan;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -424,7 +423,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     RadioButton radioButton = new RadioButton(this);
                     radioButton.setButtonDrawable(null);
                     radioButton.setTextColor(getResources().getColorStateList(R.color.rb_popup_spec_text_color_selector));
-                    radioButton.setBackgroundResource(R.drawable.rb_popup_spec_selector);
+                    radioButton.setBackgroundResource(R.drawable.rb_ppw_spec_selector);
                     radioButton.setPadding(16, 16, 16, 16);
                     FlexRadioGroup.LayoutParams layoutParams = new FlexRadioGroup.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -458,7 +457,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     RadioButton radioButton = new RadioButton(this);
                     radioButton.setButtonDrawable(null);
                     radioButton.setTextColor(getResources().getColorStateList(R.color.rb_popup_spec_text_color_selector));
-                    radioButton.setBackgroundResource(R.drawable.rb_popup_spec_selector);
+                    radioButton.setBackgroundResource(R.drawable.rb_ppw_spec_selector);
                     radioButton.setPadding(16, 16, 16, 16);
                     FlexRadioGroup.LayoutParams layoutParams = new FlexRadioGroup.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -497,7 +496,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     RadioButton radioButton = new RadioButton(this);
                     radioButton.setButtonDrawable(null);
                     radioButton.setTextColor(getResources().getColorStateList(R.color.rb_popup_spec_text_color_selector));
-                    radioButton.setBackgroundResource(R.drawable.rb_popup_spec_selector);
+                    radioButton.setBackgroundResource(R.drawable.rb_ppw_spec_selector);
                     radioButton.setPadding(16, 16, 16, 16);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                             0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
@@ -543,17 +542,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
 
     private void showServiceInfo() {
         if (!isFinishing()) {
-            SpannableString ss = new SpannableString(getString(R.string.service_contact_information));
-            ss.setSpan(new ClickableSpan() {
-                @Override
-                public void onClick(View widget) {
-                    Log.d("", "onClick........" + widget);
-                }
-            }, 5, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+            TextView view = new TextView(this);
+            view.setPadding(16, 16, 16, 16);
+            view.setText(Html.fromHtml(getString(R.string.service_contact_information)));
+            view.setMovementMethod(LinkMovementMethod.getInstance());
             new AlertDialog.Builder(this)
                     .setTitle("客服信息")
-                    .setMessage(ss)
+                    .setView(view)
                     .setCancelable(true)
                     .show();
         }

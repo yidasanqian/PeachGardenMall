@@ -3,7 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/ic_login_and_register_background"
+                android:background="@drawable/bg_login_and_register"
                 tools:context="me.zoro.peachgardenmall.activity.RegisterActivity"
 
     >
@@ -46,7 +46,7 @@
                 android:inputType="phone"
                 android:maxLength="11"
                 android:hint="输入手机号"
-                android:background="@drawable/et_background"
+                android:background="@drawable/bg_et"
                 />
 
             <android.support.design.widget.TextInputEditText
@@ -57,7 +57,7 @@
                 android:layout_marginTop="@dimen/layout_margin"
                 android:hint="设置密码"
                 android:inputType="textPassword"
-                android:background="@drawable/et_background"
+                android:background="@drawable/bg_et"
                 />
 
         <LinearLayout
@@ -78,7 +78,7 @@
                 android:hint="输入验证码"
                 android:maxLength="6"
                 android:inputType="number"
-                android:background="@drawable/et_background"
+                android:background="@drawable/bg_et"
                 />
 
             <Button
@@ -103,7 +103,7 @@
             android:text="手机注册"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/button_text_size"
-            android:background="@drawable/btn_register_background"
+            android:background="@drawable/bg_btn_register"
             />
     </LinearLayout>
 

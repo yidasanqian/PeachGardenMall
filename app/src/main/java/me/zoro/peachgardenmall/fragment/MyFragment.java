@@ -91,9 +91,8 @@ public class MyFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(getContext().getApplicationContext()));
+        // 从本地缓存获取用户信息
         mUserInfo = PreferencesUtil.getUserInfoFromPref(getContext());
-        if (mUserInfo != null)
-            new FetchUserInfoTask().execute(mUserInfo.getUserId());
     }
 
     @Nullable
@@ -102,6 +101,7 @@ public class MyFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_my, container, false);
         unbinder = ButterKnife.bind(this, root);
 
+        invalidateUI();
         Log.d(TAG, "onCreateView: ");
         return root;
     }
@@ -215,6 +215,7 @@ public class MyFragment extends Fragment {
      * @param userInfo
      */
     public void updateUserInfo(UserInfo userInfo) {
+        mUserInfo = userInfo;
         if (mListener != null) {
             mListener.onUserInfoLoaded(userInfo);
         }
@@ -228,7 +229,7 @@ public class MyFragment extends Fragment {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " m      ust implement OnFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -256,7 +257,6 @@ public class MyFragment extends Fragment {
             mUserRepository.fetchUserInfo(userId, new UserDatasource.GetUserInfoCallback() {
                 @Override
                 public void onUserInfoLoaded(UserInfo userInfo) {
-                    mUserInfo = userInfo;
                     updateUserInfo(userInfo);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -274,9 +274,13 @@ public class MyFragment extends Fragment {
                     if (Const.SERVER_AVALIABLE.equals(errorMsg)) {
                         showMessage(errorMsg);
                     } else {
-                        mUserInfo = null;
-                        updateUserInfo(mUserInfo);
-                        invalidateUI();
+                        updateUserInfo(null);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                invalidateUI();
+                            }
+                        });
                     }
                 }
             });

@@ -61,6 +61,7 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mIsShowChecked = isShowChecked;
     }
 
+    @Override
     public int getItemViewType(int position) {
         // item 第一个位置position为0，之后递增
         if (isEmpty()) {
@@ -154,6 +155,8 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         LinearLayout mGoodsesInfo;
         @BindView(R.id.goods_name_tv)
         TextView mGoodsNameTv;
+        @BindView(R.id.tv_goods_spec)
+        TextView mTvGoodsSpec;
         @BindView(R.id.tv_goods_money)
         TextView mTvGoodsMoney;
         @BindView(R.id.subtract_iv)

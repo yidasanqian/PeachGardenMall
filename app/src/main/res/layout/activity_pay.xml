@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:text="确认金额，去支付"
         android:textColor="@android:color/white"
-        android:background="@drawable/btn_background"
+        android:background="@drawable/bg_btn"
         />
 
 </LinearLayout>

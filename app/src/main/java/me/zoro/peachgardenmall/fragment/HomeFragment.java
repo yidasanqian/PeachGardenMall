@@ -8,9 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ClickableSpan;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
@@ -207,19 +207,15 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     }
 
     private void showServiceInfo() {
+        // TODO: 17/4/25 修改客服信息
         if (!getActivity().isFinishing()) {
-            // TODO: 17/4/25 修改客服信息
-            SpannableString ss = new SpannableString(getString(R.string.service_contact_information));
-            ss.setSpan(new ClickableSpan() {
-                @Override
-                public void onClick(View widget) {
-                    Log.d("", "onClick........" + widget);
-                }
-            }, 5, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+            TextView view = new TextView(getActivity());
+            view.setPadding(48, 16, 48, 16);
+            view.setText(Html.fromHtml(getString(R.string.service_contact_information)));
+            view.setMovementMethod(LinkMovementMethod.getInstance());
             new AlertDialog.Builder(getContext())
                     .setTitle("客服信息")
-                    .setMessage(ss)
+                    .setView(view)
                     .setCancelable(true)
                     .show();
         }

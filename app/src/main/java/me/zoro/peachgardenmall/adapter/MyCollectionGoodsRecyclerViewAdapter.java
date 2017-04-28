@@ -99,6 +99,20 @@ public class MyCollectionGoodsRecyclerViewAdapter extends RecyclerView.Adapter<R
     }
 
     @Override
+    public int getItemViewType(int position) {
+        // item 第一个位置position为0，之后递增
+        if (isEmpty()) {
+            return TYPE_EMPTY;
+        }
+
+        return TYPE_ITEM;
+    }
+
+    private boolean isEmpty() {
+        return mGoodses.size() == 0;
+    }
+
+    @Override
     public int getItemCount() {
         return mGoodses.size() > 0 ? mGoodses.size() : 1;
     }

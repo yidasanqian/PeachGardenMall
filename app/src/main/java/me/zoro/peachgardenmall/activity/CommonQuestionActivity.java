@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -17,6 +18,8 @@ public class CommonQuestionActivity extends AppCompatActivity {
     TextView mToolbarTitle;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.tv_common_question)
+    TextView mTvCommonQuestion;
 
 
     @Override
@@ -31,6 +34,7 @@ public class CommonQuestionActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
+        mTvCommonQuestion.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 

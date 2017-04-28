@@ -36,6 +36,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     }
 
+    @Override
     public int getItemViewType(int position) {
         // item 第一个位置position为0，之后递增
         if (isEmpty()) {

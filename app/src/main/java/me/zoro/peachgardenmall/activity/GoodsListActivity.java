@@ -180,8 +180,10 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
         switch (view.getId()) {
             // TODO: 17/4/13 商品排序
             case R.id.tb_comprehensive_sorting:
+                new FetchGoodsesOrderTask().execute();
                 break;
             case R.id.tb_sales_sorting:
+                new FetchGoodsesOrderTask().execute();
                 break;
             case R.id.btn_filter:
                 mPopupWindow.showAsDropDown(mBtnFilter);
@@ -284,6 +286,41 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
         protected Void doInBackground(Integer... params) {
             Map<String, Object> map = new HashMap<>();
             map.put("categoryId", params[0]);
+            map.put("pn", mPageNum);
+            map.put("ps", mPageSize);
+            mGoodsRepository.getGoodses(map, new GoodsDatasource.GetGoodsesCallback() {
+                @Override
+                public void onGoodsesLoaded(ArrayList<Goods> goodses) {
+                    if (goodses.size() > 0) {
+                        if (mPageNum > 1) {
+                            mGoodses.addAll(goodses);
+                            mGoodsGridAdapter.appendData(goodses);
+                        } else {
+                            mGoodses = goodses;
+                            mGoodsGridAdapter.replaceData(goodses);
+                        }
+                        mIsLoadingMore = false;
+                    }
+                }
+
+                @Override
+                public void onDataNotAvailable(String errorMsg) {
+                    showMessage(errorMsg);
+                    mIsLoadingMore = false;
+                }
+            });
+            return null;
+        }
+    }
+
+    private class FetchGoodsesOrderTask extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("categoryId", params[0]);
+            // TODO: 17/4/27 排序
+            map.put("order", params[0]);
             map.put("pn", mPageNum);
             map.put("ps", mPageSize);
             mGoodsRepository.getGoodses(map, new GoodsDatasource.GetGoodsesCallback() {

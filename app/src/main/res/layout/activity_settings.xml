@@ -449,7 +449,7 @@
             android:text="退出登录"
             android:textColor="@android:color/white"
             android:layout_margin="@dimen/layout_margin"
-            android:background="@drawable/btn_background"
+            android:background="@drawable/bg_btn"
             />
     </LinearLayout>
 </ScrollView>

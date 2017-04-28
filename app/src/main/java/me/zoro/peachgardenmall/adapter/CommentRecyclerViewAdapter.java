@@ -34,6 +34,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         mComments = comments;
     }
 
+    @Override
     public int getItemViewType(int position) {
         // item 第一个位置position为0，之后递增
         if (isEmpty()) {

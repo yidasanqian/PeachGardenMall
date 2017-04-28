@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="综合排序"
-            android:background="@drawable/tb_background"
+            android:background="@drawable/bg_tb"
             />
 
         <Button
@@ -36,7 +36,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="销量排序"
-            android:background="@drawable/tb_background"
+            android:background="@drawable/bg_tb"
             />
 
         <Button

@@ -113,6 +113,7 @@ public class MyCollectionActivity extends AppCompatActivity implements MyCollect
     @Override
     protected void onResume() {
         super.onResume();
+        // TODO: 17/4/28 获取我的收藏
         if (mGoodses.size() < 1 && mUserInfo != null) {
             new FetchStarGoodsTask().execute();
         }

@@ -8,8 +8,7 @@
         android:id="@+id/goods_img_iv"
         android:layout_height="120dp"
         android:layout_width="match_parent"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         />
 
     <TextView
