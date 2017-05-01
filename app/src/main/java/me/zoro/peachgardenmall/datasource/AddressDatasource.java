@@ -19,6 +19,13 @@ public interface AddressDatasource {
 
     void setupDefault(Map<String, Object> params, @NonNull SetupDefaultCallback callback);
 
+    void getById(int addrId, @NonNull GetByIdCallback callback);
+
+    interface GetByIdCallback {
+        void onAddressLoaded(Address address);
+
+        void onDataNotAvoidable();
+    }
     interface AddCallback {
         void onSavedSuccess();
 

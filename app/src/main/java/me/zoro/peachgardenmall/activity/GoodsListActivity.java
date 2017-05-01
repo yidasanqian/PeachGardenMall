@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,12 +57,14 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
     Button mBtnFilter;
     @BindView(R.id.grid_view)
     GridView mGridView;
+    @BindView(R.id.fab_up)
+    FloatingActionButton mFabUp;
 
     Button mBtnPromotion;
     Button mBtnSelfSupport;
     RecyclerView mLeftRecyclerView;
-    RecyclerView mRightRecyclerView;
 
+    RecyclerView mRightRecyclerView;
     TextView mTvGoodsCount;
     TextView mTvReset;
     TextView mTvConfirm;
@@ -236,6 +239,15 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
             mPageNum++;
             new FetchGoodsesTask().execute(mCategoryId);
         }
+
+        /**
+         * 如果最后可见项位置大于10，则显示返回顶部按钮，否则隐藏按钮
+         */
+        if (view.getLastVisiblePosition() > 10) {
+            mFabUp.show();
+        } else {
+            mFabUp.hide();
+        }
     }
 
     @Override
@@ -279,6 +291,14 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
                 mIsLoadingMore = false;
             }
         });
+    }
+
+    /**
+     * 返回顶部
+     */
+    @OnClick(R.id.fab_up)
+    public void onViewClicked() {
+        mGridView.smoothScrollToPosition(0);
     }
 
     private class FetchGoodsesTask extends AsyncTask<Integer, Void, Void> {

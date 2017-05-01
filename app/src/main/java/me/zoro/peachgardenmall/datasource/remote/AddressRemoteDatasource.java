@@ -120,6 +120,10 @@ public class AddressRemoteDatasource implements AddressDatasource {
 
             }
         });
+    }
+
+    @Override
+    public void getById(int addrId, @NonNull GetByIdCallback callback) {
 
     }
 }

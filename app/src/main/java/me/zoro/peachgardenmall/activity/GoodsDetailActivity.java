@@ -71,6 +71,10 @@ import me.zoro.peachgardenmall.view.FlexRadioGroup;
 
 public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, FlexRadioGroup.OnCheckedChangeListener, PopupWindow.OnDismissListener {
     private static final String TAG = "GoodsDetailActivity";
+    public static final String ADDRESS_ID_EXTRA = "address_id";
+    public static final String GOODS_SPEC_KEY_EXTRA = "goods_speck_key";
+    public static final String GOODS_EXTRA = "goods";
+    public static final String GOODS_COUNT_EXTRA = "goods_count";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.banner)
@@ -319,8 +323,21 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 }
 
                 break;
-            // TODO: 17/4/25 购买
+            // TODO: 17/4/25 购买，即创建订单
             case R.id.tv_purchase:
+                if (mUserInfo != null) {
+                    Intent intent = new Intent(this, CreateOrderActivity.class);
+                    intent.putExtra(GOODS_EXTRA, mGoods);
+                    intent.putExtra(GOODS_SPEC_KEY_EXTRA, mKey);
+                    intent.putExtra(GOODS_COUNT_EXTRA, mTvCount.getText().toString());
+                    intent.putExtra(ADDRESS_ID_EXTRA, mUserInfo.getAddressId());
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
                 break;
             // TODO: 17/4/25 加入购物车
             case R.id.tv_add_to_shopping_cart:
@@ -387,6 +404,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         dismissPpwAfter();
     }
 
+    /**
+     * 显示规格选择窗口
+     */
     private void showSpecPopupWindow() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.popup_goods_spec, null);
         ImageView ivGoodsImg = (ImageView) contentView.findViewById(R.id.iv_goods_img);

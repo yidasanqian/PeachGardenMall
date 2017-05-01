@@ -30,6 +30,7 @@ import me.zoro.peachgardenmall.datasource.domain.Address;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.AddressRemoteDatasource;
 import me.zoro.peachgardenmall.utils.CacheManager;
+import me.zoro.peachgardenmall.utils.PreferencesUtil;
 
 /**
  * Created by dengfengdecao on 17/4/22.
@@ -103,23 +104,26 @@ public class DeliveryAddressActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             UserInfo userInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
-            if (userInfo != null) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("userId", userInfo.getUserId());
-                mAddressRepository.get(map, new AddressDatasource.GetCallback() {
-                    @Override
-                    public void onAddressesLoaded(List<Address> addresses) {
-                        if (addresses.size() > 0) {
-                            mRecyclerViewAdapter.replaceData(addresses);
-                        }
-                    }
-
-                    @Override
-                    public void onDataNotAvoidable() {
-                        showMessage(getString(R.string.data_not_avoidable));
-                    }
-                });
+            if (userInfo == null) {
+                userInfo = PreferencesUtil.getUserInfoFromPref(DeliveryAddressActivity.this);
             }
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("userId", userInfo.getUserId());
+            mAddressRepository.get(map, new AddressDatasource.GetCallback() {
+                @Override
+                public void onAddressesLoaded(List<Address> addresses) {
+                    if (addresses.size() > 0) {
+                        mRecyclerViewAdapter.replaceData(addresses);
+                    }
+                }
+
+                @Override
+                public void onDataNotAvoidable() {
+                    showMessage(getString(R.string.data_not_avoidable));
+                }
+            });
+
             return null;
         }
     }

@@ -74,4 +74,19 @@ public class AddressRepository implements AddressDatasource {
             }
         });
     }
+
+    @Override
+    public void getById(int addrId, @NonNull final GetByIdCallback callback) {
+        mRemoteDatasource.getById(addrId, new GetByIdCallback() {
+            @Override
+            public void onAddressLoaded(Address address) {
+                callback.onAddressLoaded(address);
+            }
+
+            @Override
+            public void onDataNotAvoidable() {
+                callback.onDataNotAvoidable();
+            }
+        });
+    }
 }
