@@ -241,4 +241,11 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
     public void deleteFromShoppingCart(Map<String, Object> params, @NonNull DeleteFromShoppingCartCallback callback) {
 
     }
+
+    @Override
+    public void getShoppingCartGoodses(Map<String, Object> params, @NonNull GetShoppingCartGoodsesCallback callback) {
+
+    }
+
+
 }

@@ -278,8 +278,7 @@ public class EditUserInfoActivity extends AppCompatActivity {
                         }
                     });
 
-                    CacheManager.getInstance().put(Const.USER_INFO_CACHE_KEY, mUserInfo);
-                    PreferencesUtil.persistentUserInfo(EditUserInfoActivity.this, mUserInfo);
+                    PreferencesUtil.persistentUserInfo(EditUserInfoActivity.this, userInfo);
                 }
 
                 @Override

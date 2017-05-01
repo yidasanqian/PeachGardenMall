@@ -31,6 +31,14 @@ public interface GoodsDatasource {
 
     void deleteFromShoppingCart(Map<String, Object> params, @NonNull DeleteFromShoppingCartCallback callback);
 
+    void getShoppingCartGoodses(Map<String, Object> params, @NonNull GetShoppingCartGoodsesCallback callback);
+
+    interface GetShoppingCartGoodsesCallback {
+        void onGoodsesLoaded(ArrayList<Goods> goodses);
+
+        void onDataNotAvailable(String errorMsg);
+    }
+
     interface DeleteFromShoppingCartCallback {
         void onDeleteSuccess();
 

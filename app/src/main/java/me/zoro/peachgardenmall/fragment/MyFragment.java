@@ -37,7 +37,6 @@ import me.zoro.peachgardenmall.datasource.UserDatasource;
 import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
-import me.zoro.peachgardenmall.utils.CacheManager;
 import me.zoro.peachgardenmall.utils.PreferencesUtil;
 import me.zoro.peachgardenmall.view.RichText;
 
@@ -91,6 +90,7 @@ public class MyFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(getContext().getApplicationContext()));
+
         // 从本地缓存获取用户信息
         mUserInfo = PreferencesUtil.getUserInfoFromPref(getContext());
     }
@@ -264,8 +264,7 @@ public class MyFragment extends Fragment {
                             invalidateUI();
                         }
                     });
-                    CacheManager.getInstance().put(Const.USER_INFO_CACHE_KEY, mUserInfo);
-                    PreferencesUtil.persistentUserInfo(getContext(), mUserInfo);
+                    PreferencesUtil.persistentUserInfo(getContext(), userInfo);
                 }
 
                 @Override

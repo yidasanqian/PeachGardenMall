@@ -69,6 +69,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mViewpager.addOnPageChangeListener(this);
         setupViewPager(mViewpager);
 
+        String token = PreferencesUtil.getTokenFromPref(this);
+        if (TextUtils.isEmpty(token)) {
+            mUserInfo = null;
+            Toast.makeText(this, "您未登录", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @TargetApi(M)
@@ -190,18 +195,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 index++;
             }
 
-        }
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        String token = PreferencesUtil.getTokenFromPref(this);
-        if (TextUtils.isEmpty(token)) {
-            mUserInfo = null;
-            Toast.makeText(this, "您未登录", Toast.LENGTH_SHORT).show();
         }
     }
 

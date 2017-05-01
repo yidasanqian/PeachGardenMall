@@ -19,7 +19,11 @@
         </item>
         <item
             android:gravity="right"
-            android:drawable="@drawable/ic_expand_more_black"
+            android:drawable="@drawable/ic_arrow_drop_down_black"
+            android:left="8dp"
+            android:top="8dp"
+            android:right="8dp"
+            android:bottom="8dp"
             >
         </item>
     </layer-list>

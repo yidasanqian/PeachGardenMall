@@ -51,23 +51,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.CommentRecyclerViewAdapter;
-import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.GoodsDatasource;
 import me.zoro.peachgardenmall.datasource.GoodsRepository;
+import me.zoro.peachgardenmall.datasource.UserDatasource;
+import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.Comment;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
+import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.HomeFragment;
-import me.zoro.peachgardenmall.utils.CacheManager;
 import me.zoro.peachgardenmall.utils.DensityUtil;
+import me.zoro.peachgardenmall.utils.PreferencesUtil;
 import me.zoro.peachgardenmall.view.FlexRadioGroup;
 
 /**
  * Created by dengfengdecao on 17/4/10.
  */
 
-public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, FlexRadioGroup.OnCheckedChangeListener {
+public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, FlexRadioGroup.OnCheckedChangeListener, PopupWindow.OnDismissListener {
     private static final String TAG = "GoodsDetailActivity";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -157,6 +159,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     private CommentRecyclerViewAdapter mCommentRecyclerViewAdapter;
     private int mGoodsId;
     private Goods mGoods;
+    private UserRepository mUserRepository;
     private UserInfo mUserInfo;
 
     @Override
@@ -201,10 +204,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mTvPurchase.setOnClickListener(this);
         mTvAddToShoppingCart.setOnClickListener(this);
 
+        mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(
+                getApplicationContext()
+        ));
+
         mGoodsRepository = GoodsRepository.getInstance(GoodsRemoteDatasource.getInstance(
                 getApplicationContext()
         ));
-        mUserInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
 
         mGoodsId = getIntent().getIntExtra(HomeFragment.GOODS_ID_EXTRA, -1);
 
@@ -212,6 +218,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mCommentRecyclerViewAdapter = new CommentRecyclerViewAdapter(this, mComments);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mCommentRecyclerViewAdapter);
+
+        fetchUserInfo();
     }
 
 
@@ -235,8 +243,22 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     @Override
     protected void onResume() {
         super.onResume();
+
         if (mGoodsId != -1) {
             new FetchGoodsDetailTask().execute();
+        }
+    }
+
+    /**
+     * 获取最新用户信息
+     */
+    private void fetchUserInfo() {
+        if (mUserInfo == null) {
+            mUserInfo = PreferencesUtil.getUserInfoFromPref(this);
+        }
+        if (mUserInfo != null) {
+            mUserRepository.setDirty(true);
+            new FetchUserInfoTask().execute(mUserInfo.getUserId());
         }
     }
 
@@ -254,19 +276,17 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        String msg = "";
         switch (item.getItemId()) {
             case R.id.action_home:
-                msg += "Click edit";
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
                 break;
             /*case R.id.action_share:
                 msg += "Click share";
                 break;*/
         }
 
-        if (!msg.equals("")) {
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        }
         return true;
     }
 
@@ -305,7 +325,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             // TODO: 17/4/25 加入购物车
             case R.id.tv_add_to_shopping_cart:
                 if (mUserInfo != null) {
-                    new AddGoodsToShoppingCartTask().execute();
+                    // 如果用户未选择规格，则显示选择规格窗口,否则添加到购物车
+                    String selectSpec = mTvSelectSpec.getText().toString();
+                    if (TextUtils.isEmpty(selectSpec)) {
+                        showSpecPopupWindow();
+                    } else {
+                        //new AddGoodsToShoppingCartTask().execute();
+                    }
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
@@ -335,16 +361,30 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 }
                 break;
             case R.id.iv_close_window:
-                // 关闭规格选择窗口后更新详情页的规格UI
-                mPopupWindow.dismiss();
-                String spec = mTvGoodSpec.getText().toString().replaceFirst("已选：", "");
-                mTvSelectSpec.setText(spec);
-                // 保存选择的数量
-                mGoodsCount = mTvCount.getText().toString();
-                // 保存价格
-                mSpecPrice = mTvSpecPrice.getText().toString();
+
+                dismissPpwAfter();
                 break;
         }
+    }
+
+    /**
+     * 关闭规格选择窗口后更新详情页的规格UI
+     */
+    private void dismissPpwAfter() {
+        mPopupWindow.dismiss();
+        String ppwSpec = mTvGoodSpec.getText().toString().replaceFirst("已选：", "");
+        if (!ppwSpec.contains("请选择")) {
+            mTvSelectSpec.setText(ppwSpec);
+        }
+        // 保存选择的数量
+        mGoodsCount = mTvCount.getText().toString();
+        // 保存价格
+        mSpecPrice = mTvSpecPrice.getText().toString();
+    }
+
+    @Override
+    public void onDismiss() {
+        dismissPpwAfter();
     }
 
     private void showSpecPopupWindow() {
@@ -529,6 +569,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     ViewGroup.LayoutParams.WRAP_CONTENT, true);
             mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
             mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.BOTTOM, 0, 0);
+            mPopupWindow.setOnDismissListener(this);
 /*            contentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             int popupHeight = contentView.getMeasuredHeight();
             int[] outLocation = new int[2];
@@ -726,6 +767,31 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             map.put("userId", mUserInfo.getUserId());
             map.put("goodsIds", mGoods.getGoodsId());
             map.put("isAdd", true);
+            return null;
+        }
+    }
+
+    /**
+     * 获取用户信息
+     */
+    private class FetchUserInfoTask extends AsyncTask<Integer, Void, Void> {
+        @Override
+        protected Void doInBackground(Integer... params) {
+            int userId = params[0];
+            mUserRepository.fetchUserInfo(userId, new UserDatasource.GetUserInfoCallback() {
+                @Override
+                public void onUserInfoLoaded(final UserInfo userInfo) {
+                    mUserInfo = userInfo;
+                    PreferencesUtil.persistentUserInfo(GoodsDetailActivity.this, userInfo);
+                }
+
+                @Override
+                public void onDataNotAvailable(String errorMsg) {
+                    Log.w(TAG, "onDataNotAvailable: " + errorMsg);
+                    showMessage(errorMsg);
+                }
+            });
+
             return null;
         }
     }
