@@ -131,15 +131,22 @@ public class CreateOrderActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.address_info, R.id.tv_settlement})
+    @OnClick({R.id.address_info, R.id.coupon_info, R.id.tv_settlement})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.address_info:
                 Intent intent = new Intent(this, DeliveryAddressActivity.class);
                 startActivity(intent);
                 break;
+            // TODO: 17/5/2 优惠劵
+            case R.id.coupon_info:
+                intent = new Intent(this, CouponActivity.class);
+                startActivity(intent);
+                break;
             // TODO: 17/5/1 付款
             case R.id.tv_settlement:
+                intent = new Intent(this, PayActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -149,6 +156,8 @@ public class CreateOrderActivity extends AppCompatActivity {
         super.onResume();
         if (mAddress == null) {
             new FetchAddressByIdTask().execute(mAddrId);
+        } else {
+            updateAddressUI(mAddress);
         }
     }
 
@@ -164,8 +173,14 @@ public class CreateOrderActivity extends AppCompatActivity {
             int addrId = params[0];
             mAddressRepository.getById(addrId, new AddressDatasource.GetByIdCallback() {
                 @Override
-                public void onAddressLoaded(Address address) {
+                public void onAddressLoaded(final Address address) {
                     mAddress = address;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateAddressUI(address);
+                        }
+                    });
                 }
 
                 @Override
@@ -175,5 +190,11 @@ public class CreateOrderActivity extends AppCompatActivity {
             });
             return null;
         }
+    }
+
+    private void updateAddressUI(Address address) {
+        mTvName.setText(address.getConsignee());
+        mTvPhone.setText(address.getMobile());
+        mTvDetailAddress.setText(address.getAddress());
     }
 }

@@ -144,7 +144,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     /**
      * 保存PopupWindow中的数量
      */
-    private String mGoodsCount;
+    private String mGoodsCount = "1";
     /**
      * 保存PopupWindow中的价格
      */
@@ -326,12 +326,19 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             // TODO: 17/4/25 购买，即创建订单
             case R.id.tv_purchase:
                 if (mUserInfo != null) {
-                    Intent intent = new Intent(this, CreateOrderActivity.class);
-                    intent.putExtra(GOODS_EXTRA, mGoods);
-                    intent.putExtra(GOODS_SPEC_KEY_EXTRA, mKey);
-                    intent.putExtra(GOODS_COUNT_EXTRA, mTvCount.getText().toString());
-                    intent.putExtra(ADDRESS_ID_EXTRA, mUserInfo.getAddressId());
-                    startActivity(intent);
+                    // 如果用户未选择规格，则显示选择规格窗口,否则添加到购物车
+                    String selectSpec = mTvSelectSpec.getText().toString();
+                    if (TextUtils.isEmpty(selectSpec)) {
+                        showSpecPopupWindow();
+                    } else {
+                        Intent intent = new Intent(this, CreateOrderActivity.class);
+                        intent.putExtra(GOODS_EXTRA, mGoods);
+                        intent.putExtra(GOODS_SPEC_KEY_EXTRA, mKey);
+                        intent.putExtra(GOODS_COUNT_EXTRA, mGoodsCount);
+                        intent.putExtra(ADDRESS_ID_EXTRA, mUserInfo.getAddressId());
+                        startActivity(intent);
+                    }
+
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);

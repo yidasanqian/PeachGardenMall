@@ -27,8 +27,19 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/layout_padding"
             android:paddingTop="@dimen/layout_padding"
-            android:text="50元"
+            android:text="50"
             android:layout_below="@id/v_divide"
+            style="@style/TextAppearance.AppCompat.Title"
+            />
+
+        <TextView
+            android:id="@+id/tv_money_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/layout_padding"
+            android:text="元"
+            android:layout_below="@id/v_divide"
+            android:layout_toRightOf="@id/tv_money"
             style="@style/TextAppearance.AppCompat.Title"
             />
 
