@@ -11,20 +11,27 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.AddressDatasource;
 import me.zoro.peachgardenmall.datasource.AddressRepository;
 import me.zoro.peachgardenmall.datasource.domain.Address;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
+import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.AddressRemoteDatasource;
+import me.zoro.peachgardenmall.utils.CacheManager;
+import me.zoro.peachgardenmall.utils.PreferencesUtil;
 import me.zoro.peachgardenmall.view.RichText;
 
 /**
@@ -170,8 +177,19 @@ public class CreateOrderActivity extends AppCompatActivity {
     private class FetchAddressByIdTask extends AsyncTask<Integer, Void, Void> {
         @Override
         protected Void doInBackground(Integer... params) {
+            UserInfo userInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
+            if (userInfo == null) {
+                userInfo = PreferencesUtil.getUserInfoFromPref(CreateOrderActivity.this);
+            }
+            if (userInfo == null) {
+                startActivity(new Intent(CreateOrderActivity.this, LoginActivity.class));
+                return null;
+            }
             int addrId = params[0];
-            mAddressRepository.getById(addrId, new AddressDatasource.GetByIdCallback() {
+            Map<String, Integer> map = new HashMap<>();
+            map.put("addressId", addrId);
+            map.put("userId", userInfo.getUserId());
+            mAddressRepository.getById(map, new AddressDatasource.GetByIdCallback() {
                 @Override
                 public void onAddressLoaded(final Address address) {
                     mAddress = address;
@@ -185,10 +203,16 @@ public class CreateOrderActivity extends AppCompatActivity {
 
                 @Override
                 public void onDataNotAvoidable() {
-
+                    showMessage(Const.SERVER_AVALIABLE);
                 }
             });
             return null;
+        }
+    }
+
+    private void showMessage(String msg) {
+        if (!isFinishing()) {
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         }
     }
 

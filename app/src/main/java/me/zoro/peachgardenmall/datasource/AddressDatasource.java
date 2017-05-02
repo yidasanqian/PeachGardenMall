@@ -19,7 +19,7 @@ public interface AddressDatasource {
 
     void setupDefault(Map<String, Object> params, @NonNull SetupDefaultCallback callback);
 
-    void getById(int addrId, @NonNull GetByIdCallback callback);
+    void getById(Map<String, Integer> params, @NonNull GetByIdCallback callback);
 
     interface GetByIdCallback {
         void onAddressLoaded(Address address);

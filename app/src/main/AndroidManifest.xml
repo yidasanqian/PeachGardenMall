@@ -112,6 +112,8 @@
         </activity>
         <activity android:name=".activity.SearchGoodsActivity">
         </activity>
+        <activity android:name=".activity.ForgetActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -8,7 +8,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
@@ -27,6 +26,6 @@ public interface AddressClient {
     @POST("User/setDefaultAddress")
     Call<JsonObject> setUpDefault(@Body Map<String, Object> params);
 
-    @GET("User/getUserAddress")
-    Call<JsonObject> getById(@Query("addressId") int addressId);
+    @GET("User/getAddressById")
+    Call<JsonObject> getById(@QueryMap Map<String, Integer> params);
 }

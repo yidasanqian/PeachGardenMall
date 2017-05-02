@@ -123,7 +123,26 @@ public class AddressRemoteDatasource implements AddressDatasource {
     }
 
     @Override
-    public void getById(int addrId, @NonNull GetByIdCallback callback) {
+    public void getById(Map<String, Integer> params, @NonNull final GetByIdCallback callback) {
+        Call<JsonObject> call = mAddressClient.getById(params);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null || bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onDataNotAvoidable();
+                } else {
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    Address address = gson.fromJson(bodyJson.get(Const.RESULT), Address.class);
+                    callback.onAddressLoaded(address);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 根据id获取地址异常", t);
+                callback.onDataNotAvoidable();
+            }
+        });
     }
 }

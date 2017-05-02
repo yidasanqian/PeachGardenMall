@@ -321,7 +321,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     startActivity(intent);
                     finish();
                 }
-
                 break;
             // TODO: 17/4/25 购买，即创建订单
             case R.id.tv_purchase:
