@@ -33,6 +33,13 @@ public interface GoodsDatasource {
 
     void getShoppingCartGoodses(Map<String, Object> params, @NonNull GetShoppingCartGoodsesCallback callback);
 
+    void getIsStar(Map<String, Integer> params, @NonNull GetIsStarCallback callback);
+
+    interface GetIsStarCallback {
+        void onSuccess(boolean isStar);
+
+        void onFaillure(String msg);
+    }
     interface GetShoppingCartGoodsesCallback {
         void onGoodsesLoaded(ArrayList<Goods> goodses);
 
@@ -53,7 +60,7 @@ public interface GoodsDatasource {
     }
 
     interface StarGoodsCallback {
-        void onStarSuccess();
+        void onStarSuccess(String msg);
 
         void onStarFailure(String errorMsg);
     }

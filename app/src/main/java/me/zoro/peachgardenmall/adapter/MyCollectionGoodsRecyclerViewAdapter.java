@@ -86,8 +86,7 @@ public class MyCollectionGoodsRecyclerViewAdapter extends RecyclerView.Adapter<R
             Goods goods = getItem(position);
             viewHolder.itemView.setTag(goods);
             Picasso.with(mContext)
-                    .load(goods.getOriginalImg())
-                    .centerCrop()
+                    .load(goods.getImageUrl())
                     .into(viewHolder.mIvGoodsImg);
             viewHolder.mTvGoodsName.setText(goods.getGoodsName());
             viewHolder.mTvGoodsMoney.setText(goods.getPrice());

@@ -29,9 +29,12 @@ public interface GoodsClient {
     @GET("Goods/introduction")
     Call<JsonObject> getGoodsDetail(@Query("goodsId") int goodsId);
 
-    @GET("Goods/getGoodsList")
+    @GET("Goods/getCollectList")
     Call<JsonObject> getStarGoodses(@QueryMap Map<String, Object> params);
 
     @POST("Goods/collectGoods")
     Call<JsonObject> starGoods(@Body Map<String, Object> params);
+
+    @GET("Goods/isCollect")
+    Call<JsonObject> getIsStar(@QueryMap Map<String, Integer> params);
 }

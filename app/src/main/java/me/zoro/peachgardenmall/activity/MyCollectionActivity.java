@@ -29,6 +29,7 @@ import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 import me.zoro.peachgardenmall.utils.CacheManager;
+import me.zoro.peachgardenmall.utils.PreferencesUtil;
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 import static me.zoro.peachgardenmall.fragment.HomeFragment.GOODS_ID_EXTRA;
@@ -81,7 +82,8 @@ public class MyCollectionActivity extends AppCompatActivity implements MyCollect
                 getApplicationContext()
         ));
 
-        mUserInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
+
+        fetchUserInfo();
 
         mGoodses = new ArrayList<>();
         mLayoutManager = new LinearLayoutManager(this);
@@ -91,7 +93,7 @@ public class MyCollectionActivity extends AppCompatActivity implements MyCollect
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (SCROLL_STATE_IDLE == newState && recyclerView.getAdapter().getItemCount() == mPageSize) {
+                if (SCROLL_STATE_IDLE == newState && recyclerView.getAdapter().getItemCount() <= mPageSize) {
                     mIsLoadingMore = false;
                     mPageNum = 1;
                 }
@@ -101,20 +103,30 @@ public class MyCollectionActivity extends AppCompatActivity implements MyCollect
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 // 上拉加载
                 if (mLayoutManager.findLastVisibleItemPosition() ==
-                        recyclerView.getAdapter().getItemCount() - 1 && !mIsLoadingMore && mUserInfo != null) {
+                        recyclerView.getAdapter().getItemCount() - 1 && !mIsLoadingMore && mUserInfo != null && dy > 0) {
                     mIsLoadingMore = true;
                     mPageNum++;
+                    new FetchStarGoodsTask().execute();
                 }
             }
         });
         mAdapter.setOnItemClickListener(this);
     }
 
+
+    private void fetchUserInfo() {
+        if (mUserInfo == null) {
+            mUserInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
+        }
+        if (mUserInfo == null) {
+            mUserInfo = PreferencesUtil.getUserInfoFromPref(this);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO: 17/4/28 获取我的收藏
-        if (mGoodses.size() < 1 && mUserInfo != null) {
+        if (mUserInfo != null && mGoodses.size() < 1) {
             new FetchStarGoodsTask().execute();
         }
     }
@@ -139,7 +151,7 @@ public class MyCollectionActivity extends AppCompatActivity implements MyCollect
             map.put("userId", mUserInfo.getUserId());
             map.put("pn", mPageNum);
             map.put("ps", mPageSize);
-            mGoodsRepository.getGoodses(map, new GoodsDatasource.GetGoodsesCallback() {
+            mGoodsRepository.getStarGoodses(map, new GoodsDatasource.GetStarGoodsesCallback() {
                 @Override
                 public void onGoodsesLoaded(ArrayList<Goods> goodses) {
                     if (goodses.size() > 0) {

@@ -110,13 +110,28 @@ public class GoodsRepository implements GoodsDatasource {
     public void starGoods(Map<String, Object> params, @NonNull final StarGoodsCallback callback) {
         mRemoteDatasource.starGoods(params, new StarGoodsCallback() {
             @Override
-            public void onStarSuccess() {
-                callback.onStarSuccess();
+            public void onStarSuccess(String msg) {
+                callback.onStarSuccess(msg);
             }
 
             @Override
             public void onStarFailure(String errorMsg) {
                 callback.onStarFailure(errorMsg);
+            }
+        });
+    }
+
+    @Override
+    public void getIsStar(Map<String, Integer> params, @NonNull final GetIsStarCallback callback) {
+        mRemoteDatasource.getIsStar(params, new GetIsStarCallback() {
+            @Override
+            public void onSuccess(boolean isStar) {
+                callback.onSuccess(isStar);
+            }
+
+            @Override
+            public void onFaillure(String msg) {
+                callback.onFaillure(msg);
             }
         });
     }

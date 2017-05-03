@@ -163,6 +163,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     private CommentRecyclerViewAdapter mCommentRecyclerViewAdapter;
     private int mGoodsId;
     private Goods mGoods;
+    /**
+     * true，表示用户是否收藏过该商品，否则没收藏过
+     */
+    private boolean mIsStar;
     private UserRepository mUserRepository;
     private UserInfo mUserInfo;
 
@@ -216,14 +220,20 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 getApplicationContext()
         ));
 
-        mGoodsId = getIntent().getIntExtra(HomeFragment.GOODS_ID_EXTRA, -1);
+        fetchUserInfo();
 
+        mGoodsId = getIntent().getIntExtra(HomeFragment.GOODS_ID_EXTRA, -1);
+        new FetchGoodsDetailTask().execute();
+
+        /**
+         * 显示一条最新的评论
+         */
         mComments = new ArrayList<>();
         mCommentRecyclerViewAdapter = new CommentRecyclerViewAdapter(this, mComments);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mCommentRecyclerViewAdapter);
 
-        fetchUserInfo();
+
     }
 
 
@@ -242,15 +252,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mBanner.setImages(imagesUrl);
         // banner设置方法全部调用完毕时最后调用
         mBanner.start();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (mGoodsId != -1) {
-            new FetchGoodsDetailTask().execute();
-        }
     }
 
     /**
@@ -628,6 +629,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     }
 
     private void invalidateUI(Goods goods) {
+        // 获取用户是否收藏过该商品请求
+        new FetchIsStarTask().execute();
+
         mGoods = goods;
         List<String> imagesUrl = new ArrayList<>();
         List<Goods.ImageDataEntity> imageDataEntityList = goods.getImageData();
@@ -770,16 +774,22 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             Map<String, Object> map = new HashMap<>();
             map.put("userId", mUserInfo.getUserId());
             map.put("goodsId", mGoods.getGoodsId());
-            map.put("isStar", true);
+            if (mIsStar) {
+                map.put("isStar", false);
+            } else {
+                map.put("isStar", true);
+            }
             mGoodsRepository.starGoods(map, new GoodsDatasource.StarGoodsCallback() {
                 @Override
-                public void onStarSuccess() {
-                    showMessage(getString(R.string.star_success_msg));
+                public void onStarSuccess(String msg) {
+                    showMessage(msg);
+                    mIsStar = true;
                 }
 
                 @Override
                 public void onStarFailure(String errorMsg) {
                     showMessage(errorMsg);
+                    mIsStar = false;
                 }
             });
             return null;
@@ -818,6 +828,27 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 }
             });
 
+            return null;
+        }
+    }
+
+    private class FetchIsStarTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            Map<String, Integer> map = new HashMap<>();
+            map.put("userId", mUserInfo.getUserId());
+            map.put("goodsId", mGoods.getGoodsId());
+            mGoodsRepository.getIsStar(map, new GoodsDatasource.GetIsStarCallback() {
+                @Override
+                public void onSuccess(boolean isStar) {
+                    mIsStar = isStar;
+                }
+
+                @Override
+                public void onFaillure(String msg) {
+                    showMessage(msg);
+                }
+            });
             return null;
         }
     }

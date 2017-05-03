@@ -220,7 +220,7 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
                 } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
                     callback.onStarFailure(bodyJson.get(Const.MESSAGE).getAsString());
                 } else {
-                    callback.onStarSuccess();
+                    callback.onStarSuccess(bodyJson.get(Const.MESSAGE).getAsString());
                 }
             }
 
@@ -228,6 +228,31 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 收藏商品信息出现异常", t);
                 callback.onStarFailure(Const.SERVER_AVALIABLE);
+            }
+        });
+    }
+
+    @Override
+    public void getIsStar(Map<String, Integer> params, @NonNull final GetIsStarCallback callback) {
+        Call<JsonObject> call = mGoodsClient.getIsStar(params);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null) {
+                    callback.onFaillure(Const.SERVER_AVALIABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onFaillure(bodyJson.get(Const.MESSAGE).getAsString());
+                } else {
+                    JsonObject resultJson = bodyJson.get(Const.RESULT).getAsJsonObject();
+                    callback.onSuccess(resultJson.get("isStar").getAsBoolean());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 获取用户是否收藏过该商品请求出现异常", t);
+                callback.onFaillure(Const.SERVER_AVALIABLE);
             }
         });
     }

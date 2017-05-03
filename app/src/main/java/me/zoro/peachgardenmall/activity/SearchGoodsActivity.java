@@ -106,7 +106,7 @@ public class SearchGoodsActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() == mPageSize) {
+        if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() <= mPageSize) {
             mIsLoadingMore = false;
             mPageNum = 1;
         }
