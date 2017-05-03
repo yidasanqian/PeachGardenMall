@@ -142,6 +142,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
      */
     private int mSpecNum;
     /**
+     * 规格
+     */
+    private String mSpec;
+    /**
      * 保存PopupWindow中的数量
      */
     private String mGoodsCount = "1";
@@ -326,9 +330,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             // TODO: 17/4/25 购买，即创建订单
             case R.id.tv_purchase:
                 if (mUserInfo != null) {
-                    // 如果用户未选择规格，则显示选择规格窗口,否则添加到购物车
-                    String selectSpec = mTvSelectSpec.getText().toString();
-                    if (TextUtils.isEmpty(selectSpec)) {
+                    // 如果用户未选择规格，并且ppw未显示，则显示选择规格窗口,否则添加到购物车
+                    if (TextUtils.isEmpty(mSpec)) {
                         showSpecPopupWindow();
                     } else {
                         Intent intent = new Intent(this, CreateOrderActivity.class);
@@ -349,9 +352,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             // TODO: 17/4/25 加入购物车
             case R.id.tv_add_to_shopping_cart:
                 if (mUserInfo != null) {
-                    // 如果用户未选择规格，则显示选择规格窗口,否则添加到购物车
-                    String selectSpec = mTvSelectSpec.getText().toString();
-                    if (TextUtils.isEmpty(selectSpec)) {
+                    // 如果用户未选择规格，并且ppw未显示则显示选择规格窗口,否则添加到购物车
+                    if (TextUtils.isEmpty(mSpec)) {
                         showSpecPopupWindow();
                     } else {
                         //new AddGoodsToShoppingCartTask().execute();
@@ -396,9 +398,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
      */
     private void dismissPpwAfter() {
         mPopupWindow.dismiss();
-        String ppwSpec = mTvGoodSpec.getText().toString().replaceFirst("已选：", "");
-        if (!ppwSpec.contains("请选择")) {
-            mTvSelectSpec.setText(ppwSpec);
+        String spec = mTvGoodSpec.getText().toString().replaceFirst("已选：", "");
+        if (!spec.contains("请选择")) {
+            mSpec = spec;
+            mTvSelectSpec.setText(mSpec);
         }
         // 保存选择的数量
         mGoodsCount = mTvCount.getText().toString();
@@ -592,11 +595,14 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 }
             }
 
-            mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT, true);
-            mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            if (mPopupWindow == null) {
+                mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+                mPopupWindow.setOnDismissListener(this);
+            }
             mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.BOTTOM, 0, 0);
-            mPopupWindow.setOnDismissListener(this);
+
 /*            contentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             int popupHeight = contentView.getMeasuredHeight();
             int[] outLocation = new int[2];
@@ -680,7 +686,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                                 double price = money * count;
                                 mTvSpecPrice.setText(String.valueOf(price));
                                 mTvStock.setText(String.valueOf(specRelationList.get(j).getStock()));
-                                mTvGoodSpec.setText("已选：" + specRelationList.get(j).getValue() + " x" + mTvCount.getText());
+                                mSpec = specRelationList.get(j).getValue() + " x" + mTvCount.getText();
+                                mTvGoodSpec.setText("已选：" + mSpec);
                             }
                         }
                     }
@@ -711,7 +718,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                                 double price = money * count;
                                 mTvSpecPrice.setText(String.valueOf(price));
                                 mTvStock.setText(String.valueOf(specRelationList.get(j).getStock()));
-                                mTvGoodSpec.setText("已选：" + specRelationList.get(j).getValue() + " x" + mTvCount.getText());
+                                mSpec = specRelationList.get(j).getValue() + " x" + mTvCount.getText();
+                                mTvGoodSpec.setText("已选：" + mSpec);
                             }
                         }
                     }
