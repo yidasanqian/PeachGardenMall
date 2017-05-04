@@ -8,6 +8,9 @@ import android.util.Log;
 
 import java.io.File;
 
+import me.zoro.peachgardenmall.common.Const;
+import me.zoro.peachgardenmall.datasource.domain.UserInfo;
+
 
 /**
  * Created by dengfengdecao on 17/4/18.
@@ -94,5 +97,14 @@ public class CacheManager {
 
             }
         }
+    }
+
+    public static UserInfo getUserInfoFromCache(Context context) {
+        UserInfo userInfo = (UserInfo) getInstance().get(Const.USER_INFO_CACHE_KEY);
+        if (userInfo == null) {
+            userInfo = PreferencesUtil.getUserInfoFromPref(context);
+        }
+
+        return userInfo;
     }
 }

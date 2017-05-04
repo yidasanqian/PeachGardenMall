@@ -257,20 +257,5 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
         });
     }
 
-    @Override
-    public void addToShoppingCart(Map<String, Object> params, @NonNull AddToShoppingCartCallback callback) {
-
-    }
-
-    @Override
-    public void deleteFromShoppingCart(Map<String, Object> params, @NonNull DeleteFromShoppingCartCallback callback) {
-
-    }
-
-    @Override
-    public void getShoppingCartGoodses(Map<String, Object> params, @NonNull GetShoppingCartGoodsesCallback callback) {
-
-    }
-
 
 }

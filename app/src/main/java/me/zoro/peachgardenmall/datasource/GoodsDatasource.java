@@ -27,12 +27,6 @@ public interface GoodsDatasource {
 
     void starGoods(Map<String, Object> params, @NonNull StarGoodsCallback callback);
 
-    void addToShoppingCart(Map<String, Object> params, @NonNull AddToShoppingCartCallback callback);
-
-    void deleteFromShoppingCart(Map<String, Object> params, @NonNull DeleteFromShoppingCartCallback callback);
-
-    void getShoppingCartGoodses(Map<String, Object> params, @NonNull GetShoppingCartGoodsesCallback callback);
-
     void getIsStar(Map<String, Integer> params, @NonNull GetIsStarCallback callback);
 
     interface GetIsStarCallback {
@@ -40,24 +34,7 @@ public interface GoodsDatasource {
 
         void onFaillure(String msg);
     }
-    interface GetShoppingCartGoodsesCallback {
-        void onGoodsesLoaded(ArrayList<Goods> goodses);
 
-        void onDataNotAvailable(String errorMsg);
-    }
-
-    interface DeleteFromShoppingCartCallback {
-        void onDeleteSuccess();
-
-        void onDeleteFailure(String errorMsg);
-    }
-
-    interface AddToShoppingCartCallback {
-        void onAddSuccess();
-
-        void onAddFailure(String errorMsg);
-
-    }
 
     interface StarGoodsCallback {
         void onStarSuccess(String msg);

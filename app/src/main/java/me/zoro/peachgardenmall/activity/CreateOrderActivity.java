@@ -118,7 +118,6 @@ public class CreateOrderActivity extends AppCompatActivity {
 
         mGoodsNameTv.setText(mGoods.getGoodsName());
         mGoodsCountTv.setText(count);
-        mGoodsMoneyTv.setText(mGoods.getPrice());
         Picasso.with(this)
                 .load(mGoods.getOriginalImg())
                 .into(mGoodsImgIv);
@@ -131,9 +130,27 @@ public class CreateOrderActivity extends AppCompatActivity {
         for (int j = 0; j < specRelationList.size(); j++) {
             String key = specRelationList.get(j).getKey();
             if (key.equals(mKey)) {
+                // 商品单价
                 double money = Double.parseDouble(specRelationList.get(j).getPrice());
+                // 商品合计
                 double price = money * mGoodsCount;
+                mGoodsMoneyTv.setText(String.valueOf(money));
+                mTvGoodsTotal.setText(String.valueOf(price));
+                // 运费
+                double freight = Double.valueOf(mGoods.getFreight());
+                double freeFreight = Double.valueOf(mGoods.getFreeFreight());
+                if (mGoods.getIsFreeShipping()) {
+                    if (price >= freeFreight) {
+                        freight = 0;
+                    }
+                }
+                mTvFreight.setText(String.valueOf(freight));
+                // TODO: 17/5/4 减去优惠活动金额
+                double totalMoney = price + freight;
+                mTvTotalMoney.setText(String.valueOf(totalMoney));
                 mGoodsExtraInfoTv.setText(specRelationList.get(j).getValue());
+
+                break;
             }
         }
     }

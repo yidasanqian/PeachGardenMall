@@ -33,4 +33,11 @@ public class ExampleUnitTest {
         System.out.println(k1 == k2);
         System.out.println(k1.equals(k2));
     }
+
+    @Test
+    public void testStringFormat() {
+        String a = "haha";
+        String b = "hehe".concat(a);
+        System.out.println("ExampleUnitTest.testStringFormat b => " + b);
+    }
 }

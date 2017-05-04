@@ -53,12 +53,15 @@ import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.CommentRecyclerViewAdapter;
 import me.zoro.peachgardenmall.datasource.GoodsDatasource;
 import me.zoro.peachgardenmall.datasource.GoodsRepository;
+import me.zoro.peachgardenmall.datasource.ShoppingCartDatasource;
+import me.zoro.peachgardenmall.datasource.ShoppingCartRepository;
 import me.zoro.peachgardenmall.datasource.UserDatasource;
 import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.Comment;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
+import me.zoro.peachgardenmall.datasource.remote.ShoppingCartRemoteDatasource;
 import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.HomeFragment;
 import me.zoro.peachgardenmall.utils.DensityUtil;
@@ -173,6 +176,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     private boolean mIsStar;
     private UserRepository mUserRepository;
     private UserInfo mUserInfo;
+    private ShoppingCartRepository mCartRepository;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -221,6 +225,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         ));
 
         mGoodsRepository = GoodsRepository.getInstance(GoodsRemoteDatasource.getInstance(
+                getApplicationContext()
+        ));
+
+        mCartRepository = ShoppingCartRepository.getInstance(ShoppingCartRemoteDatasource.getInstance(
                 getApplicationContext()
         ));
 
@@ -316,6 +324,14 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 break;
             // TODO: 17/4/25 查看购物车
             case R.id.iv_shopping_cart:
+                if (mUserInfo != null) {
+                    Intent intent = new Intent(this, MyShoppingCartActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
                 break;
             // TODO: 17/4/25 判断是否已收藏
             case R.id.iv_collection:
@@ -349,14 +365,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 }
 
                 break;
-            // TODO: 17/4/25 加入购物车
             case R.id.tv_add_to_shopping_cart:
                 if (mUserInfo != null) {
                     // 如果用户未选择规格，并且ppw未显示则显示选择规格窗口,否则添加到购物车
                     if (TextUtils.isEmpty(mSpec)) {
                         showSpecPopupWindow();
                     } else {
-                        //new AddGoodsToShoppingCartTask().execute();
+                        new AddGoodsToShoppingCartTask().execute();
                     }
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
@@ -595,12 +610,11 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 }
             }
 
-            if (mPopupWindow == null) {
-                mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, true);
-                mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-                mPopupWindow.setOnDismissListener(this);
-            }
+
+            mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            mPopupWindow.setOnDismissListener(this);
             mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.BOTTOM, 0, 0);
 
 /*            contentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -687,7 +701,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                                 mTvSpecPrice.setText(String.valueOf(price));
                                 mTvStock.setText(String.valueOf(specRelationList.get(j).getStock()));
                                 mSpec = specRelationList.get(j).getValue() + " x" + mTvCount.getText();
-                                mTvGoodSpec.setText("已选：" + mSpec);
+                                mTvGoodSpec.setText("已选：".concat(mSpec));
                             }
                         }
                     }
@@ -719,7 +733,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                                 mTvSpecPrice.setText(String.valueOf(price));
                                 mTvStock.setText(String.valueOf(specRelationList.get(j).getStock()));
                                 mSpec = specRelationList.get(j).getValue() + " x" + mTvCount.getText();
-                                mTvGoodSpec.setText("已选：" + mSpec);
+                                mTvGoodSpec.setText("已选：".concat(mSpec));
                             }
                         }
                     }
@@ -809,8 +823,20 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         protected Void doInBackground(Void... params) {
             Map<String, Object> map = new HashMap<>();
             map.put("userId", mUserInfo.getUserId());
-            map.put("goodsIds", mGoods.getGoodsId());
-            map.put("isAdd", true);
+            map.put("goodsId", mGoods.getGoodsId());
+            map.put("specKey", mKey);
+            map.put("number", mGoodsCount);
+            mCartRepository.addToShoppingCart(map, new ShoppingCartDatasource.AddToShoppingCartCallback() {
+                @Override
+                public void onAddSuccess(String msg) {
+                    showMessage(msg);
+                }
+
+                @Override
+                public void onAddFailure(String errorMsg) {
+                    showMessage(errorMsg);
+                }
+            });
             return null;
         }
     }

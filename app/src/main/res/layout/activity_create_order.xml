@@ -292,7 +292,7 @@
                         android:id="@+id/tv_activity_coupon_lbl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="¥"
+                        android:text="-¥"
                         android:layout_marginTop="@dimen/layout_margin"
                         style="@style/Base.TextAppearance.AppCompat.Medium"
                         />

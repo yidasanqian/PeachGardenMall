@@ -52,7 +52,6 @@
             android:id="@+id/tv_goods_spec"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="规格规格规格规格规格规格规格"
             android:paddingLeft="@dimen/layout_padding"
             android:paddingRight="@dimen/layout_padding"
             style="@style/TextAppearance.AppCompat.Small"

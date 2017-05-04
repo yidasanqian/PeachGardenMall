@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.activity.MyShoppingCartActivity;
-import me.zoro.peachgardenmall.datasource.domain.Goods;
+import me.zoro.peachgardenmall.datasource.domain.Cart;
 
 /**
  * Created by dengfengdecao on 16/12/5.
@@ -34,7 +34,7 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
 
     private MyShoppingCartActivity mContext;
-    private List<Goods> mGoodses;
+    private List<Cart> mCarts;
     private double mTotalMoney;
 
     private boolean mIsShowChecked;
@@ -46,6 +46,11 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     private static OnAddSubtractClickListener sOnAddSubtractClickListener;
 
+    public void appendData(List<Cart> carts) {
+        mCarts.addAll(carts);
+        notifyDataSetChanged();
+    }
+
 
     public static interface OnAddSubtractClickListener {
         void onAddSubtractClick(View view, double money, int count);
@@ -55,9 +60,9 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         sOnAddSubtractClickListener = listener;
     }
 
-    public MyShoppingCartRecyclerViewAdapter(MyShoppingCartActivity context, List<Goods> goodses, boolean isShowChecked) {
+    public MyShoppingCartRecyclerViewAdapter(MyShoppingCartActivity context, List<Cart> carts, boolean isShowChecked) {
         mContext = context;
-        mGoodses = goodses;
+        mCarts = carts;
         mIsShowChecked = isShowChecked;
     }
 
@@ -72,11 +77,11 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     private boolean isEmpty() {
-        return mGoodses.size() == 0;
+        return mCarts.size() == 0;
     }
 
-    public void replaceData(List<Goods> goods, boolean isShowChecked) {
-        mGoodses = goods;
+    public void replaceData(List<Cart> carts, boolean isShowChecked) {
+        mCarts = carts;
         mIsShowChecked = isShowChecked;
         mTotalMoney = 0;
         // 调用以下方法更新后，会依次调用getItemViewType和onBindViewHolder方法
@@ -122,20 +127,21 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
 
 
-            Goods goods = getItem(position);
-            viewHolder.itemView.setTag(Double.parseDouble(goods.getPrice()));
-            viewHolder.mGoodsNameTv.setText(goods.getGoodsName());
-            viewHolder.mTvGoodsMoney.setText(goods.getPrice());
-            viewHolder.mCountTv.setText(String.valueOf(goods.getCount()));
-            viewHolder.mSubtractIv.setTag(Double.parseDouble(goods.getPrice()));
-            viewHolder.mAddIv.setTag(Double.parseDouble(goods.getPrice()));
-            mTotalMoney += Double.parseDouble(goods.getPrice());
+            Cart cart = getItem(position);
+            viewHolder.itemView.setTag(Double.parseDouble(cart.getGoodsPrice()));
+            viewHolder.mGoodsNameTv.setText(cart.getGoodsName());
+            viewHolder.mTvGoodsMoney.setText(cart.getGoodsPrice());
+            viewHolder.mTvGoodsSpec.setText(cart.getSpecKeyName());
+            viewHolder.mCountTv.setText(String.valueOf(cart.getGoodsNum()));
+            viewHolder.mSubtractIv.setTag(Double.parseDouble(cart.getGoodsPrice()));
+            viewHolder.mAddIv.setTag(Double.parseDouble(cart.getGoodsPrice()));
+            mTotalMoney += Double.parseDouble(cart.getGoodsPrice()) * cart.getGoodsNum();
         }
         mContext.updateTotalMoney(mTotalMoney);
     }
 
-    private Goods getItem(int position) {
-        return mGoodses.get(position);
+    private Cart getItem(int position) {
+        return mCarts.get(position);
     }
 
     public Map<Integer, Boolean> getMap() {
@@ -144,15 +150,15 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     @Override
     public int getItemCount() {
-        return mGoodses.size() > 0 ? mGoodses.size() : 1;
+        return mCarts.size() > 0 ? mCarts.size() : 1;
     }
 
 
     static class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.goods_img_iv)
-        ImageView mGoodsesImgIv;
+        ImageView mCartsImgIv;
         @BindView(R.id.goods_info)
-        LinearLayout mGoodsesInfo;
+        LinearLayout mCartsInfo;
         @BindView(R.id.goods_name_tv)
         TextView mGoodsNameTv;
         @BindView(R.id.tv_goods_spec)
