@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/layout_margin"
+    android:layout_marginBottom="@dimen/layout_margin"
+    android:padding="@dimen/layout_padding"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/goods_img_iv"
+        android:layout_width="56dp"
+        android:layout_height="72dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_gaoyuanyuan"
+        android:layout_gravity="left"
+        />
+
+
+    <TextView
+        android:id="@+id/goods_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆"
+        android:layout_gravity="right"
+        android:layout_marginLeft="@dimen/layout_margin"
+        android:layout_marginRight="@dimen/layout_margin"
+        android:layout_toRightOf="@id/goods_img_iv"
+        style="@style/TextAppearance.AppCompat.Body1"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="x "
+            />
+
+        <TextView
+            android:id="@+id/goods_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/goods_extra_info_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50克"
+        android:paddingLeft="@dimen/layout_padding"
+        android:layout_below="@id/goods_name_tv"
+        android:layout_toRightOf="@id/goods_img_iv"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_goods_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="@dimen/layout_padding"
+        android:layout_below="@id/goods_img_iv"
+        android:layout_toRightOf="@id/goods_img_iv"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¥ "
+            style="@style/TextAppearance.AppCompat.Body1"
+            />
+
+        <TextView
+            android:id="@+id/goods_money_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="24.00"
+            style="@style/TextAppearance.AppCompat.Body1"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="@dimen/layout_padding"
+        android:layout_below="@id/goods_img_iv"
+        android:layout_toRightOf="@id/ll_goods_price"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¥ "
+            />
+
+        <TextView
+            android:id="@+id/goods_strike_money_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="32.00"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

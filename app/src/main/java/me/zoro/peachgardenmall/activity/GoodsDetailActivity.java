@@ -30,6 +30,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,6 +65,7 @@ import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 import me.zoro.peachgardenmall.datasource.remote.ShoppingCartRemoteDatasource;
 import me.zoro.peachgardenmall.datasource.remote.UserRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.HomeFragment;
+import me.zoro.peachgardenmall.utils.CacheManager;
 import me.zoro.peachgardenmall.utils.DensityUtil;
 import me.zoro.peachgardenmall.utils.PreferencesUtil;
 import me.zoro.peachgardenmall.view.FlexRadioGroup;
@@ -122,6 +124,12 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     TextView mTvPurchase;
     @BindView(R.id.tv_add_to_shopping_cart)
     TextView mTvAddToShoppingCart;
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+    @BindView(R.id.progress_bar_title)
+    TextView mProgressBarTitle;
+    @BindView(R.id.progress_bar_container)
+    LinearLayout mProgressBarContainer;
 
     private PopupWindow mPopupWindow;
 
@@ -157,9 +165,12 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
      */
     private String mSpecPrice;
 
+    /**
+     * 规格关系的key
+     */
     private String mKey = "", mDelimiter = "_";
 
-    // mk1，mk2，升序并已'_'连接成mKey
+    // mk1，mk2，升序并以'_'连接成mKey
     private int mk1, mk2;
 
     /**
@@ -235,6 +246,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         fetchUserInfo();
 
         mGoodsId = getIntent().getIntExtra(HomeFragment.GOODS_ID_EXTRA, -1);
+        // 显示加载信息
+        setLoadingIndicator(true);
         new FetchGoodsDetailTask().execute();
 
         /**
@@ -244,8 +257,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mCommentRecyclerViewAdapter = new CommentRecyclerViewAdapter(this, mComments);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mCommentRecyclerViewAdapter);
-
-
     }
 
 
@@ -271,7 +282,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
      */
     private void fetchUserInfo() {
         if (mUserInfo == null) {
-            mUserInfo = PreferencesUtil.getUserInfoFromPref(this);
+            mUserInfo = CacheManager.getUserInfoFromCache(this);
         }
         if (mUserInfo != null) {
             mUserRepository.setDirty(true);
@@ -322,7 +333,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             case R.id.iv_service:
                 showServiceInfo();
                 break;
-            // TODO: 17/4/25 查看购物车
             case R.id.iv_shopping_cart:
                 if (mUserInfo != null) {
                     Intent intent = new Intent(this, MyShoppingCartActivity.class);
@@ -333,7 +343,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     finish();
                 }
                 break;
-            // TODO: 17/4/25 判断是否已收藏
             case R.id.iv_collection:
                 if (mUserInfo != null) {
                     new CollectionGoodsTask().execute();
@@ -350,6 +359,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     if (TextUtils.isEmpty(mSpec)) {
                         showSpecPopupWindow();
                     } else {
+                        mGoodsCount = mTvCount.getText().toString();
                         Intent intent = new Intent(this, CreateOrderActivity.class);
                         intent.putExtra(GOODS_EXTRA, mGoods);
                         intent.putExtra(GOODS_SPEC_KEY_EXTRA, mKey);
@@ -402,7 +412,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 }
                 break;
             case R.id.iv_close_window:
-
                 dismissPpwAfter();
                 break;
         }
@@ -663,9 +672,32 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mTvGoodsName.setText(goods.getGoodsName());
         mTvGoodsRemark.setText(goods.getGoodsRemark());
         mTvPrice.setText(goods.getPrice());
+        Goods.PromEntity promEntity = mGoods.getProm();
+        if (promEntity != null) {
+            mTvPromotion.setText(promEntity.getDescription());
+        } else {
+            mEditPromotion.setVisibility(View.GONE);
+        }
+
         int num = goods.getComment().getNumber();
         mTvCommentNumber.setText("（" + num + "）");
         mWebView.loadUrl(goods.getDetailInfoUrl());
+
+        setLoadingIndicator(false);
+    }
+
+    private void setLoadingIndicator(boolean active) {
+        if (mProgressBarContainer != null) {
+            if (active) {
+                //设置滚动条可见
+                mProgressBarContainer.setVisibility(View.VISIBLE);
+                mProgressBarTitle.setText(R.string.loading);
+            } else {
+                if (mProgressBarContainer.getVisibility() == View.VISIBLE) {
+                    mProgressBarContainer.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     @Override

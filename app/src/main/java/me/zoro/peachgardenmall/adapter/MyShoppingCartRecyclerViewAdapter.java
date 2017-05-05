@@ -1,5 +1,7 @@
 package me.zoro.peachgardenmall.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +20,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.activity.GoodsDetailActivity;
 import me.zoro.peachgardenmall.activity.MyShoppingCartActivity;
 import me.zoro.peachgardenmall.datasource.domain.Cart;
+
+import static me.zoro.peachgardenmall.fragment.HomeFragment.GOODS_ID_EXTRA;
 
 /**
  * Created by dengfengdecao on 16/12/5.
@@ -135,6 +139,10 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             viewHolder.mCountTv.setText(String.valueOf(cart.getGoodsNum()));
             viewHolder.mSubtractIv.setTag(Double.parseDouble(cart.getGoodsPrice()));
             viewHolder.mAddIv.setTag(Double.parseDouble(cart.getGoodsPrice()));
+
+            // 存入商品id
+            viewHolder.mCartsInfo.setTag(cart.getGoodsId());
+
             mTotalMoney += Double.parseDouble(cart.getGoodsPrice()) * cart.getGoodsNum();
         }
         mContext.updateTotalMoney(mTotalMoney);
@@ -174,9 +182,11 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         @BindView(R.id.cb_checked)
         CheckBox mCbChecked;
 
+        private Context mContext;
         public RecyclerItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            mContext = itemView.getContext();
         }
 
         public static RecyclerView.ViewHolder newInstance(View viewItem) {
@@ -187,7 +197,9 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         public void onViewClicked(View view) {
             switch (view.getId()) {
                 case R.id.goods_info:
-                    Toast.makeText(view.getContext(), "goods info", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(mContext, GoodsDetailActivity.class);
+                    intent.putExtra(GOODS_ID_EXTRA, (int) mCartsInfo.getTag());
+                    mContext.startActivity(intent);
                     break;
                 case R.id.subtract_iv:
                     int count = Integer.parseInt(mCountTv.getText().toString());

@@ -3,18 +3,21 @@ package me.zoro.peachgardenmall.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +26,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.adapter.CreateOrderGoodsRecyclerViewAdapter;
 import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.AddressDatasource;
 import me.zoro.peachgardenmall.datasource.AddressRepository;
 import me.zoro.peachgardenmall.datasource.domain.Address;
+import me.zoro.peachgardenmall.datasource.domain.Cart;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.AddressRemoteDatasource;
 import me.zoro.peachgardenmall.utils.CacheManager;
-import me.zoro.peachgardenmall.utils.PreferencesUtil;
 import me.zoro.peachgardenmall.view.RichText;
 
 /**
@@ -64,28 +68,30 @@ public class CreateOrderActivity extends AppCompatActivity {
     TextView mTvFreight;
     @BindView(R.id.tv_activity_coupon)
     TextView mTvActivityCoupon;
-    @BindView(R.id.goods_img_iv)
-    ImageView mGoodsImgIv;
-    @BindView(R.id.goods_name_tv)
-    TextView mGoodsNameTv;
-    @BindView(R.id.goods_count_tv)
-    TextView mGoodsCountTv;
-    @BindView(R.id.goods_extra_info_tv)
-    TextView mGoodsExtraInfoTv;
-    @BindView(R.id.goods_money_tv)
-    TextView mGoodsMoneyTv;
-    @BindView(R.id.goods_strike_money_tv)
-    TextView mGoodsStrikeMoneyTv;
-    @BindView(R.id.goods_info)
-    RelativeLayout mGoodsInfo;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
     @BindView(R.id.tv_total_money)
     TextView mTvTotalMoney;
     @BindView(R.id.tv_settlement)
     TextView mTvSettlement;
+    @BindView(R.id.tv_activity_coupon_desc)
+    TextView mTvActivityCouponDesc;
+    @BindView(R.id.activity_coupon_info)
+    RelativeLayout mActivityCouponInfo;
+    @BindView(R.id.tv_activity_coupon_lbl)
+    TextView mTvActivityCouponLbl;
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+    @BindView(R.id.progress_bar_title)
+    TextView mProgressBarTitle;
+    @BindView(R.id.progress_bar_container)
+    LinearLayout mProgressBarContainer;
 
     private AddressRepository mAddressRepository;
     private Address mAddress;
     private int mAddrId;
+
+    private List<Cart> mCarts;
 
     private Goods mGoods;
     /**
@@ -93,7 +99,12 @@ public class CreateOrderActivity extends AppCompatActivity {
      */
     private String mKey;
 
-    private int mGoodsCount;
+
+    private CreateOrderGoodsRecyclerViewAdapter mRecyclerViewAdapter;
+
+    private Goods.SpecRelationEntity mSpecRelation;
+    private UserInfo mUserInfo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,49 +119,63 @@ public class CreateOrderActivity extends AppCompatActivity {
 
         mAddressRepository = AddressRepository.getInstance(AddressRemoteDatasource.getInstance(getApplicationContext()));
 
-        mAddrId = getIntent().getIntExtra(GoodsDetailActivity.ADDRESS_ID_EXTRA, -1);
+        mCarts = new ArrayList<>();
 
+        mUserInfo = CacheManager.getUserInfoFromCache(CreateOrderActivity.this);
+
+        mAddrId = getIntent().getIntExtra(GoodsDetailActivity.ADDRESS_ID_EXTRA, -1);
         mGoods = (Goods) getIntent().getSerializableExtra(GoodsDetailActivity.GOODS_EXTRA);
         mKey = getIntent().getStringExtra(GoodsDetailActivity.GOODS_SPEC_KEY_EXTRA);
         String count = getIntent().getStringExtra(GoodsDetailActivity.GOODS_COUNT_EXTRA);
-        mGoodsCount = Integer.parseInt(count);
+        int goodsCount = Integer.parseInt(count);
 
+        if (mUserInfo != null) {
+            setLoadingIndicator(true);
 
-        mGoodsNameTv.setText(mGoods.getGoodsName());
-        mGoodsCountTv.setText(count);
-        Picasso.with(this)
-                .load(mGoods.getOriginalImg())
-                .into(mGoodsImgIv);
-
-        // 规则关系列表
-        List<Goods.SpecRelationEntity> specRelationList = mGoods.getSpecRelation();
-        /**
-         * 处理规则关系
-         */
-        for (int j = 0; j < specRelationList.size(); j++) {
-            String key = specRelationList.get(j).getKey();
-            if (key.equals(mKey)) {
-                // 商品单价
-                double money = Double.parseDouble(specRelationList.get(j).getPrice());
-                // 商品合计
-                double price = money * mGoodsCount;
-                mGoodsMoneyTv.setText(String.valueOf(money));
-                mTvGoodsTotal.setText(String.valueOf(price));
-                // 运费
-                double freight = Double.valueOf(mGoods.getFreight());
-                double freeFreight = Double.valueOf(mGoods.getFreeFreight());
-                if (mGoods.getIsFreeShipping()) {
-                    if (price >= freeFreight) {
-                        freight = 0;
+            if (mGoods != null) {
+                Cart cart = new Cart();
+                cart.setUserId(mUserInfo.getUserId());
+                cart.setGoodsId(mGoods.getGoodsId());
+                cart.setGoodsName(mGoods.getGoodsName());
+                cart.setMarketPrice(mGoods.getMarketPrice());
+                cart.setGoodsNum(goodsCount);
+                cart.setSpecKey(mKey);
+                // 规则关系列表
+                List<Goods.SpecRelationEntity> specRelationList = mGoods.getSpecRelation();
+                /**
+                 * 处理规则关系
+                 */
+                for (int j = 0; j < specRelationList.size(); j++) {
+                    String key = specRelationList.get(j).getKey();
+                    if (key.equals(mKey)) {
+                        mSpecRelation = specRelationList.get(j);
+                        cart.setGoodsPrice(mSpecRelation.getPrice());
+                        cart.setSpecKeyName(mSpecRelation.getValue());
+                        break;
                     }
                 }
-                mTvFreight.setText(String.valueOf(freight));
-                // TODO: 17/5/4 减去优惠活动金额
-                double totalMoney = price + freight;
-                mTvTotalMoney.setText(String.valueOf(totalMoney));
-                mGoodsExtraInfoTv.setText(specRelationList.get(j).getValue());
+                cart.setImageUrl(mGoods.getOriginalImg());
+                mCarts.add(cart);
+            }
+        } else {
+            startActivity(new Intent(CreateOrderActivity.this, LoginActivity.class));
+        }
 
-                break;
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerViewAdapter = new CreateOrderGoodsRecyclerViewAdapter(this, mCarts);
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+    }
+
+    private void setLoadingIndicator(boolean active) {
+        if (mProgressBarContainer != null) {
+            if (active) {
+                //设置滚动条可见
+                mProgressBarContainer.setVisibility(View.VISIBLE);
+                mProgressBarTitle.setText(R.string.loading);
+            } else {
+                if (mProgressBarContainer.getVisibility() == View.VISIBLE) {
+                    mProgressBarContainer.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -178,11 +203,51 @@ public class CreateOrderActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mAddress == null) {
+        if (mAddress == null && mUserInfo != null) {
             new FetchAddressByIdTask().execute(mAddrId);
         } else {
             updateAddressUI(mAddress);
         }
+
+        // 商品合计
+        final double[] totalPrice = new double[1];
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                totalPrice[0] = mRecyclerViewAdapter.getTotalPrice();
+                if (totalPrice[0] == 0d) {
+                    handler.postDelayed(this, 1000);
+                } else {
+                    mTvGoodsTotal.setText(String.valueOf(totalPrice[0]));
+                    // 运费
+                    double freight = Double.valueOf(mGoods.getFreight());
+                    double freeFreight = Double.valueOf(mGoods.getFreeFreight());
+                    if (mGoods.getIsFreeShipping()) {
+                        if (totalPrice[0] >= freeFreight) {
+                            freight = 0;
+                        }
+                    }
+                    mTvFreight.setText(String.valueOf(freight));
+                    // 实付金额
+                    double totalMoney = totalPrice[0] + freight;
+
+                    Goods.PromEntity promEntity = mGoods.getProm();
+                    double promotionMoney = Double.parseDouble(promEntity.getFullMoney());
+                    mTvActivityCoupon.setText(promEntity.getFullMoney());
+                    // 如果商品合计金额不小于促销活动金额，则实付金额需要减去优惠活动金额。否则隐藏活动信息
+                    if (totalPrice[0] >= promotionMoney) {
+                        totalMoney -= promotionMoney;
+                    } else {
+                        mActivityCouponInfo.setVisibility(View.GONE);
+                    }
+                    mTvTotalMoney.setText(String.valueOf(totalMoney));
+
+                    setLoadingIndicator(false);
+                }
+            }
+        }, 1000);
+
     }
 
     @Override
@@ -194,18 +259,10 @@ public class CreateOrderActivity extends AppCompatActivity {
     private class FetchAddressByIdTask extends AsyncTask<Integer, Void, Void> {
         @Override
         protected Void doInBackground(Integer... params) {
-            UserInfo userInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
-            if (userInfo == null) {
-                userInfo = PreferencesUtil.getUserInfoFromPref(CreateOrderActivity.this);
-            }
-            if (userInfo == null) {
-                startActivity(new Intent(CreateOrderActivity.this, LoginActivity.class));
-                return null;
-            }
             int addrId = params[0];
             Map<String, Integer> map = new HashMap<>();
             map.put("addressId", addrId);
-            map.put("userId", userInfo.getUserId());
+            map.put("userId", mUserInfo.getUserId());
             mAddressRepository.getById(map, new AddressDatasource.GetByIdCallback() {
                 @Override
                 public void onAddressLoaded(final Address address) {

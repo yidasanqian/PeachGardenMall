@@ -39,7 +39,6 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -325,6 +324,7 @@
             />
     </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
     <include layout="@layout/activity_goods_detail_bottom_menu"/>
+
+    <include layout="@layout/progress_bar"/>
 </android.support.design.widget.CoordinatorLayout>

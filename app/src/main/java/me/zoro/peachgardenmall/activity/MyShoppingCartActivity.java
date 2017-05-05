@@ -33,6 +33,7 @@ import me.zoro.peachgardenmall.datasource.remote.ShoppingCartRemoteDatasource;
 import me.zoro.peachgardenmall.utils.CacheManager;
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+import static me.zoro.peachgardenmall.activity.GoodsDetailActivity.ADDRESS_ID_EXTRA;
 
 public class MyShoppingCartActivity extends AppCompatActivity {
 
@@ -176,6 +177,12 @@ public class MyShoppingCartActivity extends AppCompatActivity {
 
             // TODO: 17/4/9 结算
             case R.id.settlement_tv:
+                Intent intent = new Intent(this, CreateOrderActivity.class);
+              /*  intent.putExtra(GOODS_EXTRA, mGoods);
+                intent.putExtra(GOODS_SPEC_KEY_EXTRA, mKey);
+                intent.putExtra(GOODS_COUNT_EXTRA, mGoodsCount);*/
+                intent.putExtra(ADDRESS_ID_EXTRA, mUserInfo.getAddressId());
+                startActivity(intent);
                 break;
         }
     }
