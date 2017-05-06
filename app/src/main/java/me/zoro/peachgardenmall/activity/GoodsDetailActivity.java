@@ -29,10 +29,12 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +100,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     RelativeLayout mEditSelectSpec;
     @BindView(R.id.tv_promotion_count)
     TextView mTvPromotionCount;
+    @BindView(R.id.iv_promotion_img)
+    ImageView mIvPromotionImg;
     @BindView(R.id.tv_promotion)
     TextView mTvPromotion;
     @BindView(R.id.edit_promotion)
@@ -326,6 +330,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 break;
             // TODO: 17/4/25 选择促销
             case R.id.edit_promotion:
+                showPromotionPopup();
                 break;
             // TODO: 17/4/25 查看评论
             case R.id.edit_comment:
@@ -415,6 +420,45 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 dismissPpwAfter();
                 break;
         }
+    }
+
+    /**
+     * 显示促销活动列表
+     */
+    private void showPromotionPopup() {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.popup_goods_promotion, null);
+        TextView tvPromotionCount = (TextView) contentView.findViewById(R.id.tv_promotion_count);
+        ListView listView = (ListView) contentView.findViewById(R.id.list_view);
+        Goods.PromEntity promEntiry = mGoods.getProm();
+        tvPromotionCount.setText(String.valueOf(1));
+        List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("count", 1);
+        map.put("img", promEntiry.getPromImg());
+        map.put("desc", promEntiry.getDescription());
+        data.add(map);
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, data, R.layout.popup_goods_promotion_item,
+                new String[]{"count", "img", "desc"},
+                new int[]{R.id.tv_promotion_count, R.id.iv_promotion_img, R.id.tv_promotion});
+        // 需要用这个适配器来显示网上的远程图片,http://stackoverflow.com/questions/23985786/android-display-image-in-imageview-by-simpleadapter
+        simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Object data, String textRepresentation) {
+                if (view.getId() == R.id.iv_promotion_img && !TextUtils.isEmpty(textRepresentation)) {
+                    Picasso.with(view.getContext())
+                            .load(textRepresentation)
+                            .into((ImageView) view);
+                    return true;
+                }
+                return false;
+            }
+        });
+        listView.setAdapter(simpleAdapter);
+
+        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.BOTTOM, 0, 0);
     }
 
     /**
@@ -677,6 +721,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             mTvPromotion.setText(promEntity.getDescription());
         } else {
             mEditPromotion.setVisibility(View.GONE);
+        }
+
+        if (promEntity.getPromImg() != null) {
+            Picasso.with(this)
+                    .load((String) promEntity.getPromImg())
+                    .fit()
+                    .into(mIvPromotionImg);
+        } else {
+            mIvPromotionImg.setVisibility(View.GONE);
         }
 
         int num = goods.getComment().getNumber();

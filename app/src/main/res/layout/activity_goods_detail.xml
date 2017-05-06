@@ -183,15 +183,25 @@
                 android:textSize="@dimen/subhead_size"
                 />
 
+            <ImageView
+                android:id="@+id/iv_promotion_img"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/ic_launcher"
+                android:adjustViewBounds="true"
+                android:layout_toRightOf="@id/tv_promotion_lbl"
+                android:layout_centerVertical="true"
+                />
 
             <TextView
                 android:id="@+id/tv_promotion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="抢先囤8折卡，享店庆最低折扣"
-                android:layout_toRightOf="@id/tv_promotion_lbl"
+                android:layout_toRightOf="@id/iv_promotion_img"
                 android:layout_centerVertical="true"
-                android:padding="@dimen/layout_padding"
+                android:paddingTop="@dimen/layout_padding"
+                android:paddingBottom="@dimen/layout_padding"
                 style="@style/TextAppearance.AppCompat.Subhead"
                 />
 
