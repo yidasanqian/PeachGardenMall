@@ -1,6 +1,7 @@
 package me.zoro.peachgardenmall.datasource.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 订单信息
@@ -9,40 +10,76 @@ import java.io.Serializable;
 
 public class Order implements Serializable {
 
-    private int mId;
-    private String mName;
-    private String mNumber;
-    private Goods mGoods;
+    private int id;
+    private Address address;
+    private Coupon coupon;
+    private double goodsTotalMoney;
+    private double freight;
+    private double promotionMoney;
+    private List<Goods> goodses;
+    private double factPayMoney;
 
     public int getId() {
-        return mId;
+        return id;
     }
 
     public void setId(int id) {
-        mId = id;
+        this.id = id;
     }
 
-    public String getName() {
-        return mName;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setName(String name) {
-        mName = name;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public String getNumber() {
-        return mNumber;
+    public Coupon getCoupon() {
+        return coupon;
     }
 
-    public void setNumber(String number) {
-        mNumber = number;
+    public void setCoupon(Coupon coupon) {
+        this.coupon = coupon;
     }
 
-    public Goods getGoods() {
-        return mGoods;
+    public double getGoodsTotalMoney() {
+        return goodsTotalMoney;
     }
 
-    public void setGoods(Goods goods) {
-        mGoods = goods;
+    public void setGoodsTotalMoney(double goodsTotalMoney) {
+        this.goodsTotalMoney = goodsTotalMoney;
+    }
+
+    public double getFreight() {
+        return freight;
+    }
+
+    public void setFreight(double freight) {
+        this.freight = freight;
+    }
+
+    public double getPromotionMoney() {
+        return promotionMoney;
+    }
+
+    public void setPromotionMoney(double promotionMoney) {
+        this.promotionMoney = promotionMoney;
+    }
+
+    public List<Goods> getGoodses() {
+        return goodses;
+    }
+
+    public void setGoodses(List<Goods> goodses) {
+        this.goodses = goodses;
+    }
+
+    public double getFactPayMoney() {
+        return factPayMoney;
+    }
+
+    public void setFactPayMoney(double factPayMoney) {
+        this.factPayMoney = factPayMoney;
     }
 }

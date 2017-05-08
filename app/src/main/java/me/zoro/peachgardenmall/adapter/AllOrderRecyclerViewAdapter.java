@@ -18,10 +18,11 @@ import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.datasource.domain.Order;
 
 /**
+ * 全部订单的adapter
  * Created by dengfengdecao on 16/12/5.
  */
 
-public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AllOrderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_EMPTY = -1;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
@@ -30,7 +31,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private Context mContext;
     private List<Order> mOrders;
 
-    public OrderRecyclerViewAdapter(Context context, List<Order> orders) {
+    public AllOrderRecyclerViewAdapter(Context context, List<Order> orders) {
         mContext = context;
         mOrders = orders;
 

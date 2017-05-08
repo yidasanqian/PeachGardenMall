@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +138,10 @@ public class MyShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             viewHolder.mGoodsNameTv.setText(cart.getGoodsName());
             viewHolder.mTvGoodsMoney.setText(cart.getGoodsPrice());
             viewHolder.mTvGoodsSpec.setText(cart.getSpecKeyName());
+            Picasso.with(mContext)
+                    .load(cart.getImageUrl())
+                    .fit()
+                    .into(viewHolder.mCartsImgIv);
             viewHolder.mCountTv.setText(String.valueOf(cart.getGoodsNum()));
             viewHolder.mSubtractIv.setTag(Double.parseDouble(cart.getGoodsPrice()));
             viewHolder.mAddIv.setTag(Double.parseDouble(cart.getGoodsPrice()));

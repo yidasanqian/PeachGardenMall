@@ -45,19 +45,17 @@ public class PayActivity extends AppCompatActivity {
     private static final String TAG = "PayActivity";
 
     public static final String RECHARGE_MONEY_EXTRA = "recharge_money_extra";
-    public static final String RSA_PRIVATE = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAJIFf0TZ5ZVbVj+RTmvirfWzUdi88q0jPRZqT5fMXdxQAsBy5ISv7IG/Ja/G+CDAXWyhtSPsZhDi/Ago2JcOM4NDPrZydqKm8i8aMXzLqbWYG1MlfQHu6rufP8a1voK6NlV+8A4wFAV17yQVI+IEqKc50SH1hojtk8KwwILlinSLAgMBAAECgYBUh/AkOIvqiaSFSiX+2IviJ7vi34cQ6cxsVIDdHIbdikf9hsV5dqpQdgpoFqP/ubybrYVCVZDEh9JlGtg/og35ODKF9P8icL3et9FpqYuN5asRkAw8CQMfoLdLsiTp359QI4PK8GEcqOOHSm9CKB83Kp5vZIWUo6QUDPVhAjCBMQJBAMIHrQ1znq4iwaN5lqCA4LEdY67YDaTaX9RKz+wUzBdaP58Ut6MVDaf4cN+qPEYe23K3tJOi31TNZ3VP9iSSzDMCQQDAqInMnydbiIwDN7CnL+FGqtz8z0nhw5e7xLVoFKn3mIJUuhpMtCt1PnXYhbOYPiHkhZliXlq3CIaxlqkw/t5JAkEAk3uwL5Rd3jEvDOqD8vZjVF1pguJY5KDUzJIdH27jfzCrQWlG+KAtJCs06N4GOKqF1doLWVko9tW2uTYRe9VVfwJBAJjs7zzaVE5m6+Sd7v42llYWyIVwMRAgxq+ILArq5COiDkoc00VxelF9e+Ob9XvyTcrsdV1M0isZfHk4wyIeHOkCQQCVBi2z7xfUmxZxGJBpRr7xGtR4/ddaQvFazFu2BwG6yvm2KPvsqfDZxOjK8aWtjTUW/+RkLmPkNKG1Tu7TrZyK";
-    //public static final String RSA_PRIVATE = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAJIFf0TZ5ZVbVj+RTmvirfWzUdi88q0jPRZqT5fMXdxQAsBy5ISv7IG/Ja/G+CDAXWyhtSPsZhDi/Ago2JcOM4NDPrZydqKm8i8aMXzLqbWYG1MlfQHu6rufP8a1voK6NlV+8A4wFAV17yQVI+IEqKc50SH1hojtk8KwwILlinSLAgMBAAECgYBUh/AkOIvqiaSFSiX+2IviJ7vi34cQ6cxsVIDdHIbdikf9hsV5dqpQdgpoFqP/ubybrYVCVZDEh9JlGtg/og35ODKF9P8icL3et9FpqYuN5asRkAw8CQMfoLdLsiTp359QI4PK8GEcqOOHSm9CKB83Kp5vZIWUo6QUDPVhAjCBMQJBAMIHrQ1znq4iwaN5lqCA4LEdY67YDaTaX9RKz+wUzBdaP58Ut6MVDaf4cN+qPEYe23K3tJOi31TNZ3VP9iSSzDMCQQDAqInMnydbiIwDN7CnL+FGqtz8z0nhw5e7xLVoFKn3mIJUuhpMtCt1PnXYhbOYPiHkhZliXlq3CIaxlqkw/t5JAkEAk3uwL5Rd3jEvDOqD8vZjVF1pguJY5KDUzJIdH27jfzCrQWlG+KAtJCs06N4GOKqF1doLWVko9tW2uTYRe9VVfwJBAJjs7zzaVE5m6+Sd7v42llYWyIVwMRAgxq+ILArq5COiDkoc00VxelF9e+Ob9XvyTcrsdV1M0isZfHk4wyIeHOkCQQCVBi2z7xfUmxZxGJBpRr7xGtR4/ddaQvFazFu2BwG6yvm2KPvsqfDZxOjK8aWtjTUW/+RkLmPkNKG1Tu7TrZyK";
 
     private static final int SDK_PAY_FLAG = 1;
     /**
      * 支付宝支付业务：入参app_id
      */
-    public static final String APPID = "2016121904425820";
+    public static final String APPID = "2017050607142602";
 
     /**
      * 支付宝账户登录授权业务：入参pid值
      */
-    public static final String PID = "2088521478612514";
+    public static final String PID = "2088621928157904";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.et_recharge_money)
@@ -118,35 +116,6 @@ public class PayActivity extends AppCompatActivity {
         final Map<String, String> reqParams = new HashMap<>();
         reqParams.put("app_id", APPID);
         reqParams.put("biz_content", gson.toJson(serviceParams));
-        /*reqParams.put("charset", "utf-8");
-        reqParams.put("method", "alipay.trade.app.pay");
-        reqParams.put("notify_url", AppConfig.SERVER_HOST + "/api/v1/anon/notify");
-        reqParams.put("sign_type", "RSA");
-        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-        reqParams.put("timestamp", timestamp);
-        reqParams.put("version", "1.0");
-        final String orderParam = OrderInfoUtil2_0.buildOrderParam(reqParams);
-        final String sign = OrderInfoUtil2_0.getSign(reqParams, RSA_PRIVATE);
-        Runnable payRunnable = new Runnable() {
-
-            @Override
-            public void run() {
-                final String orderInfo = orderParam + "&" + sign;   // 订单信息
-                Log.d(TAG, "orderInfo: 订单信息 <== " + orderInfo);
-
-                PayTask payTask = new PayTask(PayActivity.this);
-                Map<String, String> result = payTask.payV2(orderInfo, true);
-                Log.i("msp", result.toString());
-
-                Message msg = new Message();
-                msg.what = SDK_PAY_FLAG;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
-            }
-        };
-
-        Thread payThread = new Thread(payRunnable);
-        payThread.start();*/
         Call<ResponseBody> call = mPayClient.getOrderInfo(reqParams);
         call.enqueue(new Callback<ResponseBody>() {
             @Override

@@ -80,4 +80,9 @@
     <string name="captcha_hint">请输入验证码</string>
     <string name="tel_hint">请输入手机号</string>
     <string name="loading">加载中...</string>
+    <string name="success_modify_password_msg">修改密码成功</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

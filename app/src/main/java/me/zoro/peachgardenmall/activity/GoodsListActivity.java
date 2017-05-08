@@ -189,7 +189,11 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
                 new FetchGoodsesOrderTask().execute();
                 break;
             case R.id.btn_filter:
-                mPopupWindow.showAsDropDown(mBtnFilter);
+                String query = mSearchView.getQuery().toString().trim();
+                if (!TextUtils.isEmpty(query)) {
+                    searchGoodes(query);
+                }
+                //mPopupWindow.showAsDropDown(mBtnFilter);
                 break;
 
         }

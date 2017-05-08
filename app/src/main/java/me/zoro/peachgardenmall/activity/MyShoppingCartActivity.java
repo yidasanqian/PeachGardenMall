@@ -33,10 +33,11 @@ import me.zoro.peachgardenmall.datasource.remote.ShoppingCartRemoteDatasource;
 import me.zoro.peachgardenmall.utils.CacheManager;
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
-import static me.zoro.peachgardenmall.activity.GoodsDetailActivity.ADDRESS_ID_EXTRA;
+
 
 public class MyShoppingCartActivity extends AppCompatActivity {
 
+    public static final String CARTS_EXTRA = "carts";
     @BindView(R.id.toolbar_right_txt)
     TextView mToolbarRightTxt;
     @BindView(R.id.toolbar)
@@ -50,7 +51,7 @@ public class MyShoppingCartActivity extends AppCompatActivity {
 
     private LinearLayoutManager mLayoutManager;
     private MyShoppingCartRecyclerViewAdapter mRecyclerViewAdapter;
-    private List<Cart> mCarts;
+    private ArrayList<Cart> mCarts;
     /**
      * true,显示可选择，否则不显示可选择
      */
@@ -178,10 +179,7 @@ public class MyShoppingCartActivity extends AppCompatActivity {
             // TODO: 17/4/9 结算
             case R.id.settlement_tv:
                 Intent intent = new Intent(this, CreateOrderActivity.class);
-              /*  intent.putExtra(GOODS_EXTRA, mGoods);
-                intent.putExtra(GOODS_SPEC_KEY_EXTRA, mKey);
-                intent.putExtra(GOODS_COUNT_EXTRA, mGoodsCount);*/
-                intent.putExtra(ADDRESS_ID_EXTRA, mUserInfo.getAddressId());
+                intent.putExtra(CARTS_EXTRA, mCarts);
                 startActivity(intent);
                 break;
         }
@@ -204,7 +202,7 @@ public class MyShoppingCartActivity extends AppCompatActivity {
             map.put("ps", mPageSize);
             mCartRepository.getShoppingCartGoodses(map, new ShoppingCartDatasource.GetShoppingCartGoodsesCallback() {
                 @Override
-                public void onGoodsesLoaded(List<Cart> carts) {
+                public void onGoodsesLoaded(ArrayList<Cart> carts) {
                     if (carts.size() > 0) {
                         if (mPageNum > 1) {
                             mCarts.addAll(carts);

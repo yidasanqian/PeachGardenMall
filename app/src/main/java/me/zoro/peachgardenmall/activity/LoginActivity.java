@@ -2,12 +2,15 @@ package me.zoro.peachgardenmall.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -33,6 +36,8 @@ import me.zoro.peachgardenmall.utils.PreferencesUtil;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "LoginActivity";
+    
     public static final String USERINFO_EXTRA = "user_info";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -77,6 +82,67 @@ public class LoginActivity extends AppCompatActivity {
         }
         mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(getApplicationContext()));
 
+        Log.d(TAG, "onCreate: ");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Log.d(TAG, "onPostResume: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        Log.d(TAG, "onPostCreate: ");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.d(TAG, "onRestoreInstanceState: ");
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.d(TAG, "onConfigurationChanged: ");
     }
 
     @OnClick({R.id.btn_login, R.id.tv_forget_password, R.id.tv_register})
@@ -85,11 +151,12 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.btn_login:
                 login();
                 break;
-            // TODO: 17/4/11 忘记密码
             case R.id.tv_forget_password:
+                Intent intent = new Intent(this, ForgetActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_register:
-                Intent intent = new Intent(this, RegisterActivity.class);
+                intent = new Intent(this, RegisterActivity.class);
                 startActivity(intent);
                 break;
         }

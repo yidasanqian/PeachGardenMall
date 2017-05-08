@@ -9,4 +9,6 @@
     <color name="subheadColor">#de000000</color>
     <color name="colorButtonNormal">#d6d7d7</color>
     <color name="progress_bar_background">#90000000</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

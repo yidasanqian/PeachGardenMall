@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/goods_img_iv"
-        android:layout_width="56dp"
-        android:layout_height="72dp"
+        android:layout_width="@dimen/ic_goods_width"
+        android:layout_height="@dimen/ic_goods_height"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_gaoyuanyuan"
         android:layout_gravity="left"
@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:text="高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆"
         android:layout_gravity="right"
+        android:maxLines="3"
         android:layout_marginLeft="@dimen/layout_margin"
         android:layout_marginRight="@dimen/layout_margin"
         android:layout_toRightOf="@id/goods_img_iv"

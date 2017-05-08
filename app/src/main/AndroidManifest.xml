@@ -33,9 +33,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:screenOrientation="portrait"
-        >
+        android:theme="@style/AppTheme">
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -62,57 +60,167 @@
                     android:scheme="http"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MyShoppingCartActivity">
+        <activity
+            android:name=".activity.MyShoppingCartActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.MyOrderActivity">
+        <activity
+            android:name=".activity.MyOrderActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.MyCollectionActivity">
+        <activity
+            android:name=".activity.MyCollectionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.VipActivity">
+        <activity
+            android:name=".activity.VipActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.SettingsActivity">
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.DeliveryAddressActivity">
+        <activity
+            android:name=".activity.DeliveryAddressActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.CreateAddressActivity">
+        <activity
+            android:name=".activity.CreateAddressActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.CreateOrderActivity">
+        <activity
+            android:name=".activity.CreateOrderActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.PayActivity">
+        <activity
+            android:name=".activity.PayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.GoodsDetailActivity">
+        <activity
+            android:name=".activity.GoodsDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.RegisterActivity">
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.LoginActivity">
+        <activity
+            android:name=".activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.EditUserInfoActivity">
+        <activity
+            android:name=".activity.EditUserInfoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.AboutActivity">
+        <activity
+            android:name=".activity.AboutActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.AccountSettingActivity">
+        <activity
+            android:name=".activity.AccountSettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.CommonQuestionActivity">
+        <activity
+            android:name=".activity.CommonQuestionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.ImageShowerActivity">
+        <activity
+            android:name=".activity.ImageShowerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.CommentActivity">
+        <activity
+            android:name=".activity.CommentActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.CouponActivity">
+        <activity
+            android:name=".activity.CouponActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.GoodsListActivity">
+        <activity
+            android:name=".activity.GoodsListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.EditPasswordActivity">
+        <activity
+            android:name=".activity.EditPasswordActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.EditPhoneActivity">
+        <activity
+            android:name=".activity.EditPhoneActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.EditIdCardActivity">
+        <activity
+            android:name=".activity.EditIdCardActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.ErrorActivity">
+        <activity
+            android:name=".activity.ErrorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.SearchGoodsActivity">
+        <activity
+            android:name=".activity.SearchGoodsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".activity.ForgetActivity">
+        <activity
+            android:name=".activity.ForgetActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+        <activity
+            android:name=".activity.FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme">
         </activity>
     </application>
 

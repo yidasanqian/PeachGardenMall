@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -91,7 +92,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     private Address mAddress;
     private int mAddrId;
 
-    private List<Cart> mCarts;
+    private ArrayList<Cart> mCarts;
 
     private Goods mGoods;
     /**
@@ -118,16 +119,20 @@ public class CreateOrderActivity extends AppCompatActivity {
         ab.setDisplayShowHomeEnabled(true);
 
         mAddressRepository = AddressRepository.getInstance(AddressRemoteDatasource.getInstance(getApplicationContext()));
-
-        mCarts = new ArrayList<>();
-
         mUserInfo = CacheManager.getUserInfoFromCache(CreateOrderActivity.this);
 
-        mAddrId = getIntent().getIntExtra(GoodsDetailActivity.ADDRESS_ID_EXTRA, -1);
+        mCarts = (ArrayList<Cart>) getIntent().getSerializableExtra(MyShoppingCartActivity.CARTS_EXTRA);
+        if (mCarts == null) {
+            mCarts = new ArrayList<>();
+        }
+
         mGoods = (Goods) getIntent().getSerializableExtra(GoodsDetailActivity.GOODS_EXTRA);
         mKey = getIntent().getStringExtra(GoodsDetailActivity.GOODS_SPEC_KEY_EXTRA);
         String count = getIntent().getStringExtra(GoodsDetailActivity.GOODS_COUNT_EXTRA);
-        int goodsCount = Integer.parseInt(count);
+        int goodsCount = 1;
+        if (!TextUtils.isEmpty(count)) {
+            goodsCount = Integer.parseInt(count);
+        }
 
         if (mUserInfo != null) {
             setLoadingIndicator(true);
@@ -204,7 +209,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (mAddress == null && mUserInfo != null) {
-            new FetchAddressByIdTask().execute(mAddrId);
+            new FetchAddressByIdTask().execute(mUserInfo.getAddressId());
         } else {
             updateAddressUI(mAddress);
         }

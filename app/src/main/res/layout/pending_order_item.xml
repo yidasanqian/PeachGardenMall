@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/layout_margin"
+    android:layout_marginBottom="@dimen/layout_margin"
+    android:padding="@dimen/layout_padding"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/iv_goods_img"
+        android:layout_width="@dimen/ic_goods_width"
+        android:layout_height="@dimen/ic_goods_height"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_gaoyuanyuan"
+        android:layout_gravity="left"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_goods_name"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆高圆圆"
+        android:layout_gravity="right"
+        android:maxLines="3"
+        android:layout_marginLeft="@dimen/layout_margin"
+        android:layout_marginRight="@dimen/layout_margin"
+        android:layout_toRightOf="@id/iv_goods_img"
+        style="@style/TextAppearance.AppCompat.Body1"
+        />
+
+    <Button
+        android:id="@+id/btn_order_action"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="待付款"
+        android:textColor="@color/colorPrimary"
+        android:background="@color/colorAccent"
+        >
+
+    </Button>
+
+
+    <TextView
+        android:id="@+id/tv_goods_spec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50克"
+        android:padding="@dimen/layout_padding"
+        android:layout_below="@id/tv_goods_name"
+        android:layout_toRightOf="@id/iv_goods_img"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/list_divider"
+        android:layout_below="@id/tv_goods_spec"
+        />
+</RelativeLayout>

@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/iv_goods_img"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/ic_goods_width"
+            android:layout_height="@dimen/ic_goods_height"
             android:src="@drawable/ic_gaoyuanyuan"
             android:scaleType="centerCrop"
             />

@@ -99,4 +99,6 @@
     <dimen name="card_corner_radius">2dp</dimen>
     <dimen name="avatar_width">48dp</dimen>
     <dimen name="avatar_height">48dp</dimen>
+    <dimen name="ic_goods_width">80dp</dimen>
+    <dimen name="ic_goods_height">80dp</dimen>
 </resources>

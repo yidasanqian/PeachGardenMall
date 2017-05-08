@@ -2,7 +2,7 @@ package me.zoro.peachgardenmall.datasource;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import me.zoro.peachgardenmall.datasource.domain.Cart;
@@ -48,7 +48,7 @@ public class ShoppingCartRepository implements ShoppingCartDatasource {
     public void getShoppingCartGoodses(Map<String, Integer> params, @NonNull final GetShoppingCartGoodsesCallback callback) {
         mRemoteDatasource.getShoppingCartGoodses(params, new GetShoppingCartGoodsesCallback() {
             @Override
-            public void onGoodsesLoaded(List<Cart> carts) {
+            public void onGoodsesLoaded(ArrayList<Cart> carts) {
                 callback.onGoodsesLoaded(carts);
             }
 

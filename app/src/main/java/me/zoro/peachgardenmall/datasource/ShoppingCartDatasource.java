@@ -2,7 +2,7 @@ package me.zoro.peachgardenmall.datasource;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import me.zoro.peachgardenmall.datasource.domain.Cart;
@@ -19,7 +19,7 @@ public interface ShoppingCartDatasource {
     void getShoppingCartGoodses(Map<String, Integer> params, @NonNull GetShoppingCartGoodsesCallback callback);
 
     interface GetShoppingCartGoodsesCallback {
-        void onGoodsesLoaded(List<Cart> carts);
+        void onGoodsesLoaded(ArrayList<Cart> carts);
 
         void onDataNotAvailable(String msg);
     }

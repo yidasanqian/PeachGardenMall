@@ -10,7 +10,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import me.zoro.peachgardenmall.api.ServiceGenerator;
@@ -109,7 +108,7 @@ public class ShoppingCartRemoteDatasource implements ShoppingCartDatasource {
                 } else {
                     Gson gson = new GsonBuilder().setLenient().create();
                     JsonArray jsonArray = bodyJson.get(Const.RESULT).getAsJsonArray();
-                    List<Cart> cartList = new ArrayList<Cart>();
+                    ArrayList<Cart> cartList = new ArrayList<Cart>();
                     for (int i = 0; i < jsonArray.size(); i++) {
                         Cart cart = gson.fromJson(jsonArray.get(i), Cart.class);
                         cartList.add(cart);

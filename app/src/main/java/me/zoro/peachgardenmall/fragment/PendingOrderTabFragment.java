@@ -17,29 +17,32 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
-import me.zoro.peachgardenmall.adapter.AllOrderRecyclerViewAdapter;
+import me.zoro.peachgardenmall.adapter.PendingOrderRecyclerViewAdapter;
 import me.zoro.peachgardenmall.datasource.domain.Order;
 
 /**
- * 全部订单的fragment
- * Created by dengfengdecao on 17/4/22.
+ * 待付款，待发货，待收货，待评价订单的fragment
+ * Created by dengfengdecao on 17/5/8.
  */
 
-public class OrderTabFragment extends Fragment {
-    private static final String TAG = "OrderTabFragment";
+public class PendingOrderTabFragment extends Fragment {
 
+    private static final String TAG = "PendingOrderTabFragment";
+    private static final String PENDING_TAB_KEY = "pending_tab";
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     Unbinder unbinder;
 
-    private AllOrderRecyclerViewAdapter mRecyclerViewAdapter;
+    private PendingOrderRecyclerViewAdapter mRecyclerViewAdapter;
     private List<Order> mOrders;
 
-    public static OrderTabFragment newInstance() {
-        
-        Bundle args = new Bundle();
+    private String mPendingTab;
 
-        OrderTabFragment fragment = new OrderTabFragment();
+    public static PendingOrderTabFragment newInstance(String pendingTab) {
+
+        Bundle args = new Bundle();
+        args.putString(PENDING_TAB_KEY, pendingTab);
+        PendingOrderTabFragment fragment = new PendingOrderTabFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +50,11 @@ public class OrderTabFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mPendingTab = getArguments().getString(PENDING_TAB_KEY);
+        }
         mOrders = new ArrayList<>();
+
     }
 
     @Nullable
@@ -56,11 +63,11 @@ public class OrderTabFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_order_list, container, false);
         unbinder = ButterKnife.bind(this, root);
 
-        mRecyclerViewAdapter = new AllOrderRecyclerViewAdapter(getContext(), mOrders);
+        mRecyclerViewAdapter = new PendingOrderRecyclerViewAdapter(getContext(), mOrders);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
-        Log.d(TAG, "onCreateView: mPendingTab ==> 全部");
+        Log.d(TAG, "onCreateView: mPendingTab ==> " + mPendingTab);
         return root;
     }
 
