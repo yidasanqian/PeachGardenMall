@@ -40,7 +40,7 @@ public class CreateOrderGoodsRecyclerViewAdapter extends RecyclerView.Adapter<Re
     /**
      * 订单里的商品信息
      */
-    private List<Order.GoodsInfos> mGoodsInfoses = new ArrayList<>();
+    private List<Order.GoodsInfo> mGoodsInfoses = new ArrayList<>();
 
     public OnItemClickListener mListener;
 
@@ -92,7 +92,7 @@ public class CreateOrderGoodsRecyclerViewAdapter extends RecyclerView.Adapter<Re
         return mTotalPrice;
     }
 
-    public List<Order.GoodsInfos> getGoodsInfoses() {
+    public List<Order.GoodsInfo> getGoodsInfoses() {
         return mGoodsInfoses;
     }
 
@@ -120,11 +120,11 @@ public class CreateOrderGoodsRecyclerViewAdapter extends RecyclerView.Adapter<Re
             viewHolder.mGoodsStrikeMoneyTv.setText(cart.getMarketPrice());
             viewHolder.mGoodsExtraInfoTv.setText(cart.getSpecKeyName());
 
-            Order.GoodsInfos goodsInfos = new Order.GoodsInfos();
-            goodsInfos.setGoodsId(cart.getGoodsId());
-            goodsInfos.setSpecKey(cart.getSpecKey());
-            goodsInfos.setNumber(cart.getGoodsNum());
-            mGoodsInfoses.add(goodsInfos);
+            Order.GoodsInfo goodsInfo = new Order.GoodsInfo();
+            goodsInfo.setGoodsId(cart.getGoodsId());
+            goodsInfo.setSpecKey(cart.getSpecKey());
+            goodsInfo.setGoodsNum(cart.getGoodsNum());
+            mGoodsInfoses.add(goodsInfo);
         }
     }
 

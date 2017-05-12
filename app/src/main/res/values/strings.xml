@@ -91,4 +91,15 @@
     <string name="bad_evaluation">差评</string>
     <string name="anon_desc">你写的评价会以匿名的形式展现</string>
     <string name="evaluation_hint">宝贝满足你的期待吗？说说它的优点和美中不足的地方吧</string>
+    <string name="payment_success">支付成功</string>
+    <string name="check_the_order">查看订单</string>
+    <string name="to_home">返回首页</string>
+    <string name="payment_fail">支付失败</string>
+    <string name="fetch_captcha">发送验证码</string>
+    <string name="captcha_max_length">4</string>
+    <string name="order_detail">订单详情</string>
+    <string name="pending_payment">待付款</string>
+    <string name="pending_delivery">待发货</string>
+    <string name="pending_receiving">待收货</string>
+    <string name="pending_evaluate">待评价</string>
 </resources>

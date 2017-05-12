@@ -18,6 +18,13 @@ public interface OrderDatasource {
 
     void getOrders(Map<String, Integer> reqParams, @NonNull GetOrdersCallback callback);
 
+    void getOrderDetail(Map<String, Object> reqParams, @NonNull GetOrderCallback callback);
+
+    interface GetOrderCallback {
+        void onOrderLoaded(Order order);
+
+        void onDataNotAvailable(String msg);
+    }
     interface GetOrdersCallback {
         void onOrdersLoaded(ArrayList<Order> orders);
 

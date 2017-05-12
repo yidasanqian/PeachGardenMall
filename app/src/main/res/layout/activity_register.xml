@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:hint="输入验证码"
-                android:maxLength="6"
+                android:maxLength="@string/captcha_max_length"
                 android:inputType="number"
                 android:background="@drawable/bg_et"
                 />
@@ -85,12 +85,11 @@
                 android:id="@+id/btn_fetch_captcha"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/button_text_size"
-                android:text="发送验证码"
-                android:background="@color/colorAccent"
+                android:text="@string/fetch_captcha"
+                android:background="@drawable/bg_btn"
                 android:layout_marginLeft="@dimen/layout_margin"
                 />
         </LinearLayout>

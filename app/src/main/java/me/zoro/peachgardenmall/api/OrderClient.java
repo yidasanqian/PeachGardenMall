@@ -13,6 +13,10 @@ import retrofit2.http.QueryMap;
  */
 
 public interface OrderClient {
-    @GET
+
+    @GET("Order/getOrderByOrderSn")
+    Call<JsonObject> getOrder(@QueryMap Map<String, Object> reqParams);
+
+    @GET("Order/getOrderList")
     Call<JsonObject> getOrders(@QueryMap Map<String, Integer> reqParams);
 }

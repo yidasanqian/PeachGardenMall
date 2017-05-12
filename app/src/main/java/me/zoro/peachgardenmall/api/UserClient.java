@@ -15,7 +15,6 @@ import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
 
 /**
  * Created by dengfengdecao on 16/11/11.
@@ -64,8 +63,8 @@ public interface UserClient {
                                   @Part MultipartBody.Part file);
 
     //忘记密码
-    @POST("anon/user/new/password")
-    Call<JsonObject> forgetPassword(@QueryMap Map<String, Object> params);
+    @POST("User/reset_password")
+    Call<JsonObject> forgetPassword(@Body Map<String, Object> params);
 
 
 }

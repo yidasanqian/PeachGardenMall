@@ -23,6 +23,7 @@ import me.zoro.peachgardenmall.datasource.GoodsDatasource;
 import me.zoro.peachgardenmall.datasource.GoodsRepository;
 import me.zoro.peachgardenmall.datasource.domain.Comment;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
+import me.zoro.peachgardenmall.fragment.HomeFragment;
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
@@ -50,6 +51,10 @@ public class CommentActivity extends AppCompatActivity {
      * 默认获取10条
      */
     private int mPageSize = 10;
+    /**
+     * 从{@link GoodsDetailActivity}传过来的商品id
+     */
+    private int mGoodsId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +68,15 @@ public class CommentActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
+        mGoodsId = getIntent().getIntExtra(HomeFragment.GOODS_ID_EXTRA, -1);
+
+
         mGoodsRepository = GoodsRepository.getInstance(GoodsRemoteDatasource.getInstance(
                 getApplicationContext()
         ));
+
+        // 获取商品评论列表
+        new FetchCommensTask().execute();
 
         mComments = new ArrayList<>();
         mCommentRecyclerViewAdapter = new CommentRecyclerViewAdapter(this, mComments);
@@ -103,9 +114,8 @@ public class CommentActivity extends AppCompatActivity {
     private class FetchCommensTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            // TODO: 17/5/10 获取商品评论列表
             Map<String, Integer> map = new HashMap<>();
-            map.put("goodsId", 1);
+            map.put("goodsId", mGoodsId);
             map.put("pn", mPageNum);
             map.put("ps", mPageSize);
             mGoodsRepository.getCommentByGoodsId(map, new GoodsDatasource.GetCommentsCallback() {

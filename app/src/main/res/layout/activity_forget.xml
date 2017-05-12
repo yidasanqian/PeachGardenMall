@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/app_bar_title"
+            android:text="找回密码"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            />
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:padding="@dimen/activity_vertical_margin"
@@ -38,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:hint="@string/captcha_hint"
-                android:maxLength="6"
+                android:maxLength="@string/captcha_max_length"
                 android:inputType="number"
                 />
         </android.support.design.widget.TextInputLayout>
@@ -48,7 +75,6 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/button_text_size"
             android:background="@drawable/bg_btn"
             android:text="@string/fetching_captcha"
             android:layout_width="0dp"
@@ -80,4 +106,5 @@
         />
 
     <include layout="@layout/progress_bar"/>
+    </LinearLayout>
 </LinearLayout>

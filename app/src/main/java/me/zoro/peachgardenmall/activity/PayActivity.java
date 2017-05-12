@@ -16,12 +16,12 @@ import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -51,16 +51,18 @@ public class PayActivity extends AppCompatActivity {
 
     private static final String TAG = "PayActivity";
 
+    public static final String ORDER_DETAIL_EXTRA = "order_detail";
+
     private static final int SDK_PAY_FLAG = 1;
     /**
      * 支付宝支付业务：入参app_id
      */
-    public static final String APPID = "2017050607142602";
+    private static final String APPID = "2017050607142602";
 
     /**
      * 支付宝账户登录授权业务：入参pid值
      */
-    public static final String PID = "2088621928157904";
+    private static final String PID = "2088621928157904";
     /**
      * 支付宝服务器主动通知商户服务器里指定的页面
      */
@@ -111,9 +113,20 @@ public class PayActivity extends AppCompatActivity {
             orderReqParams.put("totalMoney", mOrder.getFactPayMoney());
             orderReqParams.put("payType", 1);
 
-            JsonArray jsonArray = new JsonParser().parse(gson.toJson(mOrder.getGoodsInfos())).getAsJsonArray();
+            List<Order.GoodsInfo> goodsInfoList = mOrder.getGoodsInfo();
+            // JsonArray jsonArray = new JsonParser().parse(gson.toJson(goodsInfoList)).getAsJsonArray();
+            JsonArray jsonArray = new JsonArray();
+            JsonObject jo = new JsonObject();
+            for (int i = 0; i < goodsInfoList.size(); i++) {
+                Order.GoodsInfo goodsInfo = goodsInfoList.get(i);
+                jo.addProperty("specKey", goodsInfo.getSpecKey());
+                jo.addProperty("goodsId", goodsInfo.getGoodsId());
+                jo.addProperty("number", goodsInfo.getGoodsNum());
+                jsonArray.add(jo);
+            }
             orderReqParams.put("goodsInfos", jsonArray);
             String outTradeNo = getOutTradeNo();
+            mOrder.setOutTraceNo(outTradeNo);
             orderReqParams.put("out_trade_no", outTradeNo);
             // 业务参数
             Map<String, String> serviceParams = new HashMap<>();
@@ -236,15 +249,15 @@ public class PayActivity extends AppCompatActivity {
                         String resultStatus = payResult.getResultStatus();
                         // 判断resultStatus 为9000则代表支付成功
                         if (TextUtils.equals(resultStatus, "9000")) {
-                            // todo 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                            Toast.makeText(target, "支付成功", Toast.LENGTH_LONG).show();
-                            Intent data = new Intent();
-
-                            target.setResult(RESULT_OK, data);
+                            // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                            Toast.makeText(target, target.getString(R.string.payment_success), Toast.LENGTH_LONG).show();
+                            Intent data = new Intent(target, PaymentSuccessActivity.class);
+                            data.putExtra(ORDER_DETAIL_EXTRA, target.mOrder);
+                            target.startActivity(data);
                             target.finish();
                         } else {
                             // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                            Toast.makeText(target, "支付失败", Toast.LENGTH_LONG).show();
+                            Toast.makeText(target, target.getString(R.string.payment_fail), Toast.LENGTH_LONG).show();
                             target.setResult(RESULT_CANCELED);
                             target.finish();
                         }

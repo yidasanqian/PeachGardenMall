@@ -223,7 +223,7 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() == mPageSize) {
+        if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() <= mPageSize) {
             mIsLoadingMore = false;
             mPageNum = 1;
         }

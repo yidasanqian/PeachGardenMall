@@ -44,8 +44,7 @@ public interface GoodsClient {
     @GET("Goods/getPromOrder")
     Call<JsonObject> getPromotion();
 
-    // TODO: 17/5/10 评论api
-    @GET("")
-    Call<JsonObject> getCommentsByGoodsId(@QueryMap Map<String, Integer> goodsId);
+    @GET("Goods/getCommentByGoodsId")
+    Call<JsonObject> getCommentsByGoodsId(@QueryMap Map<String, Integer> params);
 
 }

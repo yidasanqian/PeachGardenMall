@@ -64,7 +64,7 @@ public class Cart implements Serializable {
     private String barCode;
     private int selected;
     @SerializedName("add_time")
-    private int addTime;
+    private String addTime;
     @SerializedName("prom_type")
     private int promType;
     @SerializedName("prom_id")
@@ -199,11 +199,11 @@ public class Cart implements Serializable {
         this.selected = selected;
     }
 
-    public int getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(int addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

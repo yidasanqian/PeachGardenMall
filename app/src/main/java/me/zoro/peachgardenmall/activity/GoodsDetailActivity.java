@@ -335,9 +335,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             case R.id.edit_promotion:
                 showPromotionPopup();
                 break;
-            // TODO: 17/4/25 查看评论
             case R.id.edit_comment:
                 Intent intent = new Intent(this, CommentActivity.class);
+                intent.putExtra(HomeFragment.GOODS_ID_EXTRA, mGoodsId);
                 startActivity(intent);
                 break;
             // 显示客服信息

@@ -79,4 +79,31 @@ public class OrderRemoteDatasource implements OrderDatasource {
             }
         });
     }
+
+    @Override
+    public void getOrderDetail(Map<String, Object> reqParams, @NonNull final GetOrderCallback callback) {
+        Call<JsonObject> call = mOrderClient.getOrder(reqParams);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null) {
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
+                } else {
+                    JsonObject resultJson = bodyJson.get(Const.RESULT).getAsJsonObject();
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    Order order = gson.fromJson(resultJson, Order.class);
+                    callback.onOrderLoaded(order);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 获取订单详情时服务器异常", t);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
+            }
+        });
+    }
 }

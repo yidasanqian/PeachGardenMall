@@ -117,7 +117,7 @@ public class OrderTabFragment extends Fragment {
                         recyclerView.getAdapter().getItemCount() - 1 && !mIsLoadingMore && mUserInfo != null && dy > 0) {
                     mIsLoadingMore = true;
                     mPageNum++;
-                    new FetchOrdersTask().execute();
+                    new FetchOrdersTask().execute(mUserInfo.getUserId());
                 }
             }
         });
@@ -125,11 +125,8 @@ public class OrderTabFragment extends Fragment {
         Log.d(TAG, "onCreateView: mOrderType ==> " + mOrderType);
 
         mUserInfo = CacheManager.getUserInfoFromCache(getContext());
-        if (mUserInfo != null) {
-            new FetchOrdersTask().execute(mUserInfo.getUserId());
-        } else {
+        new FetchOrdersTask().execute(mUserInfo.getUserId());
 
-        }
         return root;
     }
 

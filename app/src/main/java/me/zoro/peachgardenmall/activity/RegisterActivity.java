@@ -3,6 +3,7 @@ package me.zoro.peachgardenmall.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -87,27 +88,54 @@ public class RegisterActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn_fetch_captcha:
                 // 获取验证码
-                String phone = mEtTel.getText().toString();
-                if (TextUtils.isEmpty(phone)) {
-                    mEtTel.setError(getString(R.string.empty_phone_msg));
-                    return;
-                }
-                mUserRepository.fetchCaptcha(phone, new UserDatasource.GetCaptchaCallback() {
-                    @Override
-                    public void onFetchSuccess(String msg) {
-                        showMessage(msg);
-                    }
-
-                    @Override
-                    public void onFetchFailure(String msg) {
-                        showMessage(msg);
-                    }
-                });
+                fetchCaptcha();
                 break;
             case R.id.btn_register:
                 register();
                 break;
         }
+    }
+
+    private void fetchCaptcha() {
+        String phone = mEtTel.getText().toString();
+        if (TextUtils.isEmpty(phone)) {
+            mEtTel.setError(getString(R.string.empty_phone_msg));
+            return;
+        }
+        mUserRepository.fetchCaptcha(phone, new UserDatasource.GetCaptchaCallback() {
+            @Override
+            public void onFetchSuccess(String msg) {
+                showMessage(msg);
+                final int[] countDown = {60};
+                final Handler handler = new Handler();
+                if (!isFinishing()) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            countDown[0]--;
+                            if (countDown[0] > 0) {
+                                if (mBtnFetchCaptcha != null) {
+                                    mBtnFetchCaptcha.setEnabled(false);
+                                    mBtnFetchCaptcha.setText("倒计时（".concat(String.valueOf(countDown[0])).concat("s)"));
+                                }
+                                handler.postDelayed(this, 1000);
+                            } else {
+                                if (mBtnFetchCaptcha != null) {
+                                    mBtnFetchCaptcha.setEnabled(true);
+                                    mBtnFetchCaptcha.setText(R.string.fetch_captcha);
+                                }
+                                handler.removeCallbacks(this);
+                            }
+                        }
+                    }, 1000);
+                }
+            }
+
+            @Override
+            public void onFetchFailure(String msg) {
+                showMessage(msg);
+            }
+        });
     }
 
     private void register() {

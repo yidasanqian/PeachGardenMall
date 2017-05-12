@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,12 +13,14 @@
             android:layout_width="@dimen/avatar_width"
             android:layout_height="@dimen/avatar_height"
             android:layout_margin="@dimen/layout_padding"
+            android:src="@drawable/ic_gaoyuanyuan"
             />
 
         <TextView
             android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="gaoyunyuan"
             android:layout_toRightOf="@id/iv_avatar"
             android:layout_centerInParent="true"
             style="@style/TextAppearance.AppCompat.Subhead"
@@ -31,7 +33,7 @@
             android:src="@drawable/ic_vip"
             android:layout_toRightOf="@id/tv_nickname"
             android:layout_centerInParent="true"
-            android:visibility="invisible"
+            android:visibility="gone"
             />
 
         <TextView
@@ -42,7 +44,7 @@
             android:layout_centerInParent="true"
             android:paddingLeft="@dimen/layout_padding"
             android:paddingRight="@dimen/layout_padding"
-            style="@style/TextAppearance.AppCompat.Medium"
+            style="@style/TextAppearance.AppCompat.Small"
             />
     </RelativeLayout>
 

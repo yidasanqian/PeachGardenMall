@@ -48,4 +48,19 @@ public class OrderRepository implements OrderDatasource {
             }
         });
     }
+
+    @Override
+    public void getOrderDetail(Map<String, Object> reqParams, @NonNull final GetOrderCallback callback) {
+        mRemoteOrderDatasource.getOrderDetail(reqParams, new GetOrderCallback() {
+            @Override
+            public void onOrderLoaded(Order order) {
+                callback.onOrderLoaded(order);
+            }
+
+            @Override
+            public void onDataNotAvailable(String msg) {
+                callback.onDataNotAvailable(msg);
+            }
+        });
+    }
 }

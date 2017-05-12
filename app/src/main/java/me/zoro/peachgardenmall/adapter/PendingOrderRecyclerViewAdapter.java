@@ -1,21 +1,41 @@
 package me.zoro.peachgardenmall.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.activity.GoodsDetailActivity;
+import me.zoro.peachgardenmall.activity.MyOrderActivity;
+import me.zoro.peachgardenmall.activity.OrderDetailActivity;
+import me.zoro.peachgardenmall.datasource.GoodsDatasource;
+import me.zoro.peachgardenmall.datasource.GoodsRepository;
+import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.domain.Order;
+import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
+import me.zoro.peachgardenmall.fragment.HomeFragment;
+
+import static me.zoro.peachgardenmall.activity.PaymentSuccessActivity.ORDER_TRACE_NO_EXTRA;
 
 /**
  * 待付款，待发货，待收货，待评价的订单的adapter
@@ -60,7 +80,7 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_EMPTY) {
-            View viewItem = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1,
+            View viewItem = LayoutInflater.from(mContext).inflate(R.layout.empty_order_item,
                     parent, false);
             return new RecyclerEmptyViewHolder(viewItem);
         }
@@ -75,12 +95,31 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         // item 第一个位置position为0，之后递增
         if (holder instanceof RecyclerEmptyViewHolder) {
             RecyclerEmptyViewHolder viewHolder = (RecyclerEmptyViewHolder) holder;
-            viewHolder.mTvEmptyHint.setText(R.string.empty_data_hint);
         } else {
             RecyclerItemViewHolder viewHolder = (RecyclerItemViewHolder) holder;
 
             Order order = getItem(position);
+            List<Order.GoodsInfo> goodsInfoList = order.getGoodsInfo();
+            int size = goodsInfoList.size();
 
+            Order.GoodsInfo goodsInfo = goodsInfoList.get(0);
+            Picasso.with(mContext)
+                    .load(goodsInfo.getGoodsImsg())
+                    .fit()
+                    .into(viewHolder.mIvGoodsImg);
+            viewHolder.mTvGoodsName.setText(goodsInfo.getGoodsName());
+            viewHolder.mTvGoodsSpec.setText(goodsInfo.getSpecKeyName());
+            int orderType = order.getOrderType();
+            viewHolder.mBtnOrderAction.setTag(order.getOutTraceNo());
+            if (orderType == MyOrderActivity.PENDING_PAYMENT) {
+                viewHolder.mBtnOrderAction.setText(R.string.pending_payment);
+            } else if (orderType == MyOrderActivity.PENDING_DELIVERY) {
+                viewHolder.mBtnOrderAction.setText(R.string.pending_delivery);
+            } else if (orderType == MyOrderActivity.PENDING_RECEIVING) {
+                viewHolder.mBtnOrderAction.setText(R.string.pending_receiving);
+            } else if (orderType == MyOrderActivity.PENDING_EVALUATE) {
+                viewHolder.mBtnOrderAction.setText(R.string.pending_evaluate);
+            }
         }
 
     }
@@ -111,13 +150,21 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         @BindView(R.id.tv_goods_spec)
         TextView mTvGoodsSpec;
 
+        private Context mContext;
+
         @OnClick(R.id.btn_order_action)
         public void onViewClicked() {
+            String outTraceNo = (String) mBtnOrderAction.getTag();
+            Intent intent = new Intent(mContext, OrderDetailActivity.class);
+            intent.putExtra(ORDER_TRACE_NO_EXTRA, outTraceNo);
+            mContext.startActivity(intent);
+
         }
 
         public RecyclerItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            mContext = itemView.getContext();
         }
 
         public static RecyclerView.ViewHolder newInstance(View viewItem) {
@@ -126,12 +173,98 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     }
 
-    private class RecyclerEmptyViewHolder extends RecyclerView.ViewHolder {
-        TextView mTvEmptyHint;
+    static class RecyclerEmptyViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+        @BindView(R.id.grid_view)
+        GridView mGridView;
+        private GoodsDatasource mGoodsRepository;
+        private List<Goods> mGoodses;
+        /**
+         * 默认获取第一页
+         */
+        private int mPageNum = 1;
+        /**
+         * 默认获取10条
+         */
+        private int mPageSize = 10;
+        /**
+         * 是否正在加载更多，true，表示正在加载，false，则不是
+         */
+        private boolean mIsLoadingMore;
+        private GoodsGridAdapter mGridAdapter;
 
         public RecyclerEmptyViewHolder(View viewItem) {
             super(viewItem);
-            mTvEmptyHint = (TextView) viewItem.findViewById(android.R.id.text1);
+            ButterKnife.bind(this, viewItem);
+
+            mGoodsRepository = GoodsRepository.getInstance(GoodsRemoteDatasource.getInstance(
+                    viewItem.getContext().getApplicationContext()
+            ));
+
+            mGoodses = new ArrayList<>();
+
+            mGridAdapter = new GoodsGridAdapter(viewItem.getContext(), mGoodses);
+            mGridView.setAdapter(mGridAdapter);
+            mGridView.setOnItemClickListener(this);
+            mGridView.setOnScrollListener(this);
+            new FetchGoodsesTask().execute();
+
+
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Goods goods = mGoodses.get(position);
+            Intent intent = new Intent(view.getContext(), GoodsDetailActivity.class);
+            intent.putExtra(HomeFragment.GOODS_ID_EXTRA, goods.getGoodsId());
+            view.getContext().startActivity(intent);
+        }
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() <= mPageSize) {
+                mIsLoadingMore = false;
+                mPageNum = 1;
+            }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            // 上拉加载
+            if (view.getLastVisiblePosition() == totalItemCount - 1 && visibleItemCount > 0 && !mIsLoadingMore) {
+                mIsLoadingMore = true;
+                mPageNum++;
+                new FetchGoodsesTask().execute();
+            }
+        }
+
+        private class FetchGoodsesTask extends AsyncTask<Void, Void, Void> {
+            @Override
+            protected Void doInBackground(Void... params) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("pn", mPageNum);
+                map.put("ps", mPageSize);
+                mGoodsRepository.getGoodses(map, new GoodsDatasource.GetGoodsesCallback() {
+                    @Override
+                    public void onGoodsesLoaded(ArrayList<Goods> goodses) {
+                        if (goodses.size() > 0) {
+                            if (mPageNum > 1) {
+                                mGoodses.addAll(goodses);
+                                mGridAdapter.appendData(goodses);
+                            } else {
+                                mGoodses = goodses;
+                                mGridAdapter.replaceData(goodses);
+                            }
+                            mIsLoadingMore = false;
+                        }
+                    }
+
+                    @Override
+                    public void onDataNotAvailable(String errorMsg) {
+                        mIsLoadingMore = false;
+                    }
+                });
+                return null;
+            }
         }
     }
 }

@@ -111,6 +111,8 @@ public class CreateOrderActivity extends AppCompatActivity {
      * 地址id
      */
     private int mAddressId;
+    private Address mAddress;
+
     /**
      * 运费
      */
@@ -241,12 +243,13 @@ public class CreateOrderActivity extends AppCompatActivity {
                 intent = new Intent(this, CouponActivity.class);
                 startActivity(intent);
                 break;
-            // TODO: 17/5/1 付款
+            // 付款
             case R.id.tv_settlement:
                 if (mUserInfo != null && !mProgressBarContainer.isShown()) {
                     intent = new Intent(this, PayActivity.class);
                     Order order = new Order();
                     order.setUserId(mUserInfo.getUserId());
+                    order.setAddressObj(mAddress);
                     order.setAddressId(mAddressId);
                     order.setFreight(mFreight);
                     order.setPromotionMoney(mExpression);
@@ -256,7 +259,7 @@ public class CreateOrderActivity extends AppCompatActivity {
                     List<Integer> promotionIds = new ArrayList<>();
                     promotionIds.add(mSelectedPromotionId);
                     order.setPromotionIds(promotionIds);
-                    order.setGoodsInfos(mRecyclerViewAdapter.getGoodsInfoses());
+                    order.setGoodsInfo(mRecyclerViewAdapter.getGoodsInfoses());
                     order.setFactPayMoney(mFactPayMoney);
                     order.setPayType(1);
                     intent.putExtra(ORDER_EXTRA, order);
@@ -274,8 +277,8 @@ public class CreateOrderActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == UPDATE_ADDRESS_REQUEST && resultCode == RESULT_OK) {
             Address address = (Address) data.getSerializableExtra(DeliveryAddressActivity.DEFAULT_ADDRESS_EXTRA);
-            mAddressId = address.getId();
-            new FetchAddressByIdTask().execute(address.getId());
+            updateAddressUI(address);
+            // new FetchAddressByIdTask().execute(address.getId());
         }
     }
 
@@ -319,6 +322,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     }
 
     private void updateAddressUI(Address address) {
+        mAddress = address;
         mTvName.setText(address.getConsignee());
         mTvPhone.setText(address.getMobile());
         mTvDetailAddress.setText(address.getAddress());

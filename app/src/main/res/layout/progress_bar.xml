@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:padding="8dp"
-        android:text="提示信息"
+        android:text="@string/loading"
         android:textColor="@android:color/primary_text_dark"
         />
 </LinearLayout>

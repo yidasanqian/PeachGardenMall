@@ -80,8 +80,10 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             Comment comment = getItem(position);
             Picasso.with(mContext)
                     .load(comment.getHeadPic())
+                    .fit()
                     .into(viewHolder.mIvAvatar);
             viewHolder.mTvNickname.setText(comment.getUsername());
+            viewHolder.mTvTime.setText(comment.getAddTime());
             viewHolder.mTvCommentContent.setText(comment.getContent());
             // TODO: 17/5/10 评论者购买商品的规格
         }
@@ -111,6 +113,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         TextView mTvNickname;
         @BindView(R.id.tv_comment_content)
         TextView mTvCommentContent;
+        @BindView(R.id.tv_time)
+        TextView mTvTime;
         @BindView(R.id.tv_goods_spec)
         TextView mTvGoodsSpec;
 
