@@ -59,14 +59,14 @@ public class BannerRemoteDatasource implements BannerDatasource {
                         callback.onDataNotAvoidable(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onDataNotAvoidable(Const.SERVER_AVALIABLE);
+                    callback.onDataNotAvoidable(Const.SERVER_UNAVAILABLE);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 获取广告异常", t);
-                callback.onDataNotAvoidable(Const.SERVER_AVALIABLE);
+                callback.onDataNotAvoidable(Const.SERVER_UNAVAILABLE);
             }
         });
     }

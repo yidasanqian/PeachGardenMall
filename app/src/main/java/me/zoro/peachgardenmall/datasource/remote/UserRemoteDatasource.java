@@ -54,18 +54,13 @@ public class UserRemoteDatasource implements UserDatasource {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
-                if (bodyJson != null) {
-
-                    Log.d(TAG, "onResponse: 获取校验码 bodyJson <== " + bodyJson);
-                    int code = bodyJson.get("code").getAsInt();
-                    if (code == 0) {
-                        String captcha = bodyJson.get("result").getAsString();
-                        callback.onFetchSuccess(captcha);
-                    } else {
-                        callback.onFetchFailure(bodyJson.get("message").getAsString());
-                    }
+                if (bodyJson == null) {
+                    callback.onFetchFailure(Const.SERVER_UNAVAILABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onFetchFailure(bodyJson.get(Const.MESSAGE).getAsString());
                 } else {
-                    callback.onFetchFailure("服务器异常！");
+                    callback.onFetchSuccess(bodyJson.get(Const.MESSAGE).getAsString());
+
                 }
             }
 
@@ -98,7 +93,7 @@ public class UserRemoteDatasource implements UserDatasource {
                         callback.onRegisterFailure(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onRegisterFailure(Const.SERVER_AVALIABLE);
+                    callback.onRegisterFailure(Const.SERVER_UNAVAILABLE);
                 }
 
             }
@@ -131,14 +126,14 @@ public class UserRemoteDatasource implements UserDatasource {
                         callback.onLoginFailure(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onLoginFailure(Const.SERVER_AVALIABLE);
+                    callback.onLoginFailure(Const.SERVER_UNAVAILABLE);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 登陆异常 t <== ", t);
-                callback.onLoginFailure(Const.SERVER_AVALIABLE);
+                callback.onLoginFailure(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -199,7 +194,7 @@ public class UserRemoteDatasource implements UserDatasource {
                         callback.onUserInfoReviseFailure((bodyJson.get(Const.MESSAGE).getAsString()));
                     }
                 } else {
-                    callback.onUserInfoReviseFailure(Const.SERVER_AVALIABLE);
+                    callback.onUserInfoReviseFailure(Const.SERVER_UNAVAILABLE);
 
                 }
             }
@@ -254,7 +249,7 @@ public class UserRemoteDatasource implements UserDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 忘记密码异常 t <== ", t);
-                callback.onForgetPasswordFailure(Const.SERVER_AVALIABLE);
+                callback.onForgetPasswordFailure(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -274,7 +269,7 @@ public class UserRemoteDatasource implements UserDatasource {
                         callback.onChangePasswordFailure(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onChangePasswordFailure(Const.SERVER_AVALIABLE);
+                    callback.onChangePasswordFailure(Const.SERVER_UNAVAILABLE);
                 }
 
             }
@@ -282,7 +277,7 @@ public class UserRemoteDatasource implements UserDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 更改密码异常 t <== ", t);
-                callback.onChangePasswordFailure(Const.SERVER_AVALIABLE);
+                callback.onChangePasswordFailure(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -302,7 +297,7 @@ public class UserRemoteDatasource implements UserDatasource {
                         callback.onChangePhoneFailure(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onChangePhoneFailure(Const.SERVER_AVALIABLE);
+                    callback.onChangePhoneFailure(Const.SERVER_UNAVAILABLE);
                 }
 
             }
@@ -310,7 +305,7 @@ public class UserRemoteDatasource implements UserDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 更改手机号异常 t <== ", t);
-                callback.onChangePhoneFailure(Const.SERVER_AVALIABLE);
+                callback.onChangePhoneFailure(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -330,14 +325,14 @@ public class UserRemoteDatasource implements UserDatasource {
                         callback.onChangeIdCardFailure(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onChangeIdCardFailure(Const.SERVER_AVALIABLE);
+                    callback.onChangeIdCardFailure(Const.SERVER_UNAVAILABLE);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 更改身份证异常 t <== ", t);
-                callback.onChangeIdCardFailure(Const.SERVER_AVALIABLE);
+                callback.onChangeIdCardFailure(Const.SERVER_UNAVAILABLE);
 
             }
         });
@@ -361,14 +356,14 @@ public class UserRemoteDatasource implements UserDatasource {
                         callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 获取用户信息异常 t <== ", t);
-                callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
             }
         });
     }

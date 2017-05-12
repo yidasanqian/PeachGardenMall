@@ -34,14 +34,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.EntranceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.WelcomeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme">
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            >
 
+        </activity>
         <!-- webview 独立进程可以降低由于Webview导致的OOM -->
         <activity
             android:name=".activity.AdActivity"
@@ -221,6 +238,12 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
             android:theme="@style/FullscreenTheme">
+        </activity>
+        <activity
+            android:name=".activity.PublishCommentActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
     </application>
 

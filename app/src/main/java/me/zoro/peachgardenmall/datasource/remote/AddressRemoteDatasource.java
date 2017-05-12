@@ -54,18 +54,20 @@ public class AddressRemoteDatasource implements AddressDatasource {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson == null) {
-                    callback.onSavedFailure(Const.SERVER_AVALIABLE);
+                    callback.onSavedFailure(Const.SERVER_UNAVAILABLE);
                 } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
                     callback.onSavedFailure(bodyJson.get(Const.MESSAGE).getAsString());
                 } else {
-                    callback.onSavedSuccess();
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    Address address = gson.fromJson(bodyJson.get(Const.RESULT), Address.class);
+                    callback.onSavedSuccess(address);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 保存地址异常", t);
-                callback.onSavedFailure(Const.SERVER_AVALIABLE);
+                callback.onSavedFailure(Const.SERVER_UNAVAILABLE);
             }
         });
     }

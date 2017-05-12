@@ -39,7 +39,7 @@ public class ImageShowerActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.VISIBLE);
 
         if (getIntent() != null) {
-            String imageUrl = getIntent().getStringExtra(Const.IMAGE_URL);
+            String imageUrl = getIntent().getStringExtra(Const.IMAGE_URL_EXTRA);
 
             if (!TextUtils.isEmpty(imageUrl)) {
 

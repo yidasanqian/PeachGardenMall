@@ -107,4 +107,9 @@ public class CacheManager {
 
         return userInfo;
     }
+
+    public static void putUserInfoToCache(Context context, UserInfo userInfo) {
+        getInstance().put(Const.USER_INFO_CACHE_KEY, userInfo);
+        PreferencesUtil.persistentUserInfo(context, userInfo);
+    }
 }

@@ -296,9 +296,9 @@ public class Cart implements Serializable {
         private String expression;
         private String description;
         @SerializedName("start_time")
-        private int startTime;
+        private String startTime;
         @SerializedName("end_time")
-        private int endTime;
+        private String endTime;
         @SerializedName("is_close")
         private int isClose;
         private Object group;
@@ -352,19 +352,19 @@ public class Cart implements Serializable {
             this.description = description;
         }
 
-        public int getStartTime() {
+        public String getStartTime() {
             return startTime;
         }
 
-        public void setStartTime(int startTime) {
+        public void setStartTime(String startTime) {
             this.startTime = startTime;
         }
 
-        public int getEndTime() {
+        public String getEndTime() {
             return endTime;
         }
 
-        public void setEndTime(int endTime) {
+        public void setEndTime(String endTime) {
             this.endTime = endTime;
         }
 

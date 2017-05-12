@@ -143,7 +143,7 @@ public class MyFragment extends Fragment {
             switch (view.getId()) {
                 case R.id.user_avatar:
                     intent = new Intent(getActivity(), ImageShowerActivity.class);
-                    intent.putExtra(Const.IMAGE_URL, mUserInfo.getHeadPic());
+                    intent.putExtra(Const.IMAGE_URL_EXTRA, mUserInfo.getHeadPic());
                     startActivity(intent);
                     break;
                 case R.id.edit_user_info_tv:
@@ -270,7 +270,7 @@ public class MyFragment extends Fragment {
                 @Override
                 public void onDataNotAvailable(String errorMsg) {
                     Log.w(TAG, "onDataNotAvailable: " + errorMsg);
-                    if (Const.SERVER_AVALIABLE.equals(errorMsg)) {
+                    if (Const.SERVER_UNAVAILABLE.equals(errorMsg)) {
                         showMessage(errorMsg);
                     } else {
                         updateUserInfo(null);

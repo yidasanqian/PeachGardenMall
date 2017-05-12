@@ -27,7 +27,7 @@ public interface AddressDatasource {
         void onDataNotAvoidable();
     }
     interface AddCallback {
-        void onSavedSuccess();
+        void onSavedSuccess(Address address);
 
         void onSavedFailure(String msg);
     }

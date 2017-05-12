@@ -62,6 +62,7 @@ import me.zoro.peachgardenmall.datasource.UserDatasource;
 import me.zoro.peachgardenmall.datasource.UserRepository;
 import me.zoro.peachgardenmall.datasource.domain.Comment;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
+import me.zoro.peachgardenmall.datasource.domain.Promotion;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 import me.zoro.peachgardenmall.datasource.remote.ShoppingCartRemoteDatasource;
@@ -252,6 +253,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mGoodsId = getIntent().getIntExtra(HomeFragment.GOODS_ID_EXTRA, -1);
         // 显示加载信息
         setLoadingIndicator(true);
+        // 获取商品详情
         new FetchGoodsDetailTask().execute();
 
         /**
@@ -282,7 +284,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     }
 
     /**
-     * 获取最新用户信息
+     * 从缓存获取用户信息
      */
     private void fetchUserInfo() {
         if (mUserInfo == null) {
@@ -325,39 +327,45 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            // 选择规格
             case R.id.edit_select_spec:
                 showSpecPopupWindow();
                 break;
-            // TODO: 17/4/25 选择促销
+            // 查看促销活动信息
             case R.id.edit_promotion:
                 showPromotionPopup();
                 break;
             // TODO: 17/4/25 查看评论
             case R.id.edit_comment:
+                Intent intent = new Intent(this, CommentActivity.class);
+                startActivity(intent);
                 break;
+            // 显示客服信息
             case R.id.iv_service:
                 showServiceInfo();
                 break;
+            // 查看购物车
             case R.id.iv_shopping_cart:
                 if (mUserInfo != null) {
-                    Intent intent = new Intent(this, MyShoppingCartActivity.class);
+                    intent = new Intent(this, MyShoppingCartActivity.class);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 break;
+            // 查看我的收藏
             case R.id.iv_collection:
                 if (mUserInfo != null) {
                     new CollectionGoodsTask().execute();
                 } else {
-                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 break;
-            // TODO: 17/4/25 购买，即创建订单
+            // 购买商品，填写订单
             case R.id.tv_purchase:
                 if (mUserInfo != null) {
                     // 如果用户未选择规格，并且ppw未显示，则显示选择规格窗口,否则添加到购物车
@@ -365,7 +373,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                         showSpecPopupWindow();
                     } else {
                         mGoodsCount = mTvCount.getText().toString();
-                        Intent intent = new Intent(this, CreateOrderActivity.class);
+                        intent = new Intent(this, CreateOrderActivity.class);
                         intent.putExtra(GOODS_EXTRA, mGoods);
                         intent.putExtra(GOODS_SPEC_KEY_EXTRA, mKey);
                         intent.putExtra(GOODS_COUNT_EXTRA, mGoodsCount);
@@ -374,12 +382,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     }
 
                 } else {
-                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
 
                 break;
+            // 收藏商品到购物车
             case R.id.tv_add_to_shopping_cart:
                 if (mUserInfo != null) {
                     // 如果用户未选择规格，并且ppw未显示则显示选择规格窗口,否则添加到购物车
@@ -389,12 +398,12 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                         new AddGoodsToShoppingCartTask().execute();
                     }
                 } else {
-                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 break;
-            // TODO: 17/4/27 数量改变时，规格价格UI待同步
+            // TODO: 17/4/27 商品数量改变时，规格价格UI待同步
             case R.id.iv_subtract:
                 int count = Integer.parseInt(mTvCount.getText().toString());
                 count--;
@@ -429,14 +438,18 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         View contentView = LayoutInflater.from(this).inflate(R.layout.popup_goods_promotion, null);
         TextView tvPromotionCount = (TextView) contentView.findViewById(R.id.tv_promotion_count);
         ListView listView = (ListView) contentView.findViewById(R.id.list_view);
-        Goods.PromEntity promEntiry = mGoods.getProm();
-        tvPromotionCount.setText(String.valueOf(1));
+        List<Promotion> promEntiryList = mGoods.getProm();
+        int size = promEntiryList.size();
+        tvPromotionCount.setText(String.valueOf(size));
         List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("count", 1);
-        map.put("img", promEntiry.getPromImg());
-        map.put("desc", promEntiry.getDescription());
-        data.add(map);
+        for (int i = 0; i < size; i++) {
+            Promotion promEntity = promEntiryList.get(i);
+            Map<String, Object> map = new HashMap<>();
+            map.put("count", 1);
+            map.put("img", null);
+            map.put("desc", promEntity.getName());
+            data.add(map);
+        }
         SimpleAdapter simpleAdapter = new SimpleAdapter(this, data, R.layout.popup_goods_promotion_item,
                 new String[]{"count", "img", "desc"},
                 new int[]{R.id.tv_promotion_count, R.id.iv_promotion_img, R.id.tv_promotion});
@@ -702,10 +715,12 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
     }
 
     private void invalidateUI(Goods goods) {
-        // 获取用户是否收藏过该商品请求
-        new FetchIsStarTask().execute();
-
         mGoods = goods;
+        // 获取用户是否收藏过该商品请求
+        if (mUserInfo != null) {
+            new FetchIsStarTask().execute();
+        }
+
         List<String> imagesUrl = new ArrayList<>();
         List<Goods.ImageDataEntity> imageDataEntityList = goods.getImageData();
         for (int i = 0; i < imageDataEntityList.size(); i++) {
@@ -716,24 +731,25 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mTvGoodsName.setText(goods.getGoodsName());
         mTvGoodsRemark.setText(goods.getGoodsRemark());
         mTvPrice.setText(goods.getPrice());
-        Goods.PromEntity promEntity = mGoods.getProm();
-        if (promEntity != null) {
-            mTvPromotion.setText(promEntity.getDescription());
+        List<Promotion> promEntityList = mGoods.getProm();
+        int size = promEntityList.size();
+        if (promEntityList != null && size > 0) {
+            mTvPromotionCount.setText(String.valueOf(size));
+            mTvPromotion.setText(promEntityList.get(0).getName());
         } else {
             mEditPromotion.setVisibility(View.GONE);
         }
+        // 隐藏促销的图标
+        mIvPromotionImg.setVisibility(View.GONE);
 
-        if (promEntity.getPromImg() != null) {
-            Picasso.with(this)
-                    .load((String) promEntity.getPromImg())
-                    .fit()
-                    .into(mIvPromotionImg);
-        } else {
-            mIvPromotionImg.setVisibility(View.GONE);
-        }
-
+        // 评论数量
         int num = goods.getComment().getNumber();
         mTvCommentNumber.setText("（" + num + "）");
+        Comment comment = goods.getComment();
+        mComments.add(comment);
+        mCommentRecyclerViewAdapter.replaceData(mComments);
+
+        // 图文详情
         mWebView.loadUrl(goods.getDetailInfoUrl());
 
         setLoadingIndicator(false);
@@ -971,4 +987,5 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             return null;
         }
     }
+
 }

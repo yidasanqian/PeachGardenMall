@@ -23,7 +23,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.AddressRecyclerViewAdapter;
-import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.AddressDatasource;
 import me.zoro.peachgardenmall.datasource.AddressRepository;
 import me.zoro.peachgardenmall.datasource.domain.Address;
@@ -101,8 +100,7 @@ public class CreateAddressActivity extends AppCompatActivity implements Compound
 
     @OnClick(R.id.toolbar_right_txt)
     public void onViewClicked() {
-        // TODO: 17/4/10 保存地址
-        UserInfo userInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
+        UserInfo userInfo = CacheManager.getUserInfoFromCache(this);
         if (userInfo == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -157,7 +155,10 @@ public class CreateAddressActivity extends AppCompatActivity implements Compound
             Map<String, Object> map = params[0];
             mAddressRepository.save(map, new AddressDatasource.AddCallback() {
                 @Override
-                public void onSavedSuccess() {
+                public void onSavedSuccess(Address address) {
+                    UserInfo userInfo = CacheManager.getUserInfoFromCache(CreateAddressActivity.this);
+                    userInfo.setAddressId(address.getId());
+                    CacheManager.putUserInfoToCache(CreateAddressActivity.this, userInfo);
                     setResult(RESULT_OK);
                     finish();
                 }

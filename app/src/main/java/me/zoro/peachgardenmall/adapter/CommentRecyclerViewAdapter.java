@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -76,7 +78,12 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         } else {
             RecyclerItemViewHolder viewHolder = (RecyclerItemViewHolder) holder;
             Comment comment = getItem(position);
-
+            Picasso.with(mContext)
+                    .load(comment.getHeadPic())
+                    .into(viewHolder.mIvAvatar);
+            viewHolder.mTvNickname.setText(comment.getUsername());
+            viewHolder.mTvCommentContent.setText(comment.getContent());
+            // TODO: 17/5/10 评论者购买商品的规格
         }
     }
 
@@ -87,6 +94,11 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public int getItemCount() {
         return mComments.size() > 0 ? mComments.size() : 1;
+    }
+
+    public void appendData(List<Comment> comments) {
+        mComments.addAll(comments);
+        notifyDataSetChanged();
     }
 
 

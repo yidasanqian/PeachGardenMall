@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.datasource.domain.Cart;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
+import me.zoro.peachgardenmall.datasource.domain.Order;
 
 /**
  * Created by dengfengdecao on 17/4/7.
@@ -35,6 +37,10 @@ public class CreateOrderGoodsRecyclerViewAdapter extends RecyclerView.Adapter<Re
      * 商品合计金额
      */
     private double mTotalPrice;
+    /**
+     * 订单里的商品信息
+     */
+    private List<Order.GoodsInfos> mGoodsInfoses = new ArrayList<>();
 
     public OnItemClickListener mListener;
 
@@ -86,6 +92,10 @@ public class CreateOrderGoodsRecyclerViewAdapter extends RecyclerView.Adapter<Re
         return mTotalPrice;
     }
 
+    public List<Order.GoodsInfos> getGoodsInfoses() {
+        return mGoodsInfoses;
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RecyclerEmptyViewHolder) {
@@ -110,6 +120,11 @@ public class CreateOrderGoodsRecyclerViewAdapter extends RecyclerView.Adapter<Re
             viewHolder.mGoodsStrikeMoneyTv.setText(cart.getMarketPrice());
             viewHolder.mGoodsExtraInfoTv.setText(cart.getSpecKeyName());
 
+            Order.GoodsInfos goodsInfos = new Order.GoodsInfos();
+            goodsInfos.setGoodsId(cart.getGoodsId());
+            goodsInfos.setSpecKey(cart.getSpecKey());
+            goodsInfos.setNumber(cart.getGoodsNum());
+            mGoodsInfoses.add(goodsInfos);
         }
     }
 

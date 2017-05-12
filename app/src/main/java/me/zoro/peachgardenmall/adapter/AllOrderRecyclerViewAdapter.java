@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,9 +29,9 @@ public class AllOrderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final int TYPE_FOOTER = 2;
 
     private Context mContext;
-    private List<Order> mOrders;
+    private ArrayList<Order> mOrders;
 
-    public AllOrderRecyclerViewAdapter(Context context, List<Order> orders) {
+    public AllOrderRecyclerViewAdapter(Context context, ArrayList<Order> orders) {
         mContext = context;
         mOrders = orders;
 
@@ -51,7 +51,7 @@ public class AllOrderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         return mOrders.size() == 0;
     }
 
-    public void replaceData(List<Order> orders) {
+    public void replaceData(ArrayList<Order> orders) {
         mOrders = orders;
         // 调用以下方法更新后，会依次调用getItemViewType和onBindViewHolder方法
         notifyDataSetChanged();
@@ -93,6 +93,11 @@ public class AllOrderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public int getItemCount() {
         return mOrders.size() > 0 ? mOrders.size() : 1;
+    }
+
+    public void appendData(ArrayList<Order> orders) {
+        mOrders.addAll(orders);
+        notifyDataSetChanged();
     }
 
 

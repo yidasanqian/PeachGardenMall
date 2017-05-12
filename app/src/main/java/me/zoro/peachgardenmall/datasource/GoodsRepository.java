@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import me.zoro.peachgardenmall.datasource.domain.Comment;
+import me.zoro.peachgardenmall.datasource.domain.Freight;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.domain.GoodsCategory;
+import me.zoro.peachgardenmall.datasource.domain.Promotion;
 
 /**
  * Created by dengfengdecao on 17/4/17.
@@ -132,6 +135,51 @@ public class GoodsRepository implements GoodsDatasource {
             @Override
             public void onFaillure(String msg) {
                 callback.onFaillure(msg);
+            }
+        });
+    }
+
+    @Override
+    public void getFreight(@NonNull final GetFreightCallback callback) {
+        mRemoteDatasource.getFreight(new GetFreightCallback() {
+            @Override
+            public void onFreightLoaded(Freight freight) {
+                callback.onFreightLoaded(freight);
+            }
+
+            @Override
+            public void onDataNotAvailable(String msg) {
+                callback.onDataNotAvailable(msg);
+            }
+        });
+    }
+
+    @Override
+    public void getPromotion(@NonNull final GetPromotionsCallback callback) {
+        mRemoteDatasource.getPromotion(new GetPromotionsCallback() {
+            @Override
+            public void onPromotionsLoaded(ArrayList<Promotion> promotions) {
+                callback.onPromotionsLoaded(promotions);
+            }
+
+            @Override
+            public void onDataNotAvailable(String msg) {
+                callback.onDataNotAvailable(msg);
+            }
+        });
+    }
+
+    @Override
+    public void getCommentByGoodsId(Map<String, Integer> params, @NonNull final GetCommentsCallback callback) {
+        mRemoteDatasource.getCommentByGoodsId(params, new GetCommentsCallback() {
+            @Override
+            public void onCommentsLoaded(List<Comment> comments) {
+                callback.onCommentsLoaded(comments);
+            }
+
+            @Override
+            public void onDataNotAvailable(String msg) {
+                callback.onDataNotAvailable(msg);
             }
         });
     }

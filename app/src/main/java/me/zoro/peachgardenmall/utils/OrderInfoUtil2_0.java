@@ -75,7 +75,7 @@ public class OrderInfoUtil2_0 {
 
         keyValues.put("method", "alipay.trade.app.pay");
 
-        keyValues.put("sign_type", "RSA");
+        keyValues.put("sign_type", "RSA2");
 
         keyValues.put("timestamp", "2016-07-29 16:55:53");
 
@@ -104,6 +104,25 @@ public class OrderInfoUtil2_0 {
         String tailKey = keys.get(keys.size() - 1);
         String tailValue = map.get(tailKey);
         sb.append(buildKeyValue(tailKey, tailValue, true));
+
+        return sb.toString();
+    }
+
+    public static String buildOrderParam(Map<String, String> map, boolean isEncode) {
+        List<String> keys = new ArrayList<String>(map.keySet());
+        // key排序
+        Collections.sort(keys);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < keys.size() - 1; i++) {
+            String key = keys.get(i);
+            String value = map.get(key);
+            sb.append(buildKeyValue(key, value, isEncode));
+            sb.append("&");
+        }
+
+        String tailKey = keys.get(keys.size() - 1);
+        String tailValue = map.get(tailKey);
+        sb.append(buildKeyValue(tailKey, tailValue, isEncode));
 
         return sb.toString();
     }

@@ -23,8 +23,8 @@ import retrofit2.http.QueryMap;
 
 public interface UserClient {
 
-    @POST("sms/captcha/{recPhoneNum}")
-    Call<JsonObject> fetchCaptcha(@Path("recPhoneNum") String tel);
+    @GET("User/send_validate_code")
+    Call<JsonObject> fetchCaptcha(@Query("phone") String tel);
 
     @POST("User/register")
     Call<JsonObject> saveUser(@Body Map<String, Object> params);

@@ -52,10 +52,4 @@
         style="@style/TextAppearance.AppCompat.Subhead"
         />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/list_divider"
-        android:layout_below="@id/tv_promotion_count"
-        />
 </RelativeLayout>

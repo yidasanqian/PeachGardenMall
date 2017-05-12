@@ -79,10 +79,16 @@
     <string name="fetching_captcha">获取验证码</string>
     <string name="captcha_hint">请输入验证码</string>
     <string name="tel_hint">请输入手机号</string>
-    <string name="loading">加载中...</string>
+    <string name="loading">加载中&#8230;</string>
     <string name="success_modify_password_msg">修改密码成功</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="create_order_error">订单创建失败，请稍后重试！</string>
+    <string name="praise_evaluation">好评</string>
+    <string name="moderate_evaluation">中评</string>
+    <string name="bad_evaluation">差评</string>
+    <string name="anon_desc">你写的评价会以匿名的形式展现</string>
+    <string name="evaluation_hint">宝贝满足你的期待吗？说说它的优点和美中不足的地方吧</string>
 </resources>

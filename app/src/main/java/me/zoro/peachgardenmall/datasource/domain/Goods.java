@@ -156,34 +156,9 @@ public class Goods implements Serializable {
     private List<FilterSpecEntity> filterSpec;
     @SerializedName("spec_relation")
     private List<SpecRelationEntity> specRelation;
-    /**
-     * freight : 22.00
-     * free_freight : 0.00
-     * comment_data : {"comment_id":58,"goods_id":2,"email":"47924712411@qq.com","username":"nihao24","content":"cacacacasudhsak24","deliver_rank":5,"add_time":"2017-04-25 12:58:02","ip_address":"222.78.87.254","is_show":1,"parent_id":0,"user_id":1,"img":null,"order_id":918,"goods_rank":5,"service_rank":5,"nickname":null,"head_pic":"http://112.5.195.56:8098/Public/Static/images/img88.jpg","number":30}
-     * prom : {"id":2,"name":"活动名称","type":1,"expression":"11","description":"&lt;p&gt;满100减900&lt;/p&gt;","start_time":"2017-05-04","end_time":"2017-07-03","is_close":0,"group":null,"prom_img":null,"full_money":"110.00"}
-     */
 
-    /**
-     * 运费
-     */
-    private String freight;
-    /**
-     * 商品合计金额满足 {@link #freeFreight}则运费为0
-     */
-    @SerializedName("free_freight")
-    private String freeFreight;
-    /**
-     * is_free_shipping : false
-     * comment_data : {"comment_id":58,"goods_id":2,"email":"47924712411@qq.com","username":"nihao24","content":"cacacacasudhsak24","deliver_rank":5,"add_time":"2017-04-25 12:58:02","ip_address":"222.78.87.254","is_show":1,"parent_id":0,"user_id":1,"img":null,"order_id":918,"goods_rank":5,"service_rank":5,"nickname":null,"head_pic":"http://112.5.195.56:8098/Public/Static/images/img88.jpg","number":30}
-     * prom : {"id":2,"name":"活动名称","type":1,"expression":"11","description":"&lt;p&gt;满100减900&lt;/p&gt;","start_time":"2017-05-04","end_time":"2017-07-03","is_close":0,"group":null,"prom_img":null,"full_money":"110.00"}
-     */
-
-    /**
-     * true, 表示需要计算运费。false，表示不需要计算运费 {@link #freight}
-     */
-    @SerializedName("is_free_shipping")
-    private boolean isFreeShipping;
-    private PromEntity prom;
+    @SerializedName("prom_list")
+    private List<Promotion> prom;
 
 
     public int getCount() {
@@ -352,14 +327,6 @@ public class Goods implements Serializable {
 
     public void setIsOnSale(int isOnSale) {
         this.isOnSale = isOnSale;
-    }
-
-    public boolean getIsFreeShipping() {
-        return isFreeShipping;
-    }
-
-    public void setIsFreeShipping(boolean isFreeShipping) {
-        this.isFreeShipping = isFreeShipping;
     }
 
     public int getOnTime() {
@@ -547,35 +514,11 @@ public class Goods implements Serializable {
         this.specRelation = specRelation;
     }
 
-    public String getFreight() {
-        return freight;
-    }
-
-    public void setFreight(String freight) {
-        this.freight = freight;
-    }
-
-    public String getFreeFreight() {
-        return freeFreight;
-    }
-
-    public void setFreeFreight(String freeFreight) {
-        this.freeFreight = freeFreight;
-    }
-
-    public boolean isFreeShipping() {
-        return isFreeShipping;
-    }
-
-    public void setFreeShipping(boolean freeShipping) {
-        isFreeShipping = freeShipping;
-    }
-
-    public PromEntity getProm() {
+    public List<Promotion> getProm() {
         return prom;
     }
 
-    public void setProm(PromEntity prom) {
+    public void setProm(List<Promotion> prom) {
         this.prom = prom;
     }
 
@@ -763,131 +706,4 @@ public class Goods implements Serializable {
         }
     }
 
-    public static class PromEntity implements Serializable {
-
-        /**
-         * id : 2
-         * name : 活动名称
-         * type : 1
-         * expression : 11
-         * description : &lt;p&gt;满100减900&lt;/p&gt;
-         * start_time : 2017-05-04
-         * end_time : 2017-07-03
-         * is_close : 0
-         * group : null
-         * prom_img : null
-         * full_money : 110.00
-         */
-
-        private int id;
-        private String name;
-        private int type;
-        /**
-         * 优惠活动的金额
-         */
-        private String expression;
-        private String description;
-        @SerializedName("start_time")
-        private String startTime;
-        @SerializedName("end_time")
-        private String endTime;
-        @SerializedName("is_close")
-        private int isClose;
-        private Object group;
-        @SerializedName("prom_img")
-        private Object promImg;
-        /**
-         * 满减的金额
-         */
-        @SerializedName("full_money")
-        private String fullMoney;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public String getExpression() {
-            return expression;
-        }
-
-        public void setExpression(String expression) {
-            this.expression = expression;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public String getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(String startTime) {
-            this.startTime = startTime;
-        }
-
-        public String getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(String endTime) {
-            this.endTime = endTime;
-        }
-
-        public int getIsClose() {
-            return isClose;
-        }
-
-        public void setIsClose(int isClose) {
-            this.isClose = isClose;
-        }
-
-        public Object getGroup() {
-            return group;
-        }
-
-        public void setGroup(Object group) {
-            this.group = group;
-        }
-
-        public Object getPromImg() {
-            return promImg;
-        }
-
-        public void setPromImg(Object promImg) {
-            this.promImg = promImg;
-        }
-
-        public String getFullMoney() {
-            return fullMoney;
-        }
-
-        public void setFullMoney(String fullMoney) {
-            this.fullMoney = fullMoney;
-        }
-    }
 }

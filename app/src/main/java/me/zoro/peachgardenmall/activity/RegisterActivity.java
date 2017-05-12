@@ -86,7 +86,23 @@ public class RegisterActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_fetch_captcha:
-                // TODO: 17/4/11 获取验证码
+                // 获取验证码
+                String phone = mEtTel.getText().toString();
+                if (TextUtils.isEmpty(phone)) {
+                    mEtTel.setError(getString(R.string.empty_phone_msg));
+                    return;
+                }
+                mUserRepository.fetchCaptcha(phone, new UserDatasource.GetCaptchaCallback() {
+                    @Override
+                    public void onFetchSuccess(String msg) {
+                        showMessage(msg);
+                    }
+
+                    @Override
+                    public void onFetchFailure(String msg) {
+                        showMessage(msg);
+                    }
+                });
                 break;
             case R.id.btn_register:
                 register();

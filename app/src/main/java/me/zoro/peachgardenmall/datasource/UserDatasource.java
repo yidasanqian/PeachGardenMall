@@ -45,14 +45,9 @@ public interface UserDatasource {
     }
 
     interface GetCaptchaCallback {
-        /**
-         * 成功获取校验码
-         *
-         * @param captcha 返回的校验码
-         */
-        void onFetchSuccess(String captcha);
+        void onFetchSuccess(String msg);
 
-        void onFetchFailure(String errorMsg);
+        void onFetchFailure(String msg);
     }
 
     interface RegisterUserCallback {

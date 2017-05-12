@@ -47,10 +47,6 @@ public class ForgetActivity extends AppCompatActivity {
     LinearLayout mProgressBarContainer;
     private UserRepository mUserRepository;
 
-    /**
-     * 从服务器获取的校验码
-     */
-    private String mRemoteCaptcha;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,13 +69,13 @@ public class ForgetActivity extends AppCompatActivity {
                 }
                 mUserRepository.fetchCaptcha(phone, new UserDatasource.GetCaptchaCallback() {
                     @Override
-                    public void onFetchSuccess(String captcha) {
-                        mRemoteCaptcha = captcha;
+                    public void onFetchSuccess(String msg) {
+                        showMessage(msg);
                     }
 
                     @Override
-                    public void onFetchFailure(String errorMsg) {
-                        showMessage(errorMsg);
+                    public void onFetchFailure(String msg) {
+                        showMessage(msg);
                     }
                 });
                 break;

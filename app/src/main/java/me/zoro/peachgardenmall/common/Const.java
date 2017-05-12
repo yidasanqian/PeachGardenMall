@@ -26,17 +26,21 @@ public final class Const {
     public static final String PREF_USER_INFO = "pref_user_info";
     public static final String TOKEN_KEY = "token";
     public static final String USERINFO_KEY = "userinfo";
-
+    /**
+     * Config
+     */
+    public static final String PREF_CONFIG = "config";
 
     /**
      * Cache
      */
     public static final String USER_INFO_CACHE_KEY = "user";
 
+    /**
+     * Extra
+     */
+    public static final String IMAGE_URL_EXTRA = "image_url";
 
-    public static final String IMAGE_URL = "image_url";
+    public static final String SERVER_UNAVAILABLE = "服务器异常，请稍后重试";
 
-    public static final String SERVER_AVALIABLE = "服务器异常，请稍后重试";
-
-    public static final String CREATE_ORDER_TAG = "create_order";
 }

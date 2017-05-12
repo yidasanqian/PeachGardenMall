@@ -34,8 +34,8 @@ public class AddressRepository implements AddressDatasource {
     public void save(Map<String, Object> params, @NonNull final AddCallback callback) {
         mRemoteDatasource.save(params, new AddCallback() {
             @Override
-            public void onSavedSuccess() {
-                callback.onSavedSuccess();
+            public void onSavedSuccess(Address address) {
+                callback.onSavedSuccess(address);
             }
 
             @Override

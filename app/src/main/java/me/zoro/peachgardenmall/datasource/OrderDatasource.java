@@ -1,0 +1,32 @@
+package me.zoro.peachgardenmall.datasource;
+
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import me.zoro.peachgardenmall.datasource.domain.Order;
+
+/**
+ * Created by dengfengdecao on 17/5/10.
+ */
+
+public interface OrderDatasource {
+
+
+    void getSignedOrderInfo(Map<String, Object> reqParams, @NonNull GetSignedOrderInfoCallback callback);
+
+    void getOrders(Map<String, Integer> reqParams, @NonNull GetOrdersCallback callback);
+
+    interface GetOrdersCallback {
+        void onOrdersLoaded(ArrayList<Order> orders);
+
+        void onDataNotAvailable(String msg);
+    }
+
+    interface GetSignedOrderInfoCallback {
+        void onSignedOrderInfo(String signOrderInfo);
+
+        void onSignedFailure(String msg);
+    }
+}

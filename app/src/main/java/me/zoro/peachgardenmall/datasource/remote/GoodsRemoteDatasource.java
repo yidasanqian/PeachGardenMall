@@ -17,8 +17,11 @@ import me.zoro.peachgardenmall.api.GoodsClient;
 import me.zoro.peachgardenmall.api.ServiceGenerator;
 import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.GoodsDatasource;
+import me.zoro.peachgardenmall.datasource.domain.Comment;
+import me.zoro.peachgardenmall.datasource.domain.Freight;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.domain.GoodsCategory;
+import me.zoro.peachgardenmall.datasource.domain.Promotion;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,14 +72,14 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
                         callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 获取商品信息出现异常", t);
-                callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -105,14 +108,14 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
                         callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 获取商品类别出现异常", t);
-                callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -140,14 +143,14 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
                         callback.onSearchFailure(bodyJson.get(Const.MESSAGE).getAsString());
                     }
                 } else {
-                    callback.onSearchFailure(Const.SERVER_AVALIABLE);
+                    callback.onSearchFailure(Const.SERVER_UNAVAILABLE);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 搜索商品失败", t);
-                callback.onSearchFailure(Const.SERVER_AVALIABLE);
+                callback.onSearchFailure(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -160,7 +163,7 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson == null || bodyJson.get(Const.CODE).getAsInt() != 0) {
-                    callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
                 } else {
                     Gson gson = new GsonBuilder().setLenient().create();
                     Goods goods = gson.fromJson(bodyJson.get(Const.RESULT), Goods.class);
@@ -171,7 +174,7 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 获取商品详情异常", t);
-                callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -184,7 +187,7 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson == null) {
-                    callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
                 } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
                     callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
                 } else {
@@ -203,7 +206,7 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 获取收藏的商品信息出现异常", t);
-                callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -216,7 +219,7 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson == null) {
-                    callback.onStarFailure(Const.SERVER_AVALIABLE);
+                    callback.onStarFailure(Const.SERVER_UNAVAILABLE);
                 } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
                     callback.onStarFailure(bodyJson.get(Const.MESSAGE).getAsString());
                 } else {
@@ -227,7 +230,7 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 收藏商品信息出现异常", t);
-                callback.onStarFailure(Const.SERVER_AVALIABLE);
+                callback.onStarFailure(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -240,7 +243,7 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson == null) {
-                    callback.onFaillure(Const.SERVER_AVALIABLE);
+                    callback.onFaillure(Const.SERVER_UNAVAILABLE);
                 } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
                     callback.onFaillure(bodyJson.get(Const.MESSAGE).getAsString());
                 } else {
@@ -252,10 +255,99 @@ public class GoodsRemoteDatasource implements GoodsDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 获取用户是否收藏过该商品请求出现异常", t);
-                callback.onFaillure(Const.SERVER_AVALIABLE);
+                callback.onFaillure(Const.SERVER_UNAVAILABLE);
             }
         });
     }
 
 
+    @Override
+    public void getFreight(@NonNull final GetFreightCallback callback) {
+        Call<JsonObject> call = mGoodsClient.getFreight();
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null) {
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
+                } else {
+                    JsonObject resultJson = bodyJson.get(Const.RESULT).getAsJsonObject();
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    Freight freight = gson.fromJson(resultJson, Freight.class);
+                    callback.onFreightLoaded(freight);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 获取运费请求出现异常", t);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
+
+            }
+        });
+    }
+
+    @Override
+    public void getPromotion(@NonNull final GetPromotionsCallback callback) {
+        Call<JsonObject> call = mGoodsClient.getPromotion();
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null) {
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
+                } else {
+                    JsonArray array = bodyJson.get(Const.RESULT).getAsJsonArray();
+                    ArrayList<Promotion> promotions = new ArrayList<>();
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    for (int i = 0; i < array.size(); i++) {
+                        Promotion promotion = gson.fromJson(array.get(i), Promotion.class);
+                        promotions.add(promotion);
+                    }
+                    callback.onPromotionsLoaded(promotions);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 获取商品促销活动请求出现异常", t);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
+            }
+        });
+    }
+
+    @Override
+    public void getCommentByGoodsId(Map<String, Integer> params, @NonNull final GetCommentsCallback callback) {
+        Call<JsonObject> call = mGoodsClient.getCommentsByGoodsId(params);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null) {
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
+                } else {
+                    JsonArray array = bodyJson.get(Const.RESULT).getAsJsonArray();
+                    List<Comment> comments = new ArrayList<>();
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    for (int i = 0; i < array.size(); i++) {
+                        Comment comment = gson.fromJson(array.get(i), Comment.class);
+                        comments.add(comment);
+                    }
+                    callback.onCommentsLoaded(comments);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 获取商品评论请求出现异常", t);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
+            }
+        });
+    }
 }

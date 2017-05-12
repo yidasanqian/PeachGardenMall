@@ -27,10 +27,18 @@ import me.zoro.peachgardenmall.fragment.PendingOrderTabFragment;
 
 public class MyOrderActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    public static final String PENDING_PAYMENT = "待付款";
-    public static final String PENDING_DELIVERY = "待发货";
-    public static final String PENDING_RECEIVING = "待收货";
-    public static final String PENDING_EVALUATE = "待评价";
+    /**
+     * 订单类型:0所有订单 1待付款 2待发货 3待收货 4待评价
+     */
+    public static final int ALL_ORDER = 0;
+    public static final int PENDING_PAYMENT = 1;
+    public static final int PENDING_DELIVERY = 2;
+    public static final int PENDING_RECEIVING = 3;
+    public static final int PENDING_EVALUATE = 4;
+
+    public static final String ORDER_TYPE_KEY = "order_type";
+
+
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     @BindView(R.id.searchView)
@@ -59,7 +67,7 @@ public class MyOrderActivity extends AppCompatActivity implements SearchView.OnQ
         mSearchView.setOnQueryTextListener(this);
 
         List<Fragment> fragments = new ArrayList<Fragment>();
-        fragments.add(OrderTabFragment.newInstance());
+        fragments.add(OrderTabFragment.newInstance(ALL_ORDER));
         fragments.add(PendingOrderTabFragment.newInstance(PENDING_PAYMENT));
         fragments.add(PendingOrderTabFragment.newInstance(PENDING_DELIVERY));
         fragments.add(PendingOrderTabFragment.newInstance(PENDING_RECEIVING));

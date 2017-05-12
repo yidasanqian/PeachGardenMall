@@ -49,13 +49,13 @@ public class UserRepository implements UserDatasource {
     public void fetchCaptcha(String tel, @NonNull final GetCaptchaCallback callback) {
         mRemoteDatasource.fetchCaptcha(tel, new GetCaptchaCallback() {
             @Override
-            public void onFetchSuccess(String captcha) {
-                callback.onFetchSuccess(captcha);
+            public void onFetchSuccess(String msg) {
+                callback.onFetchSuccess(msg);
             }
 
             @Override
-            public void onFetchFailure(String errorMsg) {
-                callback.onFetchFailure(errorMsg);
+            public void onFetchFailure(String msg) {
+                callback.onFetchFailure(msg);
             }
         });
     }

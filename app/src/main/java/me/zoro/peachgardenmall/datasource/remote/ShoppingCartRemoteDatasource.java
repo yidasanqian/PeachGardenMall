@@ -53,7 +53,7 @@ public class ShoppingCartRemoteDatasource implements ShoppingCartDatasource {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson == null) {
-                    callback.onAddFailure(Const.SERVER_AVALIABLE);
+                    callback.onAddFailure(Const.SERVER_UNAVAILABLE);
                 } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
                     callback.onAddFailure(bodyJson.get(Const.MESSAGE).getAsString());
                 } else {
@@ -64,7 +64,7 @@ public class ShoppingCartRemoteDatasource implements ShoppingCartDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 添加商品到购物车请求出现异常", t);
-                callback.onAddFailure(Const.SERVER_AVALIABLE);
+                callback.onAddFailure(Const.SERVER_UNAVAILABLE);
 
             }
         });
@@ -78,7 +78,7 @@ public class ShoppingCartRemoteDatasource implements ShoppingCartDatasource {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson == null) {
-                    callback.onDeleteFailure(Const.SERVER_AVALIABLE);
+                    callback.onDeleteFailure(Const.SERVER_UNAVAILABLE);
                 } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
                     callback.onDeleteFailure(bodyJson.get(Const.MESSAGE).getAsString());
                 } else {
@@ -89,7 +89,7 @@ public class ShoppingCartRemoteDatasource implements ShoppingCartDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure: 从购物车删除商品请求出现异常", t);
-                callback.onDeleteFailure(Const.SERVER_AVALIABLE);
+                callback.onDeleteFailure(Const.SERVER_UNAVAILABLE);
             }
         });
     }
@@ -102,7 +102,7 @@ public class ShoppingCartRemoteDatasource implements ShoppingCartDatasource {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject bodyJson = response.body();
                 if (bodyJson == null) {
-                    callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                    callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
                 } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
                     callback.onDataNotAvailable(bodyJson.get(Const.MESSAGE).getAsString());
                 } else {
@@ -120,7 +120,7 @@ public class ShoppingCartRemoteDatasource implements ShoppingCartDatasource {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, "onFailure:获取我的购物车内的所有商品请求出现异常", t);
-                callback.onDataNotAvailable(Const.SERVER_AVALIABLE);
+                callback.onDataNotAvailable(Const.SERVER_UNAVAILABLE);
             }
         });
     }

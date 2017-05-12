@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import me.zoro.peachgardenmall.datasource.domain.Comment;
+import me.zoro.peachgardenmall.datasource.domain.Freight;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.domain.GoodsCategory;
+import me.zoro.peachgardenmall.datasource.domain.Promotion;
 
 /**
  * Created by dengfengdecao on 17/4/17.
@@ -29,6 +32,31 @@ public interface GoodsDatasource {
 
     void getIsStar(Map<String, Integer> params, @NonNull GetIsStarCallback callback);
 
+    void getFreight(@NonNull GetFreightCallback callback);
+
+    void getPromotion(@NonNull GetPromotionsCallback callback);
+
+    void getCommentByGoodsId(Map<String, Integer> params, @NonNull GetCommentsCallback callback);
+
+    interface GetCommentsCallback {
+        void onCommentsLoaded(List<Comment> comments);
+
+        void onDataNotAvailable(String msg);
+
+    }
+
+    interface GetPromotionsCallback {
+        void onPromotionsLoaded(ArrayList<Promotion> promotions);
+
+        void onDataNotAvailable(String msg);
+
+    }
+
+    interface GetFreightCallback {
+        void onFreightLoaded(Freight freight);
+
+        void onDataNotAvailable(String msg);
+    }
     interface GetIsStarCallback {
         void onSuccess(boolean isStar);
 

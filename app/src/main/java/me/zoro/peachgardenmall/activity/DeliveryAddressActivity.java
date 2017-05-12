@@ -23,14 +23,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.AddressRecyclerViewAdapter;
-import me.zoro.peachgardenmall.common.Const;
 import me.zoro.peachgardenmall.datasource.AddressDatasource;
 import me.zoro.peachgardenmall.datasource.AddressRepository;
 import me.zoro.peachgardenmall.datasource.domain.Address;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.AddressRemoteDatasource;
 import me.zoro.peachgardenmall.utils.CacheManager;
-import me.zoro.peachgardenmall.utils.PreferencesUtil;
 
 /**
  * Created by dengfengdecao on 17/4/22.
@@ -40,6 +38,7 @@ public class DeliveryAddressActivity extends AppCompatActivity {
 
     private static final String TAG = "DeliveryAddressActivity";
     public static final int CREATE_ADDRESS_REQUEST = 1;
+    public static final String DEFAULT_ADDRESS_EXTRA = "default_address";
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     @BindView(R.id.toolbar)
@@ -52,6 +51,7 @@ public class DeliveryAddressActivity extends AppCompatActivity {
     private AddressRepository mAddressRepository;
 
     private List<Address> mAddresses;
+    private Address mDefaultAddr;
     private AddressRecyclerViewAdapter mRecyclerViewAdapter;
 
     @Override
@@ -82,6 +82,13 @@ public class DeliveryAddressActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        if (mDefaultAddr != null) {
+            Intent data = new Intent();
+            data.putExtra(DEFAULT_ADDRESS_EXTRA, mDefaultAddr);
+            setResult(RESULT_OK, data);
+        } else {
+            setResult(RESULT_CANCELED);
+        }
         onBackPressed();
         return super.onSupportNavigateUp();
     }
@@ -103,18 +110,23 @@ public class DeliveryAddressActivity extends AppCompatActivity {
     private class FetchAddressesTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            UserInfo userInfo = (UserInfo) CacheManager.getInstance().get(Const.USER_INFO_CACHE_KEY);
-            if (userInfo == null) {
-                userInfo = PreferencesUtil.getUserInfoFromPref(DeliveryAddressActivity.this);
-            }
+            UserInfo userInfo = CacheManager.getUserInfoFromCache(DeliveryAddressActivity.this);
 
             Map<String, Object> map = new HashMap<>();
             map.put("userId", userInfo.getUserId());
             mAddressRepository.get(map, new AddressDatasource.GetCallback() {
                 @Override
                 public void onAddressesLoaded(List<Address> addresses) {
-                    if (addresses.size() > 0) {
+                    int size = addresses.size();
+                    if (size > 0) {
                         mRecyclerViewAdapter.replaceData(addresses);
+                    }
+
+                    for (int i = 0; i < size; i++) {
+                        Address address = addresses.get(i);
+                        if (address.isIsDefault()) {
+                            mDefaultAddr = address;
+                        }
                     }
                 }
 

@@ -37,7 +37,6 @@
                 android:layout_gravity="end|center"
                 android:text="请登录"
                 android:textColor="@color/textColorPrimary"
-                android:background="?android:selectableItemBackground"
                 android:visibility="visible"
                 style="@style/Widget.AppCompat.ActionButton"
                 />

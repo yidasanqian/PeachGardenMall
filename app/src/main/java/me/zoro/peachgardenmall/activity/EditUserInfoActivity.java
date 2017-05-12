@@ -284,7 +284,7 @@ public class EditUserInfoActivity extends AppCompatActivity {
                 @Override
                 public void onDataNotAvailable(String errorMsg) {
                     Log.w(TAG, "onDataNotAvailable: " + errorMsg);
-                    if (Const.SERVER_AVALIABLE.equals(errorMsg)) {
+                    if (Const.SERVER_UNAVAILABLE.equals(errorMsg)) {
                         showMessage(errorMsg);
                     }
                 }

@@ -48,14 +48,12 @@
         android:layout_below="@id/apptoolbar"
         />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/iv_divide"
-        >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/iv_divide"
+
             android:orientation="vertical"
             >
 
@@ -82,7 +80,7 @@
                     android:id="@+id/tv_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="157****2281"
+                    android:text="手机号"
                     android:layout_gravity="right"
                     android:paddingLeft="@dimen/layout_padding"
                     android:layout_toRightOf="@id/tv_name"
@@ -93,7 +91,7 @@
                     android:id="@+id/tv_detail_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="福建省龙岩市东肖北路1号"
+                    android:text="详细地址"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
                     android:paddingLeft="@dimen/layout_padding"
@@ -117,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_margin"
                 android:background="?android:attr/selectableItemBackground"
+                android:visibility="gone"
                 >
 
                 <TextView
@@ -146,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0张"
-                    style="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:drawableRight="@drawable/ic_right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/layout_margin"
@@ -187,17 +186,16 @@
                         android:layout_height="wrap_content"
                         android:text="¥"
                         android:layout_marginTop="@dimen/layout_margin"
-                        style="@style/Base.TextAppearance.AppCompat.Medium"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         />
 
                     <TextView
                         android:id="@+id/tv_goods_total"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="32.00"
                         android:layout_marginTop="@dimen/layout_margin"
                         android:layout_marginRight="@dimen/layout_margin"
-                        style="@style/Base.TextAppearance.AppCompat.Medium"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         />
                 </LinearLayout>
 
@@ -242,17 +240,16 @@
                         android:layout_height="wrap_content"
                         android:text="¥"
                         android:layout_marginTop="@dimen/layout_margin"
-                        style="@style/Base.TextAppearance.AppCompat.Medium"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         />
 
                     <TextView
                         android:id="@+id/tv_freight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="10.00"
                         android:layout_marginTop="@dimen/layout_margin"
                         android:layout_marginRight="@dimen/layout_margin"
-                        style="@style/Base.TextAppearance.AppCompat.Medium"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         />
                 </LinearLayout>
 
@@ -293,11 +290,11 @@
                         android:id="@+id/tv_activity_coupon_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="优惠活动描述"
+                        android:text="无"
                         android:layout_marginTop="@dimen/layout_margin"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
-                        style="@style/Base.TextAppearance.AppCompat.Medium"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         />
 
                     <TextView
@@ -306,17 +303,17 @@
                         android:layout_height="wrap_content"
                         android:text="-¥"
                         android:layout_marginTop="@dimen/layout_margin"
-                        style="@style/Base.TextAppearance.AppCompat.Medium"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         />
 
                     <TextView
                         android:id="@+id/tv_activity_coupon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="32.00"
+                        android:text="0"
                         android:layout_marginTop="@dimen/layout_margin"
                         android:layout_marginRight="@dimen/layout_margin"
-                        style="@style/Base.TextAppearance.AppCompat.Medium"
+                        style="@style/TextAppearance.AppCompat.Medium"
                         />
                 </LinearLayout>
 
@@ -332,79 +329,80 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:elevation="1dp"
-                android:background="#FAFAFA"
+                android:layout_marginBottom="@dimen/fixed_height"
+                />
+
+        </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fixed_height"
+        android:elevation="1dp"
+        android:background="#FAFAFA"
+        android:layout_alignParentBottom="true"
+        >
+
+        <TextView
+            android:id="@+id/total_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="实付："
+            android:textSize="@dimen/app_bar_title"
+            android:textColor="@android:color/holo_red_light"
+            android:minHeight="56dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:scaleType="center"
+            android:gravity="center"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/total_lbl"
                 >
 
                 <TextView
-                    android:id="@+id/total_lbl"
+                    android:id="@+id/total_money_tv_lbl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="实付："
+                    android:text="¥"
                     android:textSize="@dimen/app_bar_title"
                     android:textColor="@android:color/holo_red_light"
                     android:minHeight="56dp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
                     android:scaleType="center"
                     android:gravity="center"
                     />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/total_lbl"
-                    >
-
-                    <TextView
-                        android:id="@+id/total_money_tv_lbl"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="¥"
-                        android:textSize="@dimen/app_bar_title"
-                        android:textColor="@android:color/holo_red_light"
-                        android:minHeight="56dp"
-                        android:scaleType="center"
-                        android:gravity="center"
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_total_money"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="34.00"
-                        android:textSize="@dimen/app_bar_title"
-                        android:textColor="@android:color/holo_red_light"
-                        android:minHeight="56dp"
-                        android:scaleType="center"
-                        android:gravity="center"
-                        />
-                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_settlement"
+                    android:id="@+id/tv_total_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="去付款"
                     android:textSize="@dimen/app_bar_title"
-                    android:textColor="@color/colorPrimary"
-                    android:background="@color/colorAccent"
-                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/holo_red_light"
                     android:minHeight="56dp"
-                    android:paddingStart="48dp"
-                    android:paddingEnd="48dp"
                     android:scaleType="center"
                     android:gravity="center"
                     />
-            </RelativeLayout>
         </LinearLayout>
-    </ScrollView>
+
+        <TextView
+            android:id="@+id/tv_settlement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="去付款"
+            android:textSize="@dimen/app_bar_title"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/colorAccent"
+            android:layout_alignParentRight="true"
+            android:minHeight="56dp"
+            android:paddingStart="48dp"
+            android:paddingEnd="48dp"
+            android:scaleType="center"
+            android:gravity="center"
+            />
+    </RelativeLayout>
 
     <include layout="@layout/progress_bar"
         />

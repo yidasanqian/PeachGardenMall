@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,10 +14,15 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -27,8 +31,11 @@ import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.api.PayClient;
 import me.zoro.peachgardenmall.api.ServiceGenerator;
+import me.zoro.peachgardenmall.common.AppConfig;
+import me.zoro.peachgardenmall.common.Const;
+import me.zoro.peachgardenmall.datasource.domain.Order;
 import me.zoro.peachgardenmall.datasource.domain.PayResult;
-import okhttp3.ResponseBody;
+import me.zoro.peachgardenmall.utils.OrderInfoUtil2_0;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,8 +51,6 @@ public class PayActivity extends AppCompatActivity {
 
     private static final String TAG = "PayActivity";
 
-    public static final String RECHARGE_MONEY_EXTRA = "recharge_money_extra";
-
     private static final int SDK_PAY_FLAG = 1;
     /**
      * 支付宝支付业务：入参app_id
@@ -56,17 +61,19 @@ public class PayActivity extends AppCompatActivity {
      * 支付宝账户登录授权业务：入参pid值
      */
     public static final String PID = "2088621928157904";
+    /**
+     * 支付宝服务器主动通知商户服务器里指定的页面
+     */
+    private static final String NOTIFY_URL = AppConfig.SERVER_HOST.concat("/Home/Order/alipay_notify");
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.et_recharge_money)
-    TextInputEditText mEtRechargeMoney;
     @BindView(R.id.btn_ok)
     Button mBtnOk;
 
     private PayClient mPayClient;
     private MyHandler mHandler;
-    private String mMoney;  // 要充值的金额
 
+    private Order mOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,59 +87,98 @@ public class PayActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
-
         mHandler = new MyHandler(this);
 
         mPayClient = ServiceGenerator.createService(this, PayClient.class);
+
+
+        mOrder = (Order) getIntent().getSerializableExtra(CreateOrderActivity.ORDER_EXTRA);
 
     }
 
     @OnClick(R.id.btn_ok)
     public void onClick() {
+        if (mOrder != null) {
+            Gson gson = new Gson();
 
-    }
+            Map<String, Object> orderReqParams = new HashMap<>();
+            // 用户id
+            orderReqParams.put("userId", mOrder.getUserId());
+            orderReqParams.put("addressId", mOrder.getAddressId());
+            orderReqParams.put("freight", mOrder.getFreight());
+            orderReqParams.put("promotionMoney", mOrder.getPromotionMoney());
+            orderReqParams.put("promotionIds", mOrder.getPromotionIds());
+            orderReqParams.put("totalMoney", mOrder.getFactPayMoney());
+            orderReqParams.put("payType", 1);
 
-    private void rechargeMoney(String money) {
-        mMoney = money;
+            JsonArray jsonArray = new JsonParser().parse(gson.toJson(mOrder.getGoodsInfos())).getAsJsonArray();
+            orderReqParams.put("goodsInfos", jsonArray);
+            String outTradeNo = getOutTradeNo();
+            orderReqParams.put("out_trade_no", outTradeNo);
+            // 业务参数
+            Map<String, String> serviceParams = new HashMap<>();
+            serviceParams.put("timeout_express", "30m");
+            // 卖家支付宝账号
+            serviceParams.put("seller_id", PID);
+            serviceParams.put("product_code", "QUICK_MSECURITY_PAY");
+            // 该笔订单的资金总额，单位为RMB-Yuan。取值范围为[0.01，100000000.00]，精确到小数点后两位。
+            // TODO: 17/5/11 支付金额
+            serviceParams.put("total_amount", String.valueOf(0.01));
+            serviceParams.put("subject", getString(R.string.app_name));
+            //serviceParams.put("body", "充值人民币");
+            //  生成唯一商户订单号
+            serviceParams.put("out_trade_no", outTradeNo);
 
-        // 业务参数
-        Map<String, String> serviceParams = new HashMap<>();
-        // 用户id
-        //serviceParams.put("userId", String.valueOf(mCurrentUser.getId()));
-        //  生成唯一商户订单号
-        serviceParams.put("out_trade_no", getOutTradeNo());
-        // 卖家支付宝账号
-        serviceParams.put("seller_id", PID);
-        serviceParams.put("product_code", "QUICK_MSECURITY_PAY");
-        // 用户只能在指定渠道范围内支付当有多个渠道时用“,”分隔
-        serviceParams.put("enable_pay_channels", "balance,moneyFund");
-        serviceParams.put("subject", "乐助币");
-        serviceParams.put("body", "充值乐助币");
-        // 该笔订单的资金总额，单位为RMB-Yuan。取值范围为[0.01，100000000.00]，精确到小数点后两位。
-        serviceParams.put("total_amount", money);
-        Gson gson = new Gson();
+            // 请求参数是商户在与支付宝进行数据交互时，提供给支付宝的请求数据，以便支付宝根据这些数据进一步处理
+            final Map<String, String> reqParams = new HashMap<>();
+            reqParams.put("app_id", APPID);
+            reqParams.put("biz_content", gson.toJson(serviceParams));
+            reqParams.put("charset", "utf-8");
+            reqParams.put("format", "json");
+            reqParams.put("method", "alipay.trade.app.pay");
+            reqParams.put("notify_url", NOTIFY_URL);
+            reqParams.put("sign_type", "RSA2");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+            String dateStr = sdf.format(Calendar.getInstance().getTime());
+            reqParams.put("timestamp", dateStr);
+            reqParams.put("version", "1.0");
+            // 用户只能在指定渠道范围内支付当有多个渠道时用“,”分隔
+            reqParams.put("enable_pay_channels", "balance,moneyFund");
 
-        // 请求参数是商户在与支付宝进行数据交互时，提供给支付宝的请求数据，以便支付宝根据这些数据进一步处理
-        final Map<String, String> reqParams = new HashMap<>();
-        reqParams.put("app_id", APPID);
-        reqParams.put("biz_content", gson.toJson(serviceParams));
-        Call<ResponseBody> call = mPayClient.getOrderInfo(reqParams);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    if (response.body() != null) {
+            // 首先构造原始请求字符串
+            String srcReqParams = OrderInfoUtil2_0.buildOrderParam(reqParams, false);
+            Log.d(TAG, "onClick: 原始字符串 <== " + srcReqParams);
+            // 再对请求字符串的所有一级value（biz_content作为一个value）进行encode
+            final String encodeSignInfo = OrderInfoUtil2_0.buildOrderParam(reqParams, true);
 
-                        final String orderInfo = response.body().string();   // 订单信息
-                        Log.d(TAG, "onResponse: 订单信息 <== " + orderInfo);
+            orderReqParams.put("orderInfo", srcReqParams);
+
+            Call<JsonObject> call = mPayClient.getOrderInfo(orderReqParams);
+            call.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    JsonObject bodyJson = response.body();
+                    if (bodyJson == null) {
+                        showMessage(Const.SERVER_UNAVAILABLE);
+                        mBtnOk.setEnabled(true);
+
+                    } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                        showMessage(bodyJson.get(Const.MESSAGE).getAsString());
+                        mBtnOk.setEnabled(true);
+                    } else {
+                        JsonObject resultJson = bodyJson.get(Const.RESULT).getAsJsonObject();
+                        final String returnSign = resultJson.get("returnSign").getAsString();   // 签名信息
+                        // 最后对原始字符串进行签名
+                        final String signedOrderInfo = encodeSignInfo.concat("&sign=").concat(returnSign);
+                        Log.d(TAG, "onResponse: 编码并签名后的订单信息 <== " + signedOrderInfo);
 
                         Runnable payRunnable = new Runnable() {
 
                             @Override
                             public void run() {
                                 PayTask payTask = new PayTask(PayActivity.this);
-                                Map<String, String> result = payTask.payV2(orderInfo, true);
-                                Log.i("msp", result.toString());
+                                Map<String, String> result = payTask.payV2(signedOrderInfo, true);
+                                Log.d("支付结果 <== ", result.toString());
 
                                 Message msg = new Message();
                                 msg.what = SDK_PAY_FLAG;
@@ -143,27 +189,26 @@ public class PayActivity extends AppCompatActivity {
 
                         Thread payThread = new Thread(payRunnable);
                         payThread.start();
-                    } else {
-                        mBtnOk.setEnabled(true);
-
-                        Toast.makeText(PayActivity.this, "服务器异常！", Toast.LENGTH_SHORT).show();
                     }
-                } catch (IOException e) {
-                    mBtnOk.setEnabled(true);
-                    Toast.makeText(PayActivity.this, "服务器异常！", Toast.LENGTH_SHORT).show();
 
-                    Log.e(TAG, "onResponse: IOException 获取支付签名异常", e);
                 }
 
-            }
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    mBtnOk.setEnabled(true);
+                    Log.e(TAG, "onFailure: 获取支付签名异常", t);
+                    showMessage(Const.SERVER_UNAVAILABLE);
+                }
+            });
+        } else {
+            showMessage(getString(R.string.create_order_error));
+        }
+    }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                mBtnOk.setEnabled(true);
-                Toast.makeText(PayActivity.this, "服务器异常！", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onFailure: 获取支付签名异常", t);
-            }
-        });
+    private void showMessage(String msg) {
+        if (!isFinishing()) {
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private static class MyHandler extends Handler {
@@ -191,10 +236,10 @@ public class PayActivity extends AppCompatActivity {
                         String resultStatus = payResult.getResultStatus();
                         // 判断resultStatus 为9000则代表支付成功
                         if (TextUtils.equals(resultStatus, "9000")) {
-                            // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                            // todo 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                             Toast.makeText(target, "支付成功", Toast.LENGTH_LONG).show();
                             Intent data = new Intent();
-                            data.putExtra(RECHARGE_MONEY_EXTRA, target.mMoney);
+
                             target.setResult(RESULT_OK, data);
                             target.finish();
                         } else {
