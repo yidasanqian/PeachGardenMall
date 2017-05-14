@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
+import me.zoro.peachgardenmall.datasource.domain.Address;
 import me.zoro.peachgardenmall.datasource.domain.Order;
 
 /**
@@ -51,6 +52,14 @@ public class PaymentSuccessActivity extends AppCompatActivity {
 
         Order order = (Order) getIntent().getSerializableExtra(PayActivity.ORDER_DETAIL_EXTRA);
         if (order != null) {
+            // 处理实际付款金额字段
+            order.setFactPayMoney(Double.parseDouble(order.getTotalAmount()));
+            // 处理联系地址字段
+            Address addressObj = new Address();
+            addressObj.setConsignee(order.getConsignee());
+            addressObj.setMobile(order.getMobile());
+            addressObj.setAddress(order.getAddressStr());
+
             mTvNickname.setText(order.getAddressObj().getConsignee());
             mTvContactPhone.setText(order.getAddressObj().getMobile());
             mTvContactAddress.setText(order.getAddressObj().getAddress());

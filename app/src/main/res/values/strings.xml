@@ -102,4 +102,8 @@
     <string name="pending_delivery">待发货</string>
     <string name="pending_receiving">待收货</string>
     <string name="pending_evaluate">待评价</string>
+    <string name="payment">付款</string>
+    <string name="confirm_receive">确认收货</string>
+    <string name="evaluate">评价</string>
+    <string name="confirm_receive_success">确认收货成功</string>
 </resources>

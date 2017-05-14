@@ -95,6 +95,9 @@ public class PayActivity extends AppCompatActivity {
 
 
         mOrder = (Order) getIntent().getSerializableExtra(CreateOrderActivity.ORDER_EXTRA);
+        if (mOrder == null) {
+            mOrder = (Order) getIntent().getSerializableExtra(OrderDetailActivity.ORDER_EXTRA);
+        }
 
     }
 
@@ -125,8 +128,12 @@ public class PayActivity extends AppCompatActivity {
                 jsonArray.add(jo);
             }
             orderReqParams.put("goodsInfos", jsonArray);
-            String outTradeNo = getOutTradeNo();
-            mOrder.setOutTraceNo(outTradeNo);
+            String outTradeNo = mOrder.getOutTraceNo();
+            // 如果订单号为空，则表示已存在该订单，但未付款
+            if (TextUtils.isEmpty(outTradeNo)) {
+                outTradeNo = getOutTradeNo();
+                mOrder.setOutTraceNo(outTradeNo);
+            }
             orderReqParams.put("out_trade_no", outTradeNo);
             // 业务参数
             Map<String, String> serviceParams = new HashMap<>();

@@ -28,6 +28,7 @@ import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.CreateOrderGoodsRecyclerViewAdapter;
 import me.zoro.peachgardenmall.datasource.OrderDatasource;
 import me.zoro.peachgardenmall.datasource.OrderRepository;
+import me.zoro.peachgardenmall.datasource.domain.Address;
 import me.zoro.peachgardenmall.datasource.domain.Cart;
 import me.zoro.peachgardenmall.datasource.domain.Order;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
@@ -39,6 +40,7 @@ import me.zoro.peachgardenmall.utils.CacheManager;
  */
 
 public class OrderDetailActivity extends AppCompatActivity {
+    public static final String ORDER_EXTRA = "order";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.tv_nickname)
@@ -80,6 +82,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         mOrderRepository = OrderRepository.getInstance(OrderRemoteDatasource.getInstance(
                 getApplicationContext()
         ));
+
         String outTraceNo = getIntent().getStringExtra(PaymentSuccessActivity.ORDER_TRACE_NO_EXTRA);
         UserInfo userInfo = CacheManager.getUserInfoFromCache(this);
         if (userInfo != null) {
@@ -94,11 +97,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewAdapter = new CreateOrderGoodsRecyclerViewAdapter(this, mCarts);
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
-    }
-
-    @OnClick(R.id.btn_order_action)
-    public void onViewClicked() {
-        // TODO: 17/5/12 确认收货
     }
 
     @Override
@@ -168,6 +166,19 @@ public class OrderDetailActivity extends AppCompatActivity {
         mTvFreight.setText(order.getShippingPrice());
         mTvFactPay.setText(order.getTotalAmount());
 
+        // 处理活动字段
+        order.setPromotionMoney(Double.parseDouble(order.getOrderPromAmount()));
+        List<Integer> promotionIds = new ArrayList<>();
+        promotionIds.add(order.getOrderPromId());
+        order.setPromotionIds(promotionIds);
+        // 处理实际付款金额字段
+        order.setFactPayMoney(Double.parseDouble(order.getTotalAmount()));
+        // 处理联系地址字段
+        Address addressObj = new Address();
+        addressObj.setConsignee(order.getConsignee());
+        addressObj.setMobile(order.getMobile());
+        addressObj.setAddress(order.getAddressStr());
+
         List<Order.GoodsInfo> goodsInfoses = order.getGoodsInfo();
         int goodsSize = goodsInfoses.size();
         for (int i = 0; i < goodsSize; i++) {
@@ -193,6 +204,59 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         mRecyclerViewAdapter.replaceData(mCarts);
 
+        mBtnOrderAction.setTag(order);
+        int orderType = order.getOrderType();
+        if (orderType == MyOrderActivity.PENDING_PAYMENT) {
+            mBtnOrderAction.setText(R.string.payment);
+        } else if (orderType == MyOrderActivity.PENDING_DELIVERY) {
+            mBtnOrderAction.setText(R.string.pending_delivery);
+        } else if (orderType == MyOrderActivity.PENDING_RECEIVING) {
+            mBtnOrderAction.setText(R.string.confirm_receive);
+        } else if (orderType == MyOrderActivity.PENDING_EVALUATE) {
+            mBtnOrderAction.setText(R.string.evaluate);
+        }
+
         setLoadingIndicator(false);
+    }
+
+    @OnClick(R.id.btn_order_action)
+    public void onViewClicked() {
+        final Order order = (Order) mBtnOrderAction.getTag();
+        int orderType = order.getOrderType();
+        if (orderType == MyOrderActivity.PENDING_PAYMENT) {
+            // 去付款
+            Intent intent = new Intent(this, PayActivity.class);
+            intent.putExtra(OrderDetailActivity.ORDER_EXTRA, order);
+            startActivity(intent);
+        } else if (orderType == MyOrderActivity.PENDING_DELIVERY) {
+            // todo 提醒发货
+            mBtnOrderAction.setText(R.string.pending_delivery);
+        } else if (orderType == MyOrderActivity.PENDING_RECEIVING) {
+            // todo 确认收货
+            setLoadingIndicator(true);
+            Map<String, Object> reqParams = new HashMap<>();
+            reqParams.put("userId", order.getUserId());
+            reqParams.put("out_trade_no", order.getOutTraceNo());
+            mOrderRepository.updateOrderStatus(reqParams, new OrderDatasource.UpdateOrderStatusCallback() {
+                @Override
+                public void onUpdateSuccess() {
+                    setLoadingIndicator(false);
+
+                    showMessage(getString(R.string.confirm_receive_success));
+                    new FetchOrderByTraceNoTask(order.getUserId()).execute(order.getOutTraceNo());
+                }
+
+                @Override
+                public void onUpdateFailure(String msg) {
+                    setLoadingIndicator(false);
+
+                    showMessage(msg);
+                }
+            });
+        } else if (orderType == MyOrderActivity.PENDING_EVALUATE) {
+            // 去评价
+            Intent intent = new Intent(this, PublishCommentActivity.class);
+            startActivity(intent);
+        }
     }
 }

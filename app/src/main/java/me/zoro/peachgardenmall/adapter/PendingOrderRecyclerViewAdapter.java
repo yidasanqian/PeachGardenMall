@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,8 +110,8 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                     .into(viewHolder.mIvGoodsImg);
             viewHolder.mTvGoodsName.setText(goodsInfo.getGoodsName());
             viewHolder.mTvGoodsSpec.setText(goodsInfo.getSpecKeyName());
-            int orderType = order.getOrderType();
             viewHolder.mBtnOrderAction.setTag(order.getOutTraceNo());
+            int orderType = order.getOrderType();
             if (orderType == MyOrderActivity.PENDING_PAYMENT) {
                 viewHolder.mBtnOrderAction.setText(R.string.pending_payment);
             } else if (orderType == MyOrderActivity.PENDING_DELIVERY) {
@@ -140,7 +141,6 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     }
 
     static class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
-
         @BindView(R.id.iv_goods_img)
         ImageView mIvGoodsImg;
         @BindView(R.id.tv_goods_name)
@@ -150,21 +150,23 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         @BindView(R.id.tv_goods_spec)
         TextView mTvGoodsSpec;
 
-        private Context mContext;
+        private WeakReference<Context> mTarget;
 
         @OnClick(R.id.btn_order_action)
         public void onViewClicked() {
-            String outTraceNo = (String) mBtnOrderAction.getTag();
-            Intent intent = new Intent(mContext, OrderDetailActivity.class);
-            intent.putExtra(ORDER_TRACE_NO_EXTRA, outTraceNo);
-            mContext.startActivity(intent);
-
+            if (mTarget.get() != null) {
+                Context target = mTarget.get();
+                String outTraceNo = (String) mBtnOrderAction.getTag();
+                Intent intent = new Intent(target, OrderDetailActivity.class);
+                intent.putExtra(ORDER_TRACE_NO_EXTRA, outTraceNo);
+                target.startActivity(intent);
+            }
         }
 
         public RecyclerItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            mContext = itemView.getContext();
+            mTarget = new WeakReference<Context>(itemView.getContext());
         }
 
         public static RecyclerView.ViewHolder newInstance(View viewItem) {

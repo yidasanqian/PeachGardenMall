@@ -246,7 +246,6 @@ public class CreateOrderActivity extends AppCompatActivity {
             // 付款
             case R.id.tv_settlement:
                 if (mUserInfo != null && !mProgressBarContainer.isShown()) {
-                    intent = new Intent(this, PayActivity.class);
                     Order order = new Order();
                     order.setUserId(mUserInfo.getUserId());
                     order.setAddressObj(mAddress);
@@ -262,6 +261,7 @@ public class CreateOrderActivity extends AppCompatActivity {
                     order.setGoodsInfo(mRecyclerViewAdapter.getGoodsInfoses());
                     order.setFactPayMoney(mFactPayMoney);
                     order.setPayType(1);
+                    intent = new Intent(this, PayActivity.class);
                     intent.putExtra(ORDER_EXTRA, order);
                     startActivity(intent);
                 } else {

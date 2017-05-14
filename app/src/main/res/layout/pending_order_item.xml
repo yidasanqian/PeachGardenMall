@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/layout_margin"
     android:layout_marginBottom="@dimen/layout_margin"
     android:padding="@dimen/layout_padding"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    >
 
     <ImageView
         android:id="@+id/iv_goods_img"
@@ -58,6 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@drawable/list_divider"
-        android:layout_below="@id/tv_goods_spec"
+        android:layout_marginTop="@dimen/layout_margin"
+        android:layout_below="@id/iv_goods_img"
         />
 </RelativeLayout>

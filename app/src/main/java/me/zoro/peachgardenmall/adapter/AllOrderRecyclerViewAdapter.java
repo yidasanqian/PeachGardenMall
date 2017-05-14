@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -158,20 +159,24 @@ public class AllOrderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         @BindView(R.id.tv_fact_pay)
         TextView mTvFactPay;
 
-        private Context mContext;
+        private WeakReference<Context> mTarget;
+
 
         @OnClick(R.id.goods_info)
         public void onViewClicked() {
-            String outTraceNo = (String) mGoodsInfo.getTag();
-            Intent intent = new Intent(mContext, OrderDetailActivity.class);
-            intent.putExtra(ORDER_TRACE_NO_EXTRA, outTraceNo);
-            mContext.startActivity(intent);
+            if (mTarget.get() != null) {
+                Context target = mTarget.get();
+                String outTraceNo = (String) mGoodsInfo.getTag();
+                Intent intent = new Intent(target, OrderDetailActivity.class);
+                intent.putExtra(ORDER_TRACE_NO_EXTRA, outTraceNo);
+                target.startActivity(intent);
+            }
         }
 
         public RecyclerItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            mContext = itemView.getContext();
+            mTarget = new WeakReference<Context>(itemView.getContext());
         }
 
         public static RecyclerView.ViewHolder newInstance(View viewItem) {
