@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/ll_evaluation_container"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -49,115 +50,15 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_evaluation"
-        android:orientation="vertical"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
 
-            <me.zoro.peachgardenmall.view.RichText
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/praise_evaluation"
-                android:gravity="center_vertical"
-                android:padding="@dimen/layout_padding"
-                android:drawablePadding="8dp"
-                android:textColor="@color/evaluation_text_color_selector"
-                android:drawableLeft="@drawable/bg_evaluation_selector"
-                app:drawableWidth="@dimen/ic_width"
-                app:drawableHeight="@dimen/ic_height"
-                />
-
-            <me.zoro.peachgardenmall.view.RichText
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/moderate_evaluation"
-                android:gravity="center_vertical"
-                android:padding="@dimen/layout_padding"
-                android:drawablePadding="8dp"
-                android:textColor="@color/evaluation_text_color_selector"
-                android:drawableLeft="@drawable/bg_evaluation_selector"
-                app:drawableWidth="@dimen/ic_width"
-                app:drawableHeight="@dimen/ic_height"
-                />
-
-            <me.zoro.peachgardenmall.view.RichText
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/bad_evaluation"
-                android:gravity="center_vertical"
-                android:padding="@dimen/layout_padding"
-                android:drawablePadding="8dp"
-                android:textColor="@color/evaluation_text_color_selector"
-                android:drawableLeft="@drawable/bg_evaluation_selector"
-                app:drawableWidth="@dimen/ic_width"
-                app:drawableHeight="@dimen/ic_height"
-                />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/list_divider"
-            />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:hint="@string/evaluation_hint"
-            android:gravity="top"
-            android:padding="8dp"
-            android:background="@drawable/bg_et_evaluation_content"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/list_divider"
-            android:layout_marginLeft="@dimen/layout_margin"
-            android:layout_marginRight="@dimen/layout_margin"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/layout_padding"
-            >
-
-            <CheckBox
-                android:layout_width="@dimen/ic_width"
-                android:layout_height="@dimen/ic_height"
-                android:button="@null"
-                android:background="@drawable/bg_anon_evaluation_selector"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="名字"
-                android:paddingLeft="@dimen/layout_padding"
-                android:paddingRight="@dimen/layout_padding"
-                style="@style/Base.TextAppearance.AppCompat.Subhead"
-                />
-
-
-            <TextView
-                android:id="@+id/tv_anon_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/anon_desc"
-                android:gravity="right"
-                style="@style/Base.TextAppearance.AppCompat.Medium"
-                />
-
-
-        </LinearLayout>
-    </LinearLayout>
+    <include
+        layout="@layout/progress_bar"
+        android:visibility="gone"/>
 </LinearLayout>

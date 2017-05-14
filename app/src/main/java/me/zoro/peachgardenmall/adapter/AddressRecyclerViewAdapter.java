@@ -63,7 +63,6 @@ public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             if (address != null) {
                 if (address.isIsDefault()) {
                     viewHolder.mLlAddrItem.setBackgroundResource(R.drawable.bg_delivery_addr_item);
-
                 } else {
                     viewHolder.mLlAddrItem.setBackgroundResource(R.drawable.bg_delivery_addr_item_normal);
                 }

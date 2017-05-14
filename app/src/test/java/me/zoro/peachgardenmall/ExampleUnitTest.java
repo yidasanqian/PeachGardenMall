@@ -40,4 +40,14 @@ public class ExampleUnitTest {
         String b = "hehe".concat(a);
         System.out.println("ExampleUnitTest.testStringFormat b => " + b);
     }
+
+    @Test
+    public void testBoolean() {
+        boolean isEmpty = false;
+        if (!isEmpty) {
+            System.out.println("ExampleUnitTest.testBoolean ==> " + isEmpty);
+        } else {
+            System.out.println("ExampleUnitTest.testBoolean ==> " + isEmpty);
+        }
+    }
 }

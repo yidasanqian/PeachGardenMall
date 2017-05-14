@@ -41,6 +41,7 @@ import me.zoro.peachgardenmall.utils.CacheManager;
 
 public class OrderDetailActivity extends AppCompatActivity {
     public static final String ORDER_EXTRA = "order";
+    public static final int EVALUATE_REQUEST = 1;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.tv_nickname)
@@ -67,6 +68,8 @@ public class OrderDetailActivity extends AppCompatActivity {
     private List<Cart> mCarts;
     private OrderRepository mOrderRepository;
 
+    private UserInfo mUserInfo;
+    private String mOutTraceNo;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +86,11 @@ public class OrderDetailActivity extends AppCompatActivity {
                 getApplicationContext()
         ));
 
-        String outTraceNo = getIntent().getStringExtra(PaymentSuccessActivity.ORDER_TRACE_NO_EXTRA);
-        UserInfo userInfo = CacheManager.getUserInfoFromCache(this);
-        if (userInfo != null) {
+        mOutTraceNo = getIntent().getStringExtra(PaymentSuccessActivity.ORDER_TRACE_NO_EXTRA);
+        mUserInfo = CacheManager.getUserInfoFromCache(this);
+        if (mUserInfo != null) {
             setLoadingIndicator(true);
-            new FetchOrderByTraceNoTask(userInfo.getUserId()).execute(outTraceNo);
+            new FetchOrderByTraceNoTask(mUserInfo.getUserId()).execute(mOutTraceNo);
         } else {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -97,6 +100,18 @@ public class OrderDetailActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewAdapter = new CreateOrderGoodsRecyclerViewAdapter(this, mCarts);
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EVALUATE_REQUEST && resultCode == RESULT_OK) {
+            // 评论成功
+            if (mUserInfo != null) {
+                setLoadingIndicator(true);
+                new FetchOrderByTraceNoTask(mUserInfo.getUserId()).execute(mOutTraceNo);
+            }
+        }
     }
 
     @Override
@@ -199,6 +214,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             cart.setPromType(goodsInfo.getPromType());
             cart.setImageUrl(goodsInfo.getGoodsImsg());
             cart.setFreight(order.getShippingPrice());
+            mCarts.clear();
             mCarts.add(cart);
         }
 
@@ -214,6 +230,8 @@ public class OrderDetailActivity extends AppCompatActivity {
             mBtnOrderAction.setText(R.string.confirm_receive);
         } else if (orderType == MyOrderActivity.PENDING_EVALUATE) {
             mBtnOrderAction.setText(R.string.evaluate);
+        } else if (orderType == MyOrderActivity.ALREADY_EVALUATE) {
+            mBtnOrderAction.setText(R.string.already_evaluate);
         }
 
         setLoadingIndicator(false);
@@ -232,11 +250,11 @@ public class OrderDetailActivity extends AppCompatActivity {
             // todo 提醒发货
             mBtnOrderAction.setText(R.string.pending_delivery);
         } else if (orderType == MyOrderActivity.PENDING_RECEIVING) {
-            // todo 确认收货
+            // 确认收货
             setLoadingIndicator(true);
             Map<String, Object> reqParams = new HashMap<>();
             reqParams.put("userId", order.getUserId());
-            reqParams.put("out_trade_no", order.getOutTraceNo());
+            reqParams.put("orderId", order.getId());
             mOrderRepository.updateOrderStatus(reqParams, new OrderDatasource.UpdateOrderStatusCallback() {
                 @Override
                 public void onUpdateSuccess() {
@@ -256,7 +274,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         } else if (orderType == MyOrderActivity.PENDING_EVALUATE) {
             // 去评价
             Intent intent = new Intent(this, PublishCommentActivity.class);
-            startActivity(intent);
+            intent.putExtra(ORDER_EXTRA, order);
+            startActivityForResult(intent, EVALUATE_REQUEST);
         }
     }
 }

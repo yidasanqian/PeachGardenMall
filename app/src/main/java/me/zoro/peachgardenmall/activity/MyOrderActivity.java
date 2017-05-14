@@ -28,13 +28,14 @@ import me.zoro.peachgardenmall.fragment.PendingOrderTabFragment;
 public class MyOrderActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     /**
-     * 订单类型:0所有订单 1待付款 2待发货 3待收货 4待评价
+     * 订单类型:0所有订单 1待付款 2待发货 3待收货 4待评价 5已评价
      */
     public static final int ALL_ORDER = 0;
     public static final int PENDING_PAYMENT = 1;
     public static final int PENDING_DELIVERY = 2;
     public static final int PENDING_RECEIVING = 3;
     public static final int PENDING_EVALUATE = 4;
+    public static final int ALREADY_EVALUATE = 5;
 
     public static final String ORDER_TYPE_KEY = "order_type";
 

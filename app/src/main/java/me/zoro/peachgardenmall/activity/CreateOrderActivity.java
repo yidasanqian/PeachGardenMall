@@ -188,17 +188,22 @@ public class CreateOrderActivity extends AppCompatActivity {
                 cart.setSpecKey(mKey);
                 // 规则关系列表
                 List<Goods.SpecRelationEntity> specRelationList = mGoods.getSpecRelation();
-                /**
-                 * 处理规则关系
-                 */
-                for (int j = 0; j < specRelationList.size(); j++) {
-                    String key = specRelationList.get(j).getKey();
-                    if (key.equals(mKey)) {
-                        mSpecRelation = specRelationList.get(j);
-                        cart.setGoodsPrice(mSpecRelation.getPrice());
-                        cart.setSpecKeyName(mSpecRelation.getValue());
-                        break;
+                if (specRelationList != null && specRelationList.size() > 0) {
+
+                    /**
+                     * 处理规则关系
+                     */
+                    for (int j = 0; j < specRelationList.size(); j++) {
+                        String key = specRelationList.get(j).getKey();
+                        if (key.equals(mKey)) {
+                            mSpecRelation = specRelationList.get(j);
+                            cart.setGoodsPrice(mSpecRelation.getPrice());
+                            cart.setSpecKeyName(mSpecRelation.getValue());
+                            break;
+                        }
                     }
+                } else {
+                    cart.setGoodsPrice(mGoods.getPrice());
                 }
                 cart.setImageUrl(mGoods.getOriginalImg());
                 mCarts.add(cart);

@@ -20,6 +20,22 @@ public interface OrderDatasource {
 
     void getOrderDetail(Map<String, Object> reqParams, @NonNull GetOrderCallback callback);
 
+    void updateOrderStatus(Map<String, Object> reqParams, @NonNull UpdateOrderStatusCallback callback);
+
+    void evaluateGoodses(Map<String, Object> reqParams, @NonNull EvaluateGoodsesCallback callback);
+
+    interface EvaluateGoodsesCallback {
+        void onEvaluateSuccess(String msg);
+
+        void onEvaluateFailure(String msg);
+    }
+
+    interface UpdateOrderStatusCallback {
+        void onUpdateSuccess();
+
+        void onUpdateFailure(String msg);
+    }
+
     interface GetOrderCallback {
         void onOrderLoaded(Order order);
 

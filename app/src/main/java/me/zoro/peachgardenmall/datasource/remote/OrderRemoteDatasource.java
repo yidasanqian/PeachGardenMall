@@ -106,4 +106,53 @@ public class OrderRemoteDatasource implements OrderDatasource {
             }
         });
     }
+
+    @Override
+    public void updateOrderStatus(final Map<String, Object> reqParams, @NonNull final UpdateOrderStatusCallback callback) {
+        Call<JsonObject> call = mOrderClient.updateOrderStatus(reqParams);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null) {
+                    callback.onUpdateFailure(Const.SERVER_UNAVAILABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onUpdateFailure(bodyJson.get(Const.MESSAGE).getAsString());
+                } else {
+                    callback.onUpdateSuccess();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 更新订单状态时服务器异常", t);
+                callback.onUpdateFailure(Const.SERVER_UNAVAILABLE);
+            }
+        });
+    }
+
+    @Override
+    public void evaluateGoodses(Map<String, Object> reqParams, @NonNull final EvaluateGoodsesCallback callback) {
+        Call<JsonObject> call = mOrderClient.evaluateGoodses(reqParams);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject bodyJson = response.body();
+                if (bodyJson == null) {
+                    callback.onEvaluateFailure(Const.SERVER_UNAVAILABLE);
+                } else if (bodyJson.get(Const.CODE).getAsInt() != 0) {
+                    callback.onEvaluateFailure(bodyJson.get(Const.MESSAGE).getAsString());
+                } else {
+                    callback.onEvaluateSuccess(bodyJson.get(Const.MESSAGE).getAsString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "onFailure: 订单商品评论时服务器异常", t);
+                callback.onEvaluateFailure(Const.SERVER_UNAVAILABLE);
+
+            }
+        });
+    }
 }

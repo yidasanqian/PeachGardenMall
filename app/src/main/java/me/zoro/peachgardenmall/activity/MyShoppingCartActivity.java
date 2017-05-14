@@ -176,7 +176,7 @@ public class MyShoppingCartActivity extends AppCompatActivity {
                 }
                 break;
 
-            // TODO: 17/4/9 结算
+            // 结算
             case R.id.settlement_tv:
                 Intent intent = new Intent(this, CreateOrderActivity.class);
                 intent.putExtra(CARTS_EXTRA, mCarts);

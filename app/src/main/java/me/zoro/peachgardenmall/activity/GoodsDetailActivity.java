@@ -162,6 +162,11 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
      */
     private String mSpec;
     /**
+     * 商品是否有规格，true，表示有，false，表示没有
+     */
+    private boolean mIsHasSpec;
+
+    /**
      * 保存PopupWindow中的数量
      */
     private String mGoodsCount = "1";
@@ -236,6 +241,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mTvPurchase.setOnClickListener(this);
         mTvAddToShoppingCart.setOnClickListener(this);
 
+        // 显示加载信息
+        setLoadingIndicator(true);
+
         mUserRepository = UserRepository.getInstance(UserRemoteDatasource.getInstance(
                 getApplicationContext()
         ));
@@ -251,8 +259,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         fetchUserInfo();
 
         mGoodsId = getIntent().getIntExtra(HomeFragment.GOODS_ID_EXTRA, -1);
-        // 显示加载信息
-        setLoadingIndicator(true);
+
         // 获取商品详情
         new FetchGoodsDetailTask().execute();
 
@@ -415,6 +422,11 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                     String spec = mTvGoodSpec.getText().toString().replaceFirst("x\\d$", "x" + String.valueOf(count));
                     mTvGoodSpec.setText(spec);
                 }
+                // 商品没有规格的情况
+                if (!mIsHasSpec) {
+                    mGoodsCount = String.valueOf(count);
+                    mSpec = "数量 x".concat(mGoodsCount);
+                }
                 break;
             case R.id.iv_add:
                 count = Integer.parseInt(mTvCount.getText().toString());
@@ -423,6 +435,11 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 if (mTvGoodSpec.getText().toString().contains("已选")) {
                     String spec = mTvGoodSpec.getText().toString().replaceFirst("x\\d$", "x" + String.valueOf(count));
                     mTvGoodSpec.setText(spec);
+                }
+                // 商品没有规格的情况
+                if (!mIsHasSpec) {
+                    mGoodsCount = String.valueOf(count);
+                    mSpec = "数量 x".concat(mGoodsCount);
                 }
                 break;
             case R.id.iv_close_window:
@@ -479,15 +496,21 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
      */
     private void dismissPpwAfter() {
         mPopupWindow.dismiss();
-        String spec = mTvGoodSpec.getText().toString().replaceFirst("已选：", "");
-        if (!spec.contains("请选择")) {
-            mSpec = spec;
-            mTvSelectSpec.setText(mSpec);
-        }
         // 保存选择的数量
         mGoodsCount = mTvCount.getText().toString();
         // 保存价格
         mSpecPrice = mTvSpecPrice.getText().toString();
+
+        String spec = mTvGoodSpec.getText().toString().replaceFirst("已选：", "");
+        if (!spec.contains("请选择")) {
+            mSpec = spec;
+            mTvSelectSpec.setText(mSpec);
+        } else {
+            // 商品没有规格的情况
+            mSpec = "数量 x".concat(mGoodsCount);
+            mTvSelectSpec.setText(mSpec);
+        }
+
     }
 
     @Override
@@ -559,6 +582,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         }
 
         if (mSpecNum != 0) {
+            mIsHasSpec = true;
             // 规格有两种,显示第二种布局
             if (mSpecNum == 2) {
                 llSpec2.setVisibility(View.VISIBLE);
@@ -677,11 +701,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             }
 
 
-            mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT, true);
-            mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-            mPopupWindow.setOnDismissListener(this);
-            mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.BOTTOM, 0, 0);
+
 
 /*            contentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             int popupHeight = contentView.getMeasuredHeight();
@@ -691,7 +711,18 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             getWindowManager().getDefaultDisplay().getSize(point);
             Log.d(TAG, "initPopupWindow: point==>" + point +  "\t" + "popupHeight ==> " + popupHeight + "\t" + Arrays.toString(outLocation));
             mPopupWindow.showAtLocation(llGoodsBottomMenu, Gravity.NO_GRAVITY, outLocation[0], outLocation[1] - popupHeight);*/
+        } else {
+            // 商品没有规格的情况
+            mIsHasSpec = false;
+            llSpec1.setVisibility(View.GONE);
+            mTvGoodSpec.setText("请选择商品数量");
         }
+
+        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        mPopupWindow.setOnDismissListener(this);
+        mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.BOTTOM, 0, 0);
     }
 
     private void showServiceInfo() {
@@ -959,6 +990,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 @Override
                 public void onDataNotAvailable(String errorMsg) {
                     Log.w(TAG, "onDataNotAvailable: " + errorMsg);
+                    mUserInfo = null;
                     showMessage(errorMsg);
                 }
             });

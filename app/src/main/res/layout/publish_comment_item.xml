@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/layout_padding"
+        >
+
+        <me.zoro.peachgardenmall.view.AutoDrawableRadioButton
+            android:id="@+id/rb_praise_evaluation"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:checked="true"
+            android:text="@string/praise_evaluation"
+            android:textColor="@color/evaluation_text_color_selector"
+            android:gravity="center"
+            android:drawableLeft="@drawable/bg_evaluation_selector"
+            app:drawableWidth="@dimen/ic_smaller_width"
+            app:drawableHeight="@dimen/ic_smaller_height"
+            style="@style/TextAppearance.AppCompat.Medium"
+            />
+
+        <me.zoro.peachgardenmall.view.AutoDrawableRadioButton
+            android:id="@+id/rb_moderate_evaluation"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:text="@string/moderate_evaluation"
+            android:textColor="@color/evaluation_text_color_selector"
+            android:gravity="center"
+            android:drawableLeft="@drawable/bg_evaluation_selector"
+            app:drawableWidth="@dimen/ic_smaller_width"
+            app:drawableHeight="@dimen/ic_smaller_height"
+            style="@style/TextAppearance.AppCompat.Medium"
+            />
+
+        <me.zoro.peachgardenmall.view.AutoDrawableRadioButton
+            android:id="@+id/rb_bad_evaluation"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:text="@string/bad_evaluation"
+            android:textColor="@color/evaluation_text_color_selector"
+            android:gravity="center"
+            android:drawableLeft="@drawable/bg_evaluation_selector"
+            app:drawableWidth="@dimen/ic_smaller_width"
+            app:drawableHeight="@dimen/ic_smaller_height"
+            style="@style/TextAppearance.AppCompat.Medium"
+            />
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/list_divider"
+        />
+
+    <EditText
+        android:id="@+id/et_evaluation_content"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:hint="@string/evaluation_hint"
+        android:gravity="top"
+        android:padding="8dp"
+        android:background="@drawable/bg_et_evaluation_content"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/list_divider"
+        android:layout_marginLeft="@dimen/layout_margin"
+        android:layout_marginRight="@dimen/layout_margin"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/layout_padding"
+        >
+
+        <CheckBox
+            android:id="@+id/cb_is_anon"
+            android:layout_width="@dimen/ic_width"
+            android:layout_height="@dimen/ic_height"
+            android:button="@null"
+            android:background="@drawable/bg_anon_evaluation_selector"
+            />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/layout_padding"
+            android:paddingRight="@dimen/layout_padding"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_anon_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/anon_desc"
+            android:gravity="right"
+            style="@style/TextAppearance.AppCompat.Small"
+            />
+
+
+    </LinearLayout>
+</LinearLayout>

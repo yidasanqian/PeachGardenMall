@@ -5,7 +5,9 @@ import com.google.gson.JsonObject;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 
 /**
@@ -19,4 +21,10 @@ public interface OrderClient {
 
     @GET("Order/getOrderList")
     Call<JsonObject> getOrders(@QueryMap Map<String, Integer> reqParams);
+
+    @POST("Order/confirmTakeOrder")
+    Call<JsonObject> updateOrderStatus(@Body Map<String, Object> reqParams);
+
+    @POST("Order/addComment")
+    Call<JsonObject> evaluateGoodses(@Body Map<String, Object> reqParams);
 }

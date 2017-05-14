@@ -120,6 +120,8 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 viewHolder.mBtnOrderAction.setText(R.string.pending_receiving);
             } else if (orderType == MyOrderActivity.PENDING_EVALUATE) {
                 viewHolder.mBtnOrderAction.setText(R.string.pending_evaluate);
+            } else if (orderType == MyOrderActivity.ALREADY_EVALUATE) {
+                viewHolder.mBtnOrderAction.setText(R.string.already_evaluate);
             }
         }
 

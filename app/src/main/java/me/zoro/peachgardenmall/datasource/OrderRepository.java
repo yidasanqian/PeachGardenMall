@@ -63,4 +63,34 @@ public class OrderRepository implements OrderDatasource {
             }
         });
     }
+
+    @Override
+    public void updateOrderStatus(Map<String, Object> reqParams, @NonNull final UpdateOrderStatusCallback callback) {
+        mRemoteOrderDatasource.updateOrderStatus(reqParams, new UpdateOrderStatusCallback() {
+            @Override
+            public void onUpdateSuccess() {
+                callback.onUpdateSuccess();
+            }
+
+            @Override
+            public void onUpdateFailure(String msg) {
+                callback.onUpdateFailure(msg);
+            }
+        });
+    }
+
+    @Override
+    public void evaluateGoodses(Map<String, Object> reqParams, @NonNull final EvaluateGoodsesCallback callback) {
+        mRemoteOrderDatasource.evaluateGoodses(reqParams, new EvaluateGoodsesCallback() {
+            @Override
+            public void onEvaluateSuccess(String msg) {
+                callback.onEvaluateSuccess(msg);
+            }
+
+            @Override
+            public void onEvaluateFailure(String msg) {
+                callback.onEvaluateFailure(msg);
+            }
+        });
+    }
 }

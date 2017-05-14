@@ -139,6 +139,7 @@ public class SettingsActivity extends AppCompatActivity {
         mUserRepository.logout(mUserInfo.getUserId(), new UserDatasource.LogoutCallback() {
             @Override
             public void onLogout() {
+                CacheManager.removeKey(Const.USER_INFO_CACHE_KEY);
                 PreferencesUtil.getDefaultPreferences(SettingsActivity.this, Const.PREF_TOKEN)
                         .edit()
                         .clear()

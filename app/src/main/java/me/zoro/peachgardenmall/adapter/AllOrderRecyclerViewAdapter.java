@@ -121,6 +121,8 @@ public class AllOrderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 viewHolder.mTvStatus.setText(R.string.pending_receiving);
             } else if (orderType == MyOrderActivity.PENDING_EVALUATE) {
                 viewHolder.mTvStatus.setText(R.string.pending_evaluate);
+            } else if (orderType == MyOrderActivity.ALREADY_EVALUATE) {
+                viewHolder.mTvStatus.setText(R.string.already_evaluate);
             }
         }
 
