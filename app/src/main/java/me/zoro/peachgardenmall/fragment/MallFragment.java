@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,6 +96,11 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
         //textView.setTextColor(getActivity().getResources().getColor(R.color.search_txt_color));
         // 设置提示文字颜色
         textView.setHintTextColor(getActivity().getResources().getColor(R.color.textColorSecondary));
+        int platedId = getResources().getIdentifier("android:id/search_plate",// 查找文件sdk\platforms\android-17\data\res\layout\search_view.xml中的id
+                null, //知道资源类型，底层自动实现
+                getActivity().getPackageName());//包名是清单文件里面的此项目的包名
+        LinearLayout layout = (LinearLayout) mSearchView.findViewById(platedId);
+        layout.setBackgroundResource(R.drawable.bg_search_view);
         // 设置搜索文本监听
         mSearchView.setOnQueryTextListener(this);
 
@@ -110,7 +116,6 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
         super.onResume();
         if (mGoodsCategories.size() < 1) {
             new FetchGoodsCategoriesTask().execute();
-
         }
     }
 

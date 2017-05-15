@@ -52,7 +52,7 @@ public class CreateOrderGoodsRecyclerViewAdapter extends RecyclerView.Adapter<Re
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, Goods cart);
+        void onItemClick(View view, Goods goods);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

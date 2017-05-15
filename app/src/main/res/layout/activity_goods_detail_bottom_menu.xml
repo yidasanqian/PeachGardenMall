@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_service"
+            android:src="@drawable/ic_goods_detail_service"
             android:foreground="?selectableItemBackground"
             android:padding="12dp"
             />
@@ -46,7 +46,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_shopping_cart"
+            android:src="@drawable/ic_goods_detail_shopping_cart"
             android:foreground="?selectableItemBackground"
             android:padding="12dp"
             />
@@ -62,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_collection"
+            android:src="@drawable/ic_goods_detail_collection"
             android:foreground="?selectableItemBackground"
             android:padding="12dp"
             />

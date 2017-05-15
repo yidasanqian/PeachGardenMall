@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -16,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ import butterknife.Unbinder;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.activity.AdActivity;
 import me.zoro.peachgardenmall.activity.GoodsDetailActivity;
-import me.zoro.peachgardenmall.adapter.GoodsGridAdapter;
+import me.zoro.peachgardenmall.adapter.GoodsRecyclerGridAdapter;
 import me.zoro.peachgardenmall.datasource.BannerDatasource;
 import me.zoro.peachgardenmall.datasource.BannerRepository;
 import me.zoro.peachgardenmall.datasource.GoodsDatasource;
@@ -51,6 +52,7 @@ import me.zoro.peachgardenmall.datasource.domain.BannerInfo;
 import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.remote.BannerRemoteDatasource;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
+import me.zoro.peachgardenmall.view.SpacesItemDecoration;
 
 /**
  * Created by dengfengdecao on 17/4/7.
@@ -64,11 +66,13 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     Toolbar mToolbar;
     @BindView(R.id.toolbar_right_img)
     ImageButton mToolbarRightImg;
-    @BindView(R.id.banner)
-    Banner mBanner;
-    @BindView(R.id.grid_view)
-    GridView mGridView;
+
+
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerGridView;
     Unbinder unbinder;
+
+    Banner mBanner;
 
     private BannerRepository mBannerRepository;
     private BannerInfo mBannerInfo;
@@ -78,7 +82,7 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
     private String[] mCategory;*/
 
     private GoodsRepository mGoodsRepository;
-    private GoodsGridAdapter mGridAdapter;
+    private GoodsRecyclerGridAdapter mGridAdapter;
     private List<Goods> mGoodses;
     /**
      * 默认获取第一页
@@ -127,6 +131,10 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, root);
 
+        View headerView = inflater.inflate(R.layout.fragment_home_with_header, null);
+
+        mBanner = (Banner) headerView.findViewById(R.id.banner);
+
         if (mBannerInfo != null) {
             setupBanner(mBannerInfo);
         } else {
@@ -141,11 +149,20 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         mSpinner.setAdapter(mSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(this);*/
 
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        mRecyclerGridView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
 
-        mGridAdapter = new GoodsGridAdapter(getContext(), mGoodses);
-        mGridView.setAdapter(mGridAdapter);
-        mGridView.setOnItemClickListener(this);
-        mGridView.setOnScrollListener(this);
+        mGridAdapter = new GoodsRecyclerGridAdapter(getContext(), headerView, mGoodses);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return mGridAdapter.isHeader(position) ? gridLayoutManager.getSpanCount() : 1;
+            }
+        });
+        mRecyclerGridView.setLayoutManager(gridLayoutManager);
+        mRecyclerGridView.setAdapter(mGridAdapter);
+        //mRecyclerGridView.addOnScrollListener(this);
         return root;
     }
 

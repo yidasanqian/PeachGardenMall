@@ -443,7 +443,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
                 }
                 break;
             case R.id.iv_close_window:
-                dismissPpwAfter();
+                mPopupWindow.dismiss();
                 break;
         }
     }
@@ -495,7 +495,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
      * 关闭规格选择窗口后更新详情页的规格UI
      */
     private void dismissPpwAfter() {
-        mPopupWindow.dismiss();
         // 保存选择的数量
         mGoodsCount = mTvCount.getText().toString();
         // 保存价格
@@ -716,19 +715,22 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             mIsHasSpec = false;
             llSpec1.setVisibility(View.GONE);
             mTvGoodSpec.setText("请选择商品数量");
+            // 初始化商品数量
+            mSpec = "数量 x".concat(mGoodsCount);
+
         }
 
         mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT, true);
         mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         mPopupWindow.setOnDismissListener(this);
-        mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.BOTTOM, 0, 0);
+        mPopupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
     }
 
     private void showServiceInfo() {
         if (!isFinishing()) {
             TextView view = new TextView(this);
-            view.setPadding(16, 16, 16, 16);
+            view.setPadding(48, 16, 48, 16);
             view.setText(Html.fromHtml(getString(R.string.service_contact_information)));
             view.setMovementMethod(LinkMovementMethod.getInstance());
             new AlertDialog.Builder(this)
@@ -771,7 +773,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             mEditPromotion.setVisibility(View.GONE);
         }
         // 隐藏促销的图标
-        mIvPromotionImg.setVisibility(View.GONE);
+        mIvPromotionImg.setVisibility(View.INVISIBLE);
 
         // 评论数量
         int num = goods.getComment().getNumber();

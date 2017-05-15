@@ -23,7 +23,7 @@ import me.zoro.peachgardenmall.datasource.domain.Address;
  * Created by dengfengdecao on 17/4/24.
  */
 
-public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     public static final String ADDRESS_EXTRA = "address";
 
     private static final int TYPE_EMPTY = -1;
@@ -32,6 +32,24 @@ public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int TYPE_FOOTER = 2;
 
     private List<Address> mAddresses;
+
+    public OnItemClickListener mListener;
+
+    @Override
+    public void onClick(View v) {
+        if (mListener != null) {
+            mListener.onItemClick(v, (Address) v.getTag());
+        }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, Address address);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
 
     public AddressRecyclerViewAdapter(List<Address> addresses) {
         mAddresses = addresses;
@@ -47,7 +65,7 @@ public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
         View viewItem = LayoutInflater.from(context).inflate(R.layout.delivery_address_rvi,
                 parent, false);
-
+        viewItem.setOnClickListener(this);
         return RecyclerItemViewHolder.newInstance(viewItem);
     }
 
@@ -70,6 +88,8 @@ public class AddressRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 viewHolder.mTvContactPhone.setText(address.getMobile());
                 viewHolder.mTvContactAddress.setText(address.getAddress());
                 viewHolder.mIbEditAddress.setTag(address);
+
+                viewHolder.itemView.setTag(address);
             }
         }
     }

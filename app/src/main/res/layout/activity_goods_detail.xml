@@ -23,7 +23,7 @@
             <com.youth.banner.Banner
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="300dp"
                 app:delay_time="2500"
                 app:image_scale_type="center_crop"
                 app:layout_collapseMode="parallax"
@@ -42,6 +42,7 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -55,8 +56,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="原态度绿茶 2克*25袋"
+                android:paddingLeft="@dimen/layout_padding"
+                android:paddingRight="@dimen/layout_padding"
                 android:gravity="center"
-                style="@style/TextAppearance.AppCompat.Title"
+                style="@style/TextAppearance.AppCompat.Subhead"
             />
 
         <TextView
@@ -64,8 +67,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="水活味醇，芳气清隽"
+            android:paddingLeft="@dimen/layout_padding"
+            android:paddingRight="@dimen/layout_padding"
             android:gravity="center"
-            style="@style/TextAppearance.AppCompat.Medium"
+            style="@style/TextAppearance.AppCompat.Small"
             />
 
             <LinearLayout
@@ -80,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:text="¥"
                     android:textColor="@android:color/holo_red_dark"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     />
 
                 <TextView
@@ -89,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:text="32.00"
                     android:textColor="@android:color/holo_red_dark"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     />
             </LinearLayout>
 
@@ -111,7 +116,7 @@
             android:id="@+id/edit_select_spec"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
+            android:foreground="?android:attr/selectableItemBackground"
             >
 
 
@@ -121,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:text="已选择："
                 android:padding="@dimen/layout_padding"
-                style="@style/TextAppearance.AppCompat.Subhead"
+                style="@style/TextAppearance.AppCompat.Body1"
                 />
 
 
@@ -131,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tv_select_spec_lbl"
                 android:layout_centerVertical="true"
-                style="@style/TextAppearance.AppCompat.Subhead"
+                style="@style/TextAppearance.AppCompat.Body1"
                 />
 
             <View
@@ -155,7 +160,7 @@
             android:id="@+id/edit_promotion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
+            android:foreground="?android:attr/selectableItemBackground"
             android:visibility="visible"
             >
 
@@ -169,7 +174,7 @@
                 android:paddingTop="@dimen/layout_padding"
                 android:paddingBottom="@dimen/layout_padding"
                 android:layout_centerVertical="true"
-                style="@style/TextAppearance.AppCompat.Subhead"
+                style="@style/TextAppearance.AppCompat.Body1"
                 />
 
             <TextView
@@ -179,8 +184,7 @@
                 android:text="个促销:"
                 android:layout_toRightOf="@id/tv_promotion_count"
                 android:layout_centerVertical="true"
-                android:textColor="@color/subheadColor"
-                android:textSize="@dimen/subhead_size"
+                style="@style/TextAppearance.AppCompat.Body1"
                 />
 
             <ImageView
@@ -198,14 +202,16 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/iv_promotion_img"
                 android:layout_centerVertical="true"
-                android:paddingTop="@dimen/layout_padding"
-                android:paddingBottom="@dimen/layout_padding"
-                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="6dp"
+                android:text="订单满30送代金卷10"
+                android:textColor="@android:color/holo_orange_light"
+                android:background="@drawable/bg_promotion"
+                style="@style/TextAppearance.AppCompat.Body1"
                 />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="10dp"
                 android:background="@drawable/list_divider"
                 android:layout_below="@id/tv_promotion_count"
                 />
@@ -247,7 +253,7 @@
                 android:layout_toRightOf="@id/tv_service_lbl"
                 android:layout_centerVertical="true"
                 android:padding="@dimen/layout_padding"
-                style="@style/TextAppearance.AppCompat.Subhead"
+                style="@style/TextAppearance.AppCompat.Body1"
                 />
 
             <View
@@ -271,7 +277,7 @@
             android:id="@+id/edit_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
+            android:foreground="?android:attr/selectableItemBackground"
             >
 
 
@@ -283,8 +289,7 @@
                 android:paddingLeft="@dimen/layout_padding"
                 android:paddingTop="@dimen/layout_padding"
                 android:paddingBottom="@dimen/layout_padding"
-                android:textColor="@color/subheadColor"
-                android:textSize="@dimen/subhead_size"
+                style="@style/TextAppearance.AppCompat.Body1"
                 />
 
 
@@ -294,8 +299,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tv_comment_lbl"
                 android:layout_centerVertical="true"
-                android:textColor="@color/subheadColor"
-                android:textSize="@dimen/subhead_size"
+                style="@style/TextAppearance.AppCompat.Body1"
                 />
 
             <View
@@ -315,7 +319,7 @@
                 app:drawableWidth="@dimen/ic_width"
                 app:drawableHeight="@dimen/ic_height"
                 android:drawableRight="@drawable/ic_right_arrow"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Body1"
                 />
         </RelativeLayout>
 
@@ -324,6 +328,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@drawable/list_divider"
+                />
 
         <WebView
             android:id="@+id/web_view"

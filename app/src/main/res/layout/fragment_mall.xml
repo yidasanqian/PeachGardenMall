@@ -7,9 +7,10 @@
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/search_view_height"
         android:iconifiedByDefault="false"
         android:queryHint="请输入商品名称"
+        android:gravity="center_vertical"
         android:focusable="false"
         />
 

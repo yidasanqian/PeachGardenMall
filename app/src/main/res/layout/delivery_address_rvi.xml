@@ -43,12 +43,12 @@
 
         <ImageButton
             android:id="@+id/ib_edit_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/ic_big_width"
+            android:layout_height="@dimen/ic_big_height"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/layout_margin"
-            android:background="@android:drawable/ic_menu_edit"
+            android:background="@drawable/ic_addr_edit"
             />
     </RelativeLayout>
 

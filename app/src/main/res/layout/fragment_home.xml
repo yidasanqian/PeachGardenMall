@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -9,40 +8,11 @@
         android:id="@+id/apptoolbar"
         layout="@layout/toolbar"/>
 
-    <com.youth.banner.Banner
-        android:id="@+id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        app:delay_time="2500"
-        app:image_scale_type="center_crop"
-        />
 
-    <!-- <Spinner
-         android:id="@+id/spinner"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         />-->
-
-    <me.zoro.peachgardenmall.view.RichText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableRight="@drawable/ic_drop_down"
-        android:text="小布精品推荐"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/colorAccent"
-        android:drawablePadding="4dp"
-        app:drawableWidth="12dp"
-        app:drawableHeight="12dp"
-        />
-
-    <GridView
-        android:id="@+id/grid_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="2"
-        android:verticalSpacing="8dp"
-        android:horizontalSpacing="8dp"
-        android:stretchMode="columnWidth"
-        android:gravity="center"
+        android:layout_marginBottom="4dp"
         />
 </LinearLayout>

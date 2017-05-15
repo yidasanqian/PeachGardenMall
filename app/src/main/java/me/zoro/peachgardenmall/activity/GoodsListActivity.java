@@ -18,11 +18,14 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +34,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import me.zoro.peachgardenmall.R;
 import me.zoro.peachgardenmall.adapter.GoodsFilterAdapter;
@@ -41,18 +45,19 @@ import me.zoro.peachgardenmall.datasource.domain.Goods;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 import me.zoro.peachgardenmall.fragment.MallFragment;
 
+import static me.zoro.peachgardenmall.R.id.searchView;
 import static me.zoro.peachgardenmall.fragment.HomeFragment.GOODS_ID_EXTRA;
 import static me.zoro.peachgardenmall.fragment.MallFragment.GOODSES_EXTRA;
 
 public class GoodsListActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener, SearchView.OnQueryTextListener {
 
     private static final String TAG = "GoodsListActivity";
-    @BindView(R.id.searchView)
+    @BindView(searchView)
     SearchView mSearchView;
     @BindView(R.id.tb_comprehensive_sorting)
-    Button mTbComprehensiveSorting;
+    ToggleButton mTbComprehensiveSorting;
     @BindView(R.id.tb_sales_sorting)
-    Button mTbSalesSorting;
+    ToggleButton mTbSalesSorting;
     @BindView(R.id.btn_filter)
     Button mBtnFilter;
     @BindView(R.id.grid_view)
@@ -121,9 +126,14 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
         // 设置字体大小为14sp
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);//14sp
         // 设置字体颜色
-        //textView.setTextColor(getActivity().getResources().getColor(R.color.search_txt_color));
+        // textView.setTextColor(getResources().getColor(R.color.search_txt_color));
         // 设置提示文字颜色
         textView.setHintTextColor(getResources().getColor(R.color.textColorSecondary));
+        int platedId = getResources().getIdentifier("android:id/search_plate",// 查找文件sdk\platforms\android-17\data\res\layout\search_view.xml中的id
+                null, //知道资源类型，底层自动实现
+                getPackageName());//包名是清单文件里面的此项目的包名
+        LinearLayout layout = (LinearLayout) mSearchView.findViewById(platedId);
+        layout.setBackgroundResource(R.drawable.bg_search_view);
         // 设置搜索文本监听
         mSearchView.setOnQueryTextListener(this);
     }
@@ -178,16 +188,26 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    @OnClick({R.id.tb_comprehensive_sorting, R.id.tb_sales_sorting, R.id.btn_filter})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
+    @OnCheckedChanged({R.id.tb_comprehensive_sorting, R.id.tb_sales_sorting})
+    public void onChecked(CompoundButton compoundButton, boolean isChecked) {
+        switch (compoundButton.getId()) {
             // TODO: 17/4/13 商品排序
             case R.id.tb_comprehensive_sorting:
-                new FetchGoodsesOrderTask().execute();
+                if (isChecked) {
+                    new FetchGoodsesOrderTask().execute();
+                }
                 break;
             case R.id.tb_sales_sorting:
-                new FetchGoodsesOrderTask().execute();
+                if (isChecked) {
+                    new FetchGoodsesOrderTask().execute();
+                }
                 break;
+        }
+    }
+
+    @OnClick(R.id.btn_filter)
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
             case R.id.btn_filter:
                 String query = mSearchView.getQuery().toString().trim();
                 if (!TextUtils.isEmpty(query)) {

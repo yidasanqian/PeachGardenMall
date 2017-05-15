@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
@@ -10,9 +8,10 @@
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/search_view_height"
         android:iconifiedByDefault="false"
         android:queryHint="请输入商品名称"
+        android:gravity="center_vertical"
         android:focusable="false"
         />
 
@@ -24,29 +23,33 @@
         android:paddingEnd="@dimen/layout_padding"
         >
 
-        <Button
+        <ToggleButton
             android:id="@+id/tb_comprehensive_sorting"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="综合排序"
+            android:textOn="综合排序"
+            android:textOff="综合排序"
+            android:checked="false"
             android:background="@drawable/bg_tb"
             />
 
-        <Button
+        <ToggleButton
             android:id="@+id/tb_sales_sorting"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="销量排序"
+            android:textOn="销量排序"
+            android:textOff="销量排序"
             android:background="@drawable/bg_tb"
             />
 
         <Button
             android:id="@+id/btn_filter"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_goods_list_filter"
             android:text="筛选"
             />
     </LinearLayout>
@@ -54,6 +57,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="6dp"
         >
 
         <GridView

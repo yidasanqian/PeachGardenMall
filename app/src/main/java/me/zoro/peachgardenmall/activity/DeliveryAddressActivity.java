@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,20 @@ public class DeliveryAddressActivity extends AppCompatActivity {
         mRecyclerViewAdapter = new AddressRecyclerViewAdapter(mAddresses);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+        boolean isSelected = getIntent().getBooleanExtra(CreateOrderActivity.SELECTED_CONTACT_ADDRESS, false);
+        // 如果条件为true，表示从订单页面选择发货地址
+        if (isSelected) {
+            mRecyclerViewAdapter.setOnItemClickListener(new AddressRecyclerViewAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, Address address) {
+                    Intent data = new Intent();
+                    data.putExtra(DEFAULT_ADDRESS_EXTRA, address);
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+            });
+        }
     }
 
     @Override
@@ -84,13 +99,13 @@ public class DeliveryAddressActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        if (mDefaultAddr != null) {
+       /* if (mDefaultAddr != null) {
             Intent data = new Intent();
             data.putExtra(DEFAULT_ADDRESS_EXTRA, mDefaultAddr);
             setResult(RESULT_OK, data);
         } else {
             setResult(RESULT_CANCELED);
-        }
+        }*/
         onBackPressed();
         return super.onSupportNavigateUp();
     }

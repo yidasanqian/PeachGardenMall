@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_home"
-        android:icon="@drawable/ic_home_black"
+        android:icon="@drawable/ic_goods_detail_home"
         app:showAsAction="always"
         android:title="首页"/>
 

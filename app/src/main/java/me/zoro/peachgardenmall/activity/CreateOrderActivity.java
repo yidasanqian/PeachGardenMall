@@ -53,6 +53,7 @@ public class CreateOrderActivity extends AppCompatActivity {
 
     public static final int UPDATE_ADDRESS_REQUEST = 1;
     public static final String ORDER_EXTRA = "order";
+    public static final String SELECTED_CONTACT_ADDRESS = "selected_contact_address";
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     @BindView(R.id.toolbar)
@@ -241,6 +242,7 @@ public class CreateOrderActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.address_info:
                 Intent intent = new Intent(this, DeliveryAddressActivity.class);
+                intent.putExtra(SELECTED_CONTACT_ADDRESS, true);
                 startActivityForResult(intent, UPDATE_ADDRESS_REQUEST);
                 break;
             // TODO: 17/5/2 优惠劵
