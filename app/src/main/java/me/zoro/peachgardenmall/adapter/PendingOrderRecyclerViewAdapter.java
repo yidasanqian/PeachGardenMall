@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -178,8 +177,8 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     }
 
     static class RecyclerEmptyViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
-        @BindView(R.id.grid_view)
-        GridView mGridView;
+        /*@BindView(R.id.grid_view)
+        GridView mGridView;*/
         private GoodsDatasource mGoodsRepository;
         private List<Goods> mGoodses;
         /**
@@ -206,11 +205,11 @@ public class PendingOrderRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
             mGoodses = new ArrayList<>();
 
-            mGridAdapter = new GoodsGridAdapter(viewItem.getContext(), mGoodses);
+           /* mGridAdapter = new GoodsGridAdapter(viewItem.getContext(), mGoodses);
             mGridView.setAdapter(mGridAdapter);
             mGridView.setOnItemClickListener(this);
             mGridView.setOnScrollListener(this);
-            new FetchGoodsesTask().execute();
+            new FetchGoodsesTask().execute();*/
 
 
         }

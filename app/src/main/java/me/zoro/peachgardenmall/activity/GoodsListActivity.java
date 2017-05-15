@@ -238,7 +238,8 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // 上拉加载
-        if (view.getLastVisiblePosition() == totalItemCount - 1 && !mIsLoadingMore && mCategoryId != -1) {
+        if (view.getLastVisiblePosition() == totalItemCount - 1 && view.getAdapter().getCount() >= mPageSize &&
+                !mIsLoadingMore && mCategoryId != -1) {
             mIsLoadingMore = true;
             mPageNum++;
             new FetchGoodsesTask().execute(mCategoryId);
@@ -342,9 +343,9 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
         @Override
         protected Void doInBackground(Integer... params) {
             Map<String, Object> map = new HashMap<>();
-            map.put("categoryId", params[0]);
+            map.put("categoryId", mCategoryId);
             // TODO: 17/4/27 排序
-            map.put("order", params[0]);
+            //map.put("order", params[0]);
             map.put("pn", mPageNum);
             map.put("ps", mPageSize);
             mGoodsRepository.getGoodses(map, new GoodsDatasource.GetGoodsesCallback() {
