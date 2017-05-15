@@ -38,8 +38,8 @@
 -keepattributes Signature
 -keepattributes *Annotation*
 -keep class sun.misc.Unsafe { *; }
--keep class me.dengfengdecao.happyhelp.datasource.domain.** {*;}
 # -keep class com.google.gson.examples.android.model.** { *; } # 会被Gson序列化/反序列化的model
+-keep class me.zoro.peachgardenmall.datasource.domain.** {*;}
 
 # okhttp3
 -keepattributes Signature

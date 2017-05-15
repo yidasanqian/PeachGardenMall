@@ -488,7 +488,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT, true);
         mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.BOTTOM, 0, 0);
+        mPopupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
     }
 
     /**

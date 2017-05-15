@@ -12,7 +12,7 @@ buildscript {
 
         // butterknife
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        // bugly
+        // Bugly符号表插件
         classpath 'com.tencent.bugly:symtabfileuploader:2.0.7'
     }
 }
@@ -20,6 +20,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
     }
 }
 

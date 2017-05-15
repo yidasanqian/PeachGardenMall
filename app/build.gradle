@@ -18,12 +18,31 @@ android {
             abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
     }
-    buildTypes {
+
+    // keytool -v -list -keystore app/pgmreleasekey.jks
+    signingConfigs {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            storeFile file('pgmreleasekey.jks')
+            storePassword 'helloworld'
+            keyAlias 'PGMReleaseKey'
+            keyPassword 'helloworld'
         }
     }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+bugly {
+    appId = '13464d7501' // 注册时分配的App ID
+    appKey = 'bd30bd03-b263-4c48-8d88-67fc54a38bb5' // 注册时分配的App Key
+    debug = false    // 调试开关
+    upload = true  // 符号表上传开关
 }
 
 dependencies {
@@ -56,8 +75,8 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
 
     // bugly
-    compile 'com.tencent.bugly:crashreport_upgrade:1.1.3'
-    compile 'com.tencent.bugly:nativecrashreport:3.1.0'
+    compile 'com.tencent.bugly:crashreport_upgrade:1.3.0'
+    compile 'com.tencent.bugly:nativecrashreport:3.2.0'
 
     // Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -66,4 +85,7 @@ dependencies {
     compile files('libs/alipaySdk-20161129.jar')
 
     compile 'com.google.android:flexbox:0.2.6'
+
+    // 蒲公英https://www.pgyer.com/doc/view/sdk_android_guide
+    compile 'com.pgyersdk:sdk:2.5.6'
 }

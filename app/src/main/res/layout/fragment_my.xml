@@ -45,9 +45,10 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_avatar"
-        android:layout_width="@dimen/avatar_width"
-        android:layout_height="@dimen/avatar_height"
+        android:layout_width="@dimen/ic_bigger_width"
+        android:layout_height="@dimen/ic_bigger_height"
         android:layout_gravity="center"
+        android:src="@mipmap/ic_launcher"
         android:layout_margin="@dimen/layout_margin"
         />
 
