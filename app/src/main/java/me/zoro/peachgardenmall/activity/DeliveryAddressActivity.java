@@ -66,7 +66,9 @@ public class DeliveryAddressActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
-        mAddressRepository = AddressRepository.getInstance(AddressRemoteDatasource.getInstance(getApplicationContext()));
+        mAddressRepository = AddressRepository.getInstance(AddressRemoteDatasource.getInstance(
+                getApplicationContext())
+        );
 
         mAddresses = new ArrayList<>();
         mRecyclerViewAdapter = new AddressRecyclerViewAdapter(mAddresses);

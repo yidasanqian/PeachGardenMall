@@ -15,4 +15,10 @@
         <attr name="drawableWidth" format="dimension"/>
         <attr name="drawableHeight" format="dimension"/>
     </declare-styleable>
+
+    <!-- AutoDrawableRadioButton -->
+    <declare-styleable name="AutoDrawableRadioButton">
+        <attr name="drawWidth" format="dimension"/>
+        <attr name="drawHeight" format="dimension"/>
+    </declare-styleable>
 </resources>

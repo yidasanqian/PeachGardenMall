@@ -3,6 +3,7 @@ package me.zoro.peachgardenmall.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -12,15 +13,15 @@ import me.zoro.peachgardenmall.R;
  * Created by dengfengdecao on 17/5/14.
  */
 
-public class AutoDrawableRadioButton extends android.support.v7.widget.AppCompatRadioButton {
+public class AutoDrawableRadioButton extends AppCompatRadioButton {
     private static final String TAG = "AutoDrawableRadioButton";
 
     public AutoDrawableRadioButton(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public AutoDrawableRadioButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public AutoDrawableRadioButton(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -29,9 +30,9 @@ public class AutoDrawableRadioButton extends android.support.v7.widget.AppCompat
         /**
          * 取得自定义属性值
          */
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RichText);
-        int drawableWidth = ta.getDimensionPixelSize(R.styleable.RichText_drawableWidth, -1);
-        int drawableHeight = ta.getDimensionPixelSize(R.styleable.RichText_drawableHeight, -1);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AutoDrawableRadioButton);
+        int drawableWidth = ta.getDimensionPixelSize(R.styleable.AutoDrawableRadioButton_drawWidth, -1);
+        int drawableHeight = ta.getDimensionPixelSize(R.styleable.AutoDrawableRadioButton_drawHeight, -1);
         Log.d(TAG, "AutoDrawableRadioButton: drawableWidth == > " + drawableWidth + "\tdrawableHeight ==> " + drawableHeight);
         /**
          * 取得TextView的Drawable(左上右下四个组成的数组值)

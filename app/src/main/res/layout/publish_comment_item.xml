@@ -24,8 +24,8 @@
             android:textColor="@color/evaluation_text_color_selector"
             android:gravity="center"
             android:drawableLeft="@drawable/bg_evaluation_selector"
-            app:drawableWidth="@dimen/ic_smaller_width"
-            app:drawableHeight="@dimen/ic_smaller_height"
+            app:drawWidth="@dimen/ic_width"
+            app:drawHeight="@dimen/ic_height"
             style="@style/TextAppearance.AppCompat.Medium"
             />
 
@@ -39,8 +39,8 @@
             android:textColor="@color/evaluation_text_color_selector"
             android:gravity="center"
             android:drawableLeft="@drawable/bg_evaluation_selector"
-            app:drawableWidth="@dimen/ic_smaller_width"
-            app:drawableHeight="@dimen/ic_smaller_height"
+            app:drawWidth="@dimen/ic_width"
+            app:drawHeight="@dimen/ic_height"
             style="@style/TextAppearance.AppCompat.Medium"
             />
 
@@ -54,8 +54,8 @@
             android:textColor="@color/evaluation_text_color_selector"
             android:gravity="center"
             android:drawableLeft="@drawable/bg_evaluation_selector"
-            app:drawableWidth="@dimen/ic_smaller_width"
-            app:drawableHeight="@dimen/ic_smaller_height"
+            app:drawWidth="@dimen/ic_width"
+            app:drawHeight="@dimen/ic_height"
             style="@style/TextAppearance.AppCompat.Medium"
             />
 

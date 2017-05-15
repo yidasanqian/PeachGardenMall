@@ -18,7 +18,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +41,7 @@ import me.zoro.peachgardenmall.datasource.domain.Order;
 import me.zoro.peachgardenmall.datasource.domain.UserInfo;
 import me.zoro.peachgardenmall.datasource.remote.OrderRemoteDatasource;
 import me.zoro.peachgardenmall.utils.CacheManager;
+import me.zoro.peachgardenmall.view.AutoDrawableRadioButton;
 
 /**
  * Created by dengfengdecao on 17/5/11.
@@ -93,18 +93,6 @@ public class PublishCommentActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         GoodsesInOrderAdapter adapter = new GoodsesInOrderAdapter(mOrder.getGoodsInfo());
         mRecyclerView.setAdapter(adapter);
-       /* Log.d(TAG, "onCreate: mLlEvaluation ==> " + mLlEvaluation);
-        mLlEvaluation = new LinearLayout(this);
-        Log.d(TAG, "onCreate: mLlEvaluation ==> " + mLlEvaluation);
-        mLlEvaluationContainer.addView(mLlEvaluation);
-
-        mTvName.setText(mUserInfo.getNickname());
-
-        mRbPraise.setOnCheckedChangeListener(this);
-        mRbModerate.setOnCheckedChangeListener(this);
-        mRbBad.setOnCheckedChangeListener(this);
-
-        mCbIsAnon.setOnCheckedChangeListener(this);*/
     }
 
     @OnClick(R.id.tv_publish)
@@ -187,11 +175,11 @@ public class PublishCommentActivity extends AppCompatActivity {
         static class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
 
             @BindView(R.id.rb_praise_evaluation)
-            RadioButton mRbPraise;
+            AutoDrawableRadioButton mRbPraise;
             @BindView(R.id.rb_moderate_evaluation)
-            RadioButton mRbModerate;
+            AutoDrawableRadioButton mRbModerate;
             @BindView(R.id.rb_bad_evaluation)
-            RadioButton mRbBad;
+            AutoDrawableRadioButton mRbBad;
             @BindView(R.id.et_evaluation_content)
             EditText mEtEvaluationContent;
             @BindView(R.id.cb_is_anon)
