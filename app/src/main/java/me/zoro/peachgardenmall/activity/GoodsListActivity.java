@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -133,7 +134,12 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
         TextView textView = (TextView) mSearchView.findViewById(id);
         // 设置字体大小为14sp
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);//14sp
-        textView.setGravity(Gravity.BOTTOM);
+        // Android 7.0及以上版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            textView.setGravity(Gravity.CENTER_VERTICAL);
+        } else {
+            textView.setGravity(Gravity.BOTTOM);
+        }
         // 设置字体颜色
         // textView.setTextColor(getResources().getColor(R.color.search_txt_color));
         // 设置提示文字颜色

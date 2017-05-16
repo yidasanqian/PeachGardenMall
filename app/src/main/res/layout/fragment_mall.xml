@@ -16,7 +16,30 @@
         android:layout_marginRight="8dp"
         android:background="@drawable/bg_search_view"
         />
+    <!--<FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/search_view_height"
+        android:layout_margin="8dp"
+        >
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:hint="请输入商品名称"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:background="@drawable/bg_search_view"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_search"
+            android:tint="@android:color/white"
+            />
+    </FrameLayout>-->
     <GridView
         android:id="@+id/grid_view"
         android:layout_width="match_parent"

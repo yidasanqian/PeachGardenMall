@@ -14,7 +14,7 @@
         <item
             android:gravity="right"
             android:drawable="@drawable/ic_arrow_drop_black_selector"
-            android:left="16dp"
+            android:left="24dp"
             android:top="8dp"
             android:right="8dp"
             android:bottom="8dp"

@@ -214,24 +214,29 @@ public class HomeFragment extends Fragment implements OnBannerClickListener {
             for (int i = 0; i < adList.size(); i++) {
                 if (mImagesUrl.get(pos).equals(adList.get(i).getAdImageUrl())) {
                     type = 0;
+                    break;
                 }
             }
             for (int i = 0; i < goodsList.size(); i++) {
                 if (mImagesUrl.get(pos).equals(goodsList.get(i).getGoodsImageUrl())) {
                     type = 1;
+                    break;
                 }
             }
+
+            if (type == 0) {
+                Intent intent = new Intent(getActivity(), AdActivity.class);
+                intent.putExtra(AD_URL_EXTRA, adList.get(pos).getAdLink());
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
+                intent.putExtra(GOODS_ID_EXTRA, goodsList.get(pos).getGoodsId());
+                startActivity(intent);
+            }
+
         } catch (IndexOutOfBoundsException e) {
             Log.e(TAG, "OnBannerClick: 数组越界", e);
             return;
-        }
-
-        if (type == 0) {
-            Intent intent = new Intent(getActivity(), AdActivity.class);
-            intent.putExtra(AD_URL_EXTRA, adList.get(pos).getAdLink());
-            startActivity(intent);
-        } else {
-            Log.d(TAG, "OnBannerClick: 商品");
         }
     }
 

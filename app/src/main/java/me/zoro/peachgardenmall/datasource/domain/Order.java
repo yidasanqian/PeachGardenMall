@@ -132,7 +132,7 @@ public class Order implements Serializable {
     @SerializedName("order_amount")
     private String orderAmount;
     /**
-     * 从服务器获取的实际付款金额
+     * 从服务器获取的实际付款金额,是{@link #factPayMoney}的字符串形式
      */
     @SerializedName("total_amount")
     private String totalAmount;

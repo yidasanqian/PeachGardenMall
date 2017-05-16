@@ -336,7 +336,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         switch (v.getId()) {
             // 选择规格
             case R.id.edit_select_spec:
-                showSpecPopupWindow();
+                if (mGoods != null) {
+                    showSpecPopupWindow();
+                }
                 break;
             // 查看促销活动信息
             case R.id.edit_promotion:
@@ -399,7 +401,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
             case R.id.tv_add_to_shopping_cart:
                 if (mUserInfo != null) {
                     // 如果用户未选择规格，并且ppw未显示则显示选择规格窗口,否则添加到购物车
-                    if (TextUtils.isEmpty(mSpec)) {
+                    if (TextUtils.isEmpty(mSpec) && mGoods != null) {
                         showSpecPopupWindow();
                     } else {
                         new AddGoodsToShoppingCartTask().execute();

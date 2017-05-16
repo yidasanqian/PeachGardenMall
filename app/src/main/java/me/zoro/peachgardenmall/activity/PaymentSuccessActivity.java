@@ -52,18 +52,17 @@ public class PaymentSuccessActivity extends AppCompatActivity {
 
         Order order = (Order) getIntent().getSerializableExtra(PayActivity.ORDER_DETAIL_EXTRA);
         if (order != null) {
-            // 处理实际付款金额字段
-            order.setFactPayMoney(Double.parseDouble(order.getTotalAmount()));
             // 处理联系地址字段
             Address addressObj = new Address();
             addressObj.setConsignee(order.getConsignee());
             addressObj.setMobile(order.getMobile());
             addressObj.setAddress(order.getAddressStr());
-
+            order.setAddressObj(addressObj);
             mTvNickname.setText(order.getAddressObj().getConsignee());
             mTvContactPhone.setText(order.getAddressObj().getMobile());
             mTvContactAddress.setText(order.getAddressObj().getAddress());
             mTvFactPay.setText(String.valueOf(order.getFactPayMoney()));
+
             mBtnCheckTheOrder.setTag(order.getOutTraceNo());
         }
 
