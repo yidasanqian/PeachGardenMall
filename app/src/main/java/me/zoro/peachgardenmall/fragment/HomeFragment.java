@@ -16,8 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,11 +52,13 @@ import me.zoro.peachgardenmall.datasource.remote.BannerRemoteDatasource;
 import me.zoro.peachgardenmall.datasource.remote.GoodsRemoteDatasource;
 import me.zoro.peachgardenmall.view.SpacesItemDecoration;
 
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+
 /**
  * Created by dengfengdecao on 17/4/7.
  */
 
-public class HomeFragment extends Fragment implements OnBannerClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+public class HomeFragment extends Fragment implements OnBannerClickListener {
     private static final String TAG = "HomeFragment";
     public static final String AD_URL_EXTRA = "ad_url";
     public static final String GOODS_ID_EXTRA = "goods_id";
@@ -162,7 +162,34 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         });
         mRecyclerGridView.setLayoutManager(gridLayoutManager);
         mRecyclerGridView.setAdapter(mGridAdapter);
-        //mRecyclerGridView.addOnScrollListener(this);
+        mRecyclerGridView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (SCROLL_STATE_IDLE == newState && recyclerView.getAdapter().getItemCount() <= mPageSize) {
+                    mIsLoadingMore = false;
+                    mPageNum = 1;
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                // 上拉加载
+                if (gridLayoutManager.findLastVisibleItemPosition() ==
+                        recyclerView.getAdapter().getItemCount() - 1 && !mIsLoadingMore && dy > 0) {
+                    mIsLoadingMore = true;
+                    mPageNum++;
+                    new FetchGoodsesTask().execute();
+                }
+            }
+        });
+        mGridAdapter.setOnItemClickListener(new GoodsRecyclerGridAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, Goods goods) {
+                Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
+                intent.putExtra(GOODS_ID_EXTRA, goods.getGoodsId());
+                startActivity(intent);
+            }
+        });
         return root;
     }
 
@@ -208,15 +235,6 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Goods goods = mGoodses.get(position);
-        // Toast.makeText(getActivity(), goods.getGoodsName(), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
-        intent.putExtra(GOODS_ID_EXTRA, goods.getGoodsId());
-        startActivity(intent);
-    }
-
     // 显示客服信息
     @OnClick(R.id.toolbar_right_img)
     public void onViewClicked() {
@@ -235,24 +253,6 @@ public class HomeFragment extends Fragment implements OnBannerClickListener, Ada
                     .setView(view)
                     .setCancelable(true)
                     .show();
-        }
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (SCROLL_STATE_IDLE == scrollState && view.getAdapter().getCount() <= mPageSize) {
-            mIsLoadingMore = false;
-            mPageNum = 1;
-        }
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        // 上拉加载
-        if (view.getLastVisiblePosition() == totalItemCount - 1 && visibleItemCount > 0 && !mIsLoadingMore) {
-            mIsLoadingMore = true;
-            mPageNum++;
-            new FetchGoodsesTask().execute();
         }
     }
 

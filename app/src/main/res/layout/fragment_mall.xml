@@ -10,16 +10,12 @@
         android:layout_height="@dimen/search_view_height"
         android:iconifiedByDefault="false"
         android:queryHint="请输入商品名称"
-        android:gravity="center_vertical"
         android:focusable="false"
+        android:paddingTop="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/bg_search_view"
         />
-
-
-    <!-- <View
-         android:layout_width="match_parent"
-         android:layout_height="1dp"
-         android:background="@drawable/list_divider"
-         />-->
 
     <GridView
         android:id="@+id/grid_view"

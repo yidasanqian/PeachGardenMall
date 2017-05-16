@@ -23,6 +23,6 @@
         android:layout_margin="8dp"
         app:drawableWidth="12dp"
         app:drawableHeight="12dp"
-        style="@style/TextAppearance.AppCompat.Medium"
+        style="@style/TextAppearance.AppCompat.Small"
         />
 </LinearLayout>

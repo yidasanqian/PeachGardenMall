@@ -23,7 +23,7 @@ import me.zoro.peachgardenmall.datasource.domain.Goods;
  * Created by dengfengdecao on 17/4/7.
  */
 
-public class GoodsRecyclerGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class GoodsRecyclerGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private static final int TYPE_EMPTY = -1;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
@@ -32,6 +32,24 @@ public class GoodsRecyclerGridAdapter extends RecyclerView.Adapter<RecyclerView.
     private Context mContext;
     private View mHeaderView;
     private List<Goods> mGoodses;
+
+    public OnItemClickListener mListener;
+
+    @Override
+    public void onClick(View v) {
+        if (mListener != null) {
+            mListener.onItemClick(v, (Goods) v.getTag());
+        }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, Goods goods);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
 
     public GoodsRecyclerGridAdapter(Context context, View headerView, List<Goods> goodses) {
         mContext = context;
@@ -56,6 +74,7 @@ public class GoodsRecyclerGridAdapter extends RecyclerView.Adapter<RecyclerView.
         }
         View viewItem = LayoutInflater.from(mContext).inflate(R.layout.goods_gv_item,
                 parent, false);
+        viewItem.setOnClickListener(this);
         return RecyclerItemViewHolder.newInstance(viewItem);
     }
 
@@ -80,6 +99,8 @@ public class GoodsRecyclerGridAdapter extends RecyclerView.Adapter<RecyclerView.
             } else {
                 viewHolder.mLlGoodsPrice.setVisibility(View.GONE);
             }
+
+            viewHolder.itemView.setTag(goods);
         }
     }
 

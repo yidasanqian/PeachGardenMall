@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,7 +105,6 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_goods_list);
         ButterKnife.bind(this);
 
-        initPopupWindow();
 
         mGoodsRepository = GoodsRepository.getInstance(GoodsRemoteDatasource.getInstance(
                 getApplicationContext()
@@ -114,17 +114,26 @@ public class GoodsListActivity extends AppCompatActivity implements View.OnClick
         mGoodses = (ArrayList<Goods>) getIntent().getSerializableExtra(GOODSES_EXTRA);
         mCategoryId = getIntent().getIntExtra(MallFragment.GOODS_CATEGORY_EXTRA, -1);
 
+
         mGoodsGridAdapter = new GoodsGridAdapter(this, mGoodses);
         mGridView.setAdapter(mGoodsGridAdapter);
         mGridView.setOnItemClickListener(this);
         mGridView.setOnScrollListener(this);
 
+        initSearchView();
+
+        // initPopupWindow();
+
+    }
+
+    private void initSearchView() {
         // 获取到TextView的ID
         int id = mSearchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         // 获取到TextView的控件
         TextView textView = (TextView) mSearchView.findViewById(id);
         // 设置字体大小为14sp
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);//14sp
+        textView.setGravity(Gravity.BOTTOM);
         // 设置字体颜色
         // textView.setTextColor(getResources().getColor(R.color.search_txt_color));
         // 设置提示文字颜色

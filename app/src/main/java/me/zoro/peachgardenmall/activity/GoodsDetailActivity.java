@@ -778,9 +778,11 @@ public class GoodsDetailActivity extends AppCompatActivity implements Toolbar.On
         // 评论数量
         int num = goods.getComment().getNumber();
         mTvCommentNumber.setText("（" + num + "）");
-        Comment comment = goods.getComment();
-        mComments.add(comment);
-        mCommentRecyclerViewAdapter.replaceData(mComments);
+        if (num > 0) {
+            Comment comment = goods.getComment();
+            mComments.add(comment);
+            mCommentRecyclerViewAdapter.replaceData(mComments);
+        }
 
         // 图文详情
         mWebView.loadUrl(goods.getDetailInfoUrl());

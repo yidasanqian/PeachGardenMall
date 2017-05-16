@@ -11,8 +11,11 @@
         android:layout_height="@dimen/search_view_height"
         android:iconifiedByDefault="false"
         android:queryHint="请输入商品名称"
-        android:gravity="center_vertical"
         android:focusable="false"
+        android:paddingTop="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/bg_search_view"
         />
 
     <LinearLayout
@@ -31,7 +34,8 @@
             android:textOn="综合排序"
             android:textOff="综合排序"
             android:checked="false"
-            android:background="@drawable/bg_tb"
+            android:background="@drawable/bg_goods_detail_tb"
+            style="?android:attr/borderlessButtonStyle"
             />
 
         <ToggleButton
@@ -41,7 +45,8 @@
             android:layout_height="wrap_content"
             android:textOn="销量排序"
             android:textOff="销量排序"
-            android:background="@drawable/bg_tb"
+            android:background="@drawable/bg_goods_detail_tb"
+            style="?android:attr/borderlessButtonStyle"
             />
 
         <Button
@@ -51,6 +56,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_goods_list_filter"
             android:text="筛选"
+            style="?android:attr/borderlessButtonStyle"
             />
     </LinearLayout>
 

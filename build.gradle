@@ -38,7 +38,7 @@ ext {
 
     // App version
     versionCode = 1
-    versionName = '1.0.0'
+    versionName = '1.0.0 Beta'
 
     // App dependencies
     junitVersion = '4.12'

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,29 +87,34 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
         View root = inflater.inflate(R.layout.fragment_mall, container, false);
         unbinder = ButterKnife.bind(this, root);
 
+        initSearchView();
+
+        mCategoryGridAdapter = new GoodsCategoryGridAdapter(getContext(), mGoodsCategories);
+        mGridView.setAdapter(mCategoryGridAdapter);
+        mGridView.setOnItemClickListener(this);
+        return root;
+    }
+
+    private void initSearchView() {
         // 获取到TextView的ID
         int id = mSearchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         // 获取到TextView的控件
         TextView textView = (TextView) mSearchView.findViewById(id);
         // 设置字体大小为14sp
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);//14sp
+        textView.setGravity(Gravity.BOTTOM);
         // 设置字体颜色
         //textView.setTextColor(getActivity().getResources().getColor(R.color.search_txt_color));
         // 设置提示文字颜色
         textView.setHintTextColor(getActivity().getResources().getColor(R.color.textColorSecondary));
         int platedId = getResources().getIdentifier("android:id/search_plate",// 查找文件sdk\platforms\android-17\data\res\layout\search_view.xml中的id
-                null, //知道资源类型，底层自动实现
-                getActivity().getPackageName());//包名是清单文件里面的此项目的包名
+                null, // 知道资源类型，底层自动实现
+                getActivity().getPackageName());// 包名是清单文件里面的此项目的包名
         LinearLayout layout = (LinearLayout) mSearchView.findViewById(platedId);
-        layout.setBackgroundResource(R.drawable.bg_search_view);
+        layout.setBackgroundResource(0);
+
         // 设置搜索文本监听
         mSearchView.setOnQueryTextListener(this);
-
-
-        mCategoryGridAdapter = new GoodsCategoryGridAdapter(getContext(), mGoodsCategories);
-        mGridView.setAdapter(mCategoryGridAdapter);
-        mGridView.setOnItemClickListener(this);
-        return root;
     }
 
     @Override
