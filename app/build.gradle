@@ -65,6 +65,11 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$rootProject.retrofit2Version"
     // 会引用 Gson
     compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofit2Version"
+    // Simple XML
+    compile("com.squareup.retrofit2:converter-simplexml:$rootProject.retrofit2Version") {
+        exclude module: 'xpp3'
+        exclude module: 'stax-api'
+    }
     // 会引用 RxJava
     compile "com.squareup.retrofit2:adapter-rxjava:$rootProject.retrofit2Version"
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
@@ -85,7 +90,7 @@ dependencies {
     compile files('libs/alipaySdk-20161129.jar')
 
     compile 'com.google.android:flexbox:0.2.6'
-    compile 'in.srain.cube:grid-view-with-header-footer:1.0.12'
+
     // 蒲公英https://www.pgyer.com/doc/view/sdk_android_guide
-    compile 'com.pgyersdk:sdk:2.5.6'
+    //compile 'com.pgyersdk:sdk:2.5.6'
 }

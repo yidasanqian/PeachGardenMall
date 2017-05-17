@@ -16,6 +16,7 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 import static me.zoro.peachgardenmall.common.AppConfig.SERVER_HOST;
 
@@ -31,7 +32,10 @@ public final class ServiceGenerator {
             .setLevel(HttpLoggingInterceptor.Level.BODY)
             .setLevel(HttpLoggingInterceptor.Level.BASIC);
 
-    private static final Gson sGson = new GsonBuilder().setLenient().create();
+    private static final Gson sGson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd hh:mm:ss")
+            .setLenient()
+            .create();
 
     public static <S> S createService(Context context, Class<S> serviceClass) {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
@@ -57,6 +61,7 @@ public final class ServiceGenerator {
                 .baseUrl(API_BASE_URL)
                 .client(httpClient.build())
                 .addConverterFactory(GsonConverterFactory.create(sGson))
+                .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build();
 
         Log.d(TAG, "createService: context <== " + context + "\t url=" + retrofit.baseUrl().url() + "\tbaseurl="

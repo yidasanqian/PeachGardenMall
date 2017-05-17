@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimary">@android:color/white</color>
     <color name="colorPrimaryDark">@android:color/transparent</color>
-    <color name="colorAccent">#2D3F20</color>
-    <color name="textColorPrimary">#000000</color>
-    <color name="textColor">#000000</color>
-    <color name="textColorSecondary">#8a000000</color>
-    <color name="subheadColor">#de000000</color>
+    <color name="colorAccent">#1B5E20</color>
+    <color name="background_light">@android:color/background_light</color>
+    <color name="textColorPrimary">@android:color/primary_text_dark</color>
+    <color name="textColorSecondary">@android:color/secondary_text_dark</color>
     <color name="colorButtonNormal">#d6d7d7</color>
     <color name="progress_bar_background">#90000000</color>
 
     <color name="black_overlay">#66000000</color>
+    <color name="search_view_color">#EEEEEE</color>
 </resources>

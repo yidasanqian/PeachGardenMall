@@ -102,5 +102,5 @@
     <dimen name="ic_goods_width">80dp</dimen>
     <dimen name="ic_goods_height">80dp</dimen>
     <dimen name="search_view_height">32dp</dimen>
-    <dimen name="spacing">4dp</dimen>
+    <dimen name="grid_view_spacing">4dp</dimen>
 </resources>

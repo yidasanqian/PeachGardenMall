@@ -101,8 +101,8 @@ public class MallFragment extends Fragment implements SearchView.OnQueryTextList
         int id = mSearchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         // 获取到TextView的控件
         TextView textView = (TextView) mSearchView.findViewById(id);
-        // 设置字体大小为14sp
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);//14sp
+        // 设置字体大小为12sp
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         // Android 7.0及以上版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             textView.setGravity(Gravity.CENTER_VERTICAL);

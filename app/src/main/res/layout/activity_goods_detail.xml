@@ -42,7 +42,6 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -116,7 +115,7 @@
             android:id="@+id/edit_select_spec"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackground"
             >
 
 
@@ -160,7 +159,7 @@
             android:id="@+id/edit_promotion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackground"
             android:visibility="visible"
             >
 
@@ -240,8 +239,8 @@
                 android:layout_height="wrap_content"
                 android:text="服务:"
                 android:padding="@dimen/layout_padding"
-                android:textColor="@color/subheadColor"
                 android:textSize="@dimen/subhead_size"
+                android:textColor="@color/textColorPrimary"
                 />
 
 
@@ -277,7 +276,7 @@
             android:id="@+id/edit_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackground"
             >
 
 

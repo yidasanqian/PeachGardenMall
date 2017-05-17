@@ -27,7 +27,7 @@
         android:text="个促销:"
         android:layout_toRightOf="@id/tv_promotion_count"
         android:layout_centerVertical="true"
-        android:textColor="@color/subheadColor"
+        android:textColor="@color/textColorPrimary"
         android:textSize="@dimen/subhead_size"
         />
 

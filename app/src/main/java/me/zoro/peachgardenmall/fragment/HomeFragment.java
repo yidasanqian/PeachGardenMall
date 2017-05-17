@@ -149,7 +149,7 @@ public class HomeFragment extends Fragment implements OnBannerClickListener {
         mSpinner.setAdapter(mSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(this);*/
 
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.grid_view_spacing);
         mRecyclerGridView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
 
         mGridAdapter = new GoodsRecyclerGridAdapter(getContext(), headerView, mGoodses);

@@ -12,9 +12,8 @@
         android:iconifiedByDefault="false"
         android:queryHint="请输入商品名称"
         android:focusable="false"
-        android:paddingTop="4dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="@dimen/layout_margin"
+        android:layout_marginRight="@dimen/layout_margin"
         android:background="@drawable/bg_search_view"
         />
 
@@ -22,8 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/layout_padding"
-        android:paddingEnd="@dimen/layout_padding"
+        android:paddingStart="36dp"
+        android:paddingEnd="36dp"
         >
 
         <ToggleButton

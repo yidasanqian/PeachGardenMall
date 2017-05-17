@@ -8,15 +8,15 @@
         <item>
             <shape
                 android:shape="rectangle">
-                <solid android:color="#ECECEC"/>
+                <solid android:color="@color/search_view_color"/>
             </shape>
         </item>
         <item
             android:gravity="right"
             android:drawable="@drawable/ic_arrow_drop_black_selector"
-            android:left="24dp"
+            android:left="32dp"
             android:top="8dp"
-            android:right="8dp"
+            android:right="0dp"
             android:bottom="8dp"
             >
         </item>
